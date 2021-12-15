@@ -7,15 +7,8 @@
 
 import Foundation
 
-enum NetworkEnvironment {
-    case qa
-    case production
-    case staging
-}
-
-public enum WeatherApi {
+ enum WeatherApi {
     case getWeather(city: String)
-    
 }
 
 extension WeatherApi: EndPointType {
@@ -42,9 +35,8 @@ extension WeatherApi: EndPointType {
             return .requestParameters(bodyParameters: nil,
                                       bodyEncoding: .urlEncoding,
                                       urlParameters: ["q": city,
-                                                      "appid": NetworkManager.weatherAPIKey])
-        default:
-            return .request
+                                                      "appid": NetworkManager.weatherAPIKey,
+                                                      "lang": "ru"])
         }
     }
     

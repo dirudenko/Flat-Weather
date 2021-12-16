@@ -36,6 +36,10 @@
 		69194DF8276A775900430597 /* MainWeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69194DF7276A775900430597 /* MainWeatherViewController.swift */; };
 		69194DFB276B3E7900430597 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69194DFA276B3E7900430597 /* MockData.swift */; };
 		69194E01276B4A3300430597 /* WeatherCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69194E00276B4A3300430597 /* WeatherCollectionViewCell.swift */; };
+		6991400B276B998D003A64E6 /* Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6991400A276B998D003A64E6 /* Icons.swift */; };
+		6991400D276BA577003A64E6 /* Dictionary+KeyedValue .swift in Sources */ = {isa = PBXBuildFile; fileRef = 6991400C276BA577003A64E6 /* Dictionary+KeyedValue .swift */; };
+		6991400F276BAE4D003A64E6 /* Date + dateformatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6991400E276BAE4D003A64E6 /* Date + dateformatter.swift */; };
+		69914011276BB98C003A64E6 /* String + capitalize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69914010276BB98C003A64E6 /* String + capitalize.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +93,10 @@
 		69194DF7276A775900430597 /* MainWeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWeatherViewController.swift; sourceTree = "<group>"; };
 		69194DFA276B3E7900430597 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
 		69194E00276B4A3300430597 /* WeatherCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCollectionViewCell.swift; sourceTree = "<group>"; };
+		6991400A276B998D003A64E6 /* Icons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icons.swift; sourceTree = "<group>"; };
+		6991400C276BA577003A64E6 /* Dictionary+KeyedValue .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+KeyedValue .swift"; sourceTree = "<group>"; };
+		6991400E276BAE4D003A64E6 /* Date + dateformatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date + dateformatter.swift"; sourceTree = "<group>"; };
+		69914010276BB98C003A64E6 /* String + capitalize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String + capitalize.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +188,7 @@
 			children = (
 				69194DFA276B3E7900430597 /* MockData.swift */,
 				691625DE2769D29D00C736C7 /* CityWeather.swift */,
+				6991400A276B998D003A64E6 /* Icons.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -189,6 +198,9 @@
 			children = (
 				69194DF5276A749900430597 /* UIViewController+ child.swift */,
 				691625E12769D2DB00C736C7 /* Data+ SwittyJSON.swift */,
+				6991400C276BA577003A64E6 /* Dictionary+KeyedValue .swift */,
+				6991400E276BAE4D003A64E6 /* Date + dateformatter.swift */,
+				69914010276BB98C003A64E6 /* String + capitalize.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -207,7 +219,6 @@
 			isa = PBXGroup;
 			children = (
 				691625A92769CC0C00C736C7 /* HeaderWeaherViewController.swift */,
-				69194DCE2769E14D00430597 /* HeaderWeatherView.swift */,
 			);
 			path = MainWeather;
 			sourceTree = "<group>";
@@ -287,6 +298,7 @@
 			children = (
 				69194DF1276A715F00430597 /* LoadingViewController.swift */,
 				69194E00276B4A3300430597 /* WeatherCollectionViewCell.swift */,
+				69194DCE2769E14D00430597 /* HeaderWeatherView.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -426,6 +438,7 @@
 				69194DDA2769EDF500430597 /* HTTPTask.swift in Sources */,
 				69194DFB276B3E7900430597 /* MockData.swift in Sources */,
 				69194DF8276A775900430597 /* MainWeatherViewController.swift in Sources */,
+				6991400F276BAE4D003A64E6 /* Date + dateformatter.swift in Sources */,
 				691625DA2769D13E00C736C7 /* NetworkService.swift in Sources */,
 				69194DE32769F06B00430597 /* ParameterEncoder.swift in Sources */,
 				691625AA2769CC0C00C736C7 /* HeaderWeaherViewController.swift in Sources */,
@@ -435,10 +448,13 @@
 				69194DDC2769EE1900430597 /* NetworkLogger.swift in Sources */,
 				691625B02769CC0C00C736C7 /* MyApp.xcdatamodeld in Sources */,
 				69194DE72769F0BE00430597 /* URLParameterEncoder.swift in Sources */,
+				6991400D276BA577003A64E6 /* Dictionary+KeyedValue .swift in Sources */,
 				69194DF6276A749900430597 /* UIViewController+ child.swift in Sources */,
 				69194DD52769ECBD00430597 /* EndPointType.swift in Sources */,
 				69194DF0276A0CFB00430597 /* NetworkErrors.swift in Sources */,
 				691625E22769D2DB00C736C7 /* Data+ SwittyJSON.swift in Sources */,
+				69914011276BB98C003A64E6 /* String + capitalize.swift in Sources */,
+				6991400B276B998D003A64E6 /* Icons.swift in Sources */,
 				691625A62769CC0C00C736C7 /* AppDelegate.swift in Sources */,
 				69194DED276A014600430597 /* WeatherEndPoint.swift in Sources */,
 				691625A82769CC0C00C736C7 /* SceneDelegate.swift in Sources */,

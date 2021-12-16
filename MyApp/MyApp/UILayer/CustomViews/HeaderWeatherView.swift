@@ -18,9 +18,9 @@ class HeaderWeatherView: UIView {
     
     let frame = CGRect(x: 16, y: 444, width: 326, height: 105)
     let myCollectionView: UICollectionView = UICollectionView(frame: frame, collectionViewLayout: layout)
-    myCollectionView.dataSource = self
-    myCollectionView.delegate = self
-    myCollectionView.register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "WeatherCollectionViewCell")
+//    myCollectionView.dataSource = self
+//    myCollectionView.delegate = self
+//    myCollectionView.register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "WeatherCollectionViewCell")
     myCollectionView.backgroundColor = UIColor(named: "backgroundColor")
     return myCollectionView
   }()
@@ -43,7 +43,7 @@ class HeaderWeatherView: UIView {
     return label
   }()
   
-  private(set) lazy var citiNameLabel: UILabel = {
+  private(set) lazy var cityNameLabel: UILabel = {
     let label = UILabel()
     label.font = .systemFont(ofSize: 20, weight: .semibold)
     label.adjustsFontSizeToFitWidth = true
@@ -74,14 +74,13 @@ class HeaderWeatherView: UIView {
     return label
   }()
   
-  private(set) lazy var separator = UIColor.separator
-  
+
   
   override init(frame: CGRect) {
     super.init(frame: frame)
     addSubview(weatherImage)
     addSubview(dateLabel)
-    addSubview(citiNameLabel)
+    addSubview(cityNameLabel)
     addSubview(temperatureLabel)
     addSubview(conditionLabel)
     addSubview(collectionView)
@@ -108,10 +107,10 @@ class HeaderWeatherView: UIView {
     
     NSLayoutConstraint.activate([
       
-      citiNameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 16),
-      citiNameLabel.leftAnchor.constraint(equalTo: self.centerXAnchor, constant: -30.5),
-      citiNameLabel.widthAnchor.constraint(equalToConstant: 61),
-      citiNameLabel.heightAnchor.constraint(equalToConstant: 32),
+      cityNameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 16),
+      cityNameLabel.leftAnchor.constraint(equalTo: self.centerXAnchor, constant: -30.5),
+      cityNameLabel.widthAnchor.constraint(equalToConstant: 61),
+      cityNameLabel.heightAnchor.constraint(equalToConstant: 32),
       
       weatherImage.topAnchor.constraint(equalTo: self.topAnchor, constant: 48),
       weatherImage.leftAnchor.constraint(equalTo: self.centerXAnchor, constant: -imageSize / 2),
@@ -140,37 +139,32 @@ class HeaderWeatherView: UIView {
       
     ])
   }
-}
-extension HeaderWeatherView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return 4
-  }
-  
-  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCollectionViewCell", for: indexPath) as? WeatherCollectionViewCell else { return UICollectionViewCell() }
-    cell.conditionStatusLabel.text = "\(indexPath.row)"
-    cell.conditionImage.image = UIImage(systemName: "sun.and.horizon.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-    cell.conditionNameLabel.text = "TEST"    
-    return cell
-  }
-  
-  
-}
+    
+  func configure(with model: CityWeather) {
 
-//  func configure(with model: Conversation) {
-//    userMessageLabel.text = model.latestMessage.text
-//    userNameLabel.text = model.name
-//    let path = "images/\(model.otherUserEmail)_profile_picture.png"
-//    storageService.downloadURL(for: path) { [weak self] result in
-//      switch result {
-//      case .success(let url):
-//        DispatchQueue.main.async {
-//          self?.userImage.sd_setImage(with: url, completed: nil)
-//        }
-//      case .failure(let error):
-//        print("Error to get image \(error)")
-//      }
-//    }
+    let date = Date(timeIntervalSince1970: TimeInterval(model.dt)).dateFormatter()
+    dateLabel.text = "\(date)".capitalizedFirstLetter
+    cityNameLabel.text = model.name
+    conditionLabel.text = model.weather.first?.weatherDescription.capitalizedFirstLetter
+    let config =  UIImage.SymbolConfiguration.preferringMulticolor()
+    let imageName =  iconHadler.iconDictionary.keyedValue(key: model.weather.first?.id ?? 0)
+    weatherImage.image = UIImage(systemName: imageName ?? "thermometer.sun.fill", withConfiguration: config)
+    temperatureLabel.text = "\(model.main.temp)°"
+    }
+  }
+  
+  
+
+//extension HeaderWeatherView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+//  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//    return 4
+//  }
+//  
+//  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCollectionViewCell", for: indexPath) as? WeatherCollectionViewCell
+//           else { return UICollectionViewCell() }
+//    cell.configure(with: model, index: indexPath.row)
+//    return cell
 //  }
 //}
 

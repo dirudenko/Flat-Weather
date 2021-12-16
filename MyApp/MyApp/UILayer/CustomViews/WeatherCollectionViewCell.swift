@@ -10,11 +10,11 @@ import UIKit
 class WeatherCollectionViewCell: UICollectionViewCell {
   
   private let imageSize: CGFloat = 32
-
+  
   
   private(set) lazy var conditionImage: UIImageView = {
     let imageView = UIImageView()
-    imageView.contentMode = .scaleAspectFill
+    imageView.contentMode = .scaleAspectFit
     imageView.layer.masksToBounds = true
     imageView.translatesAutoresizingMaskIntoConstraints = false
     return imageView
@@ -22,7 +22,7 @@ class WeatherCollectionViewCell: UICollectionViewCell {
   
   private(set) lazy var conditionStatusLabel: UILabel = {
     let label = UILabel()
-    label.font = .systemFont(ofSize: 14, weight: .regular)
+    label.font = .systemFont(ofSize: 14, weight: .medium)
     label.adjustsFontSizeToFitWidth = true
     label.textColor = .white
     label.translatesAutoresizingMaskIntoConstraints = false
@@ -31,7 +31,7 @@ class WeatherCollectionViewCell: UICollectionViewCell {
   
   private(set) lazy var conditionNameLabel: UILabel = {
     let label = UILabel()
-    label.font = .systemFont(ofSize: 14, weight: .regular)
+    label.font = .systemFont(ofSize: 14, weight: .medium)
     label.adjustsFontSizeToFitWidth = true
     label.textColor = .white
     label.numberOfLines = 0
@@ -54,7 +54,7 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     fatalError("init(coder:) has not been implemented")
   }
   private func addConstraints() {
-
+    
     NSLayoutConstraint.activate([
       
       conditionImage.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -69,8 +69,32 @@ class WeatherCollectionViewCell: UICollectionViewCell {
       
       conditionNameLabel.topAnchor.constraint(equalTo: conditionStatusLabel.bottomAnchor, constant: 5),
       conditionNameLabel.leftAnchor.constraint(equalTo: conditionImage.rightAnchor, constant: 4),
-      conditionNameLabel.widthAnchor.constraint(equalToConstant: 50),
+      conditionNameLabel.widthAnchor.constraint(equalToConstant: 100),
       conditionNameLabel.heightAnchor.constraint(equalToConstant: 14)
-      ])
+    ])
+  }
+  
+  func configure(with model: CityWeather, index: Int) {
+    switch index {
+    case 0:
+      conditionImage.image = UIImage(systemName: "wind")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+      conditionStatusLabel.text = "\(model.wind.speed) km/h"
+      conditionNameLabel.text = "Ветер"
+    case 1:
+      conditionImage.image = UIImage(systemName: "cloud.drizzle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+      conditionStatusLabel.text = "\(model.main.feelsLike)°"
+      conditionNameLabel.text = "Ощущается как"
+    case 2:
+      conditionImage.image = UIImage(systemName: "thermometer")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+      conditionStatusLabel.text = "\(model.main.pressure) mBar"
+      conditionNameLabel.text = "Давление"
+    case 3:
+      conditionImage.image = UIImage(systemName: "humidity")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+      conditionStatusLabel.text = "\(model.main.humidity) %"
+      conditionNameLabel.text = "Влажность"
+    default:
+      break
+    }
   }
 }
+

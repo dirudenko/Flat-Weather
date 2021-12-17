@@ -7,10 +7,10 @@
 
 import UIKit
 
-class FooterViewController: UIViewController {
+final class FooterViewController: UIViewController {
   
-  let weatherView = HourlyWeatherView()
-  let loadingVC = LoadingViewController()
+  private let weatherView = HourlyWeatherView()
+  private let loadingVC = LoadingViewController()
   private let networkManager = NetworkManager()
   private var hourlyWeather: HourlyWeather?
   
@@ -33,18 +33,25 @@ class FooterViewController: UIViewController {
   
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
-    let footerFrame = CGRect(x: 0, y: 0, width: 390, height: 140)
+    let footerFrame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height)
     loadingVC.view.frame = footerFrame
   }
   
   private func getHourlyWeather(for city: CurrentWeather) {
-    let lon = city.coord.lon
-    let lat = city.coord.lat
+    guard let lon = UserDefaults.standard.object(forKey: "lon") as? Double,
+          let lat = UserDefaults.standard.object(forKey: "lat") as? Double,
+    let correctedLon = Double(String(format: "%.2f", lon)),
+    let correctedLat = Double(String(format: "%.2f", lat))
+    else { return }
     
-    networkManager.getHourlyWeather(lon: lon, lat: lat) { result in
+    
+    //      let lon = city.coord.lon
+    //    let lat = city.coord.lat
+    
+    networkManager.getHourlyWeather(lon: correctedLon, lat: correctedLat) { result in
       switch result {
       case .success(let weather):
-       // print(weather)
+        // print(weather)
         DispatchQueue.main.async {
           self.hourlyWeather = weather
           self.weatherView.collectionView.reloadData()

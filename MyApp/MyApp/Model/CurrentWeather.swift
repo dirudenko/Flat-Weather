@@ -35,7 +35,8 @@ struct CurrentWeather: Codable {
   struct Main: Codable {
       let humidity: Int
       let feelsLike, tempMin, tempMax, temp: Double
-      let pressure, seaLevel, grndLevel: Int
+      let pressure: Int
+      let seaLevel, grndLevel: Int?
 
       enum CodingKeys: String, CodingKey {
           case humidity
@@ -70,7 +71,7 @@ struct CurrentWeather: Codable {
   struct Wind: Codable {
       let speed: Double
       let deg: Int
-      let gust: Double
+      let gust: Double?
   }
 
 

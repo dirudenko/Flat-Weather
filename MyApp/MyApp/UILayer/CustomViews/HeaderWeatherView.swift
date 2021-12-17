@@ -137,12 +137,16 @@ class HeaderWeatherView: UIView {
 
     let date = Date(timeIntervalSince1970: TimeInterval(model.dt)).dateFormatter()
     dateLabel.text = "\(date)".capitalizedFirstLetter
+    
     cityNameLabel.text = model.name
+    
     conditionLabel.text = model.weather.first?.weatherDescription.capitalizedFirstLetter
+    
     let config =  UIImage.SymbolConfiguration.preferringMulticolor()
     let imageName =  IconHadler.iconDictionary.keyedValue(key: model.weather.first?.id ?? 0)
     weatherImage.image = UIImage(systemName: imageName ?? "thermometer.sun.fill", withConfiguration: config)
-    temperatureLabel.text = "\(model.main.temp)°"
+    
+    temperatureLabel.text = "\(Int(model.main.temp))°"
     }
   }
 

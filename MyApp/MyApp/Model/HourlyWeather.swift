@@ -32,7 +32,8 @@ struct Hourly: Codable {
     let windDeg: Int
     let windGust: Double
     let weather: [Weather]
-    let pop: Int
+    let pop: Double
+    let snow: Snow?
 
     enum CodingKeys: String, CodingKey {
         case dt, temp
@@ -43,7 +44,15 @@ struct Hourly: Codable {
         case windSpeed = "wind_speed"
         case windDeg = "wind_deg"
         case windGust = "wind_gust"
-        case weather, pop
+        case weather, pop, snow
     }
+  struct Snow: Codable {
+      let the1H: Double
+
+      enum CodingKeys: String, CodingKey {
+          case the1H = "1h"
+      }
+  }
 }
+
 

@@ -22,10 +22,10 @@ class MyAppTests: XCTestCase {
   
   func testCityMoscow() throws {
     let expectation = expectation(description: "Expectation in " + #function)
-    var validateResult: CityWeather?
+    var validateResult: CurrentWeather?
     let expectedResult = 524901
     
-    networkManager.getWeaher(city: "Moscow") { result in
+    networkManager.getWeather(city: "Moscow") { result in
       switch result {
       case .success(let city):
         validateResult = city

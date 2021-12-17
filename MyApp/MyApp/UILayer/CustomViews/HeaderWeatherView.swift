@@ -18,9 +18,7 @@ class HeaderWeatherView: UIView {
     
     let frame = CGRect(x: 16, y: 444, width: 326, height: 105)
     let myCollectionView: UICollectionView = UICollectionView(frame: frame, collectionViewLayout: layout)
-//    myCollectionView.dataSource = self
-//    myCollectionView.delegate = self
-//    myCollectionView.register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "WeatherCollectionViewCell")
+    myCollectionView.isScrollEnabled = false
     myCollectionView.backgroundColor = UIColor(named: "backgroundColor")
     return myCollectionView
   }()
@@ -130,42 +128,21 @@ class HeaderWeatherView: UIView {
       conditionLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 409),
       conditionLabel.leftAnchor.constraint(equalTo: self.centerXAnchor, constant: -(83 / 2)),
       conditionLabel.widthAnchor.constraint(equalToConstant: 83),
-      conditionLabel.heightAnchor.constraint(equalToConstant: 19),
-      
-      collectionView.topAnchor.constraint(equalTo: self.topAnchor, constant: 444),
-      collectionView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16),
-      collectionView.widthAnchor.constraint(equalToConstant: 326),
-      collectionView.heightAnchor.constraint(equalToConstant: 105)
+      conditionLabel.heightAnchor.constraint(equalToConstant: 19)
       
     ])
   }
     
-  func configure(with model: CityWeather) {
+  func configure(with model: CurrentWeather) {
 
     let date = Date(timeIntervalSince1970: TimeInterval(model.dt)).dateFormatter()
     dateLabel.text = "\(date)".capitalizedFirstLetter
     cityNameLabel.text = model.name
     conditionLabel.text = model.weather.first?.weatherDescription.capitalizedFirstLetter
     let config =  UIImage.SymbolConfiguration.preferringMulticolor()
-    let imageName =  iconHadler.iconDictionary.keyedValue(key: model.weather.first?.id ?? 0)
+    let imageName =  IconHadler.iconDictionary.keyedValue(key: model.weather.first?.id ?? 0)
     weatherImage.image = UIImage(systemName: imageName ?? "thermometer.sun.fill", withConfiguration: config)
     temperatureLabel.text = "\(model.main.temp)°"
     }
   }
-  
-  
-
-//extension HeaderWeatherView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-//  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//    return 4
-//  }
-//  
-//  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCollectionViewCell", for: indexPath) as? WeatherCollectionViewCell
-//           else { return UICollectionViewCell() }
-//    cell.configure(with: model, index: indexPath.row)
-//    return cell
-//  }
-//}
-
 

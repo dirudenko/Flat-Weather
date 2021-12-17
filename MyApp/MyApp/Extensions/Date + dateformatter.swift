@@ -16,4 +16,11 @@ extension Date {
     return stringDate
   }
   
+  func dateHourFormatter() -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "HH:mm"
+    let stringDate = formatter.string(from: self)
+    return stringDate
+  }
+  
 }

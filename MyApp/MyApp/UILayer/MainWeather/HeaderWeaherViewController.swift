@@ -10,7 +10,7 @@ import UIKit
 class HeaderWeaherViewController: UIViewController {
   
   private let networkManager = NetworkManager()
-  private var city: CityWeather?
+  private var currentWeather: CurrentWeather?
   let weatherView = HeaderWeatherView()
   let loadingVC = LoadingViewController()
   
@@ -25,18 +25,27 @@ class HeaderWeaherViewController: UIViewController {
     weatherView.collectionView.dataSource = self
     weatherView.collectionView.delegate = self
     weatherView.collectionView.register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "WeatherCollectionViewCell")
-  // add(loadingVC)
+    //add(loadingVC)
     weatherView.configure(with: MockData.mockCity)
   }
+  
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    let headerFrame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
+    loadingVC.view.frame = headerFrame
+  }
+  
     
   func getWeather(for city: String) {
-    networkManager.getWeaher(city: city) { result in
+    networkManager.getWeather(city: city) { result in
       switch result {
-      case .success(let city):
-        print(city)
+      case .success(let weather):
+        //print(weather)
         DispatchQueue.main.async {
-          self.city = city
-          self.weatherView.configure(with: city)
+    
+          self.loadingVC.remove()
+          self.currentWeather = weather
+          self.weatherView.configure(with: weather)
           self.weatherView.collectionView.reloadData()
         }
         

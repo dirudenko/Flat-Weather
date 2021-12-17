@@ -7,36 +7,29 @@
 
 import UIKit
 
-class MainWeatherViewController: UIViewController {
+final class MainWeatherViewController: UIViewController {
   
-  let headerWeaherViewController = HeaderWeaherViewController()
+  private let headerWeaherViewController = HeaderWeaherViewController()
+  private let footerWeaherViewController = FooterViewController()
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
     add(headerWeaherViewController)
+    add(footerWeaherViewController)
     view.backgroundColor = .systemBackground
   }
   
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
-    let frame = CGRect(x: 16, y: 62, width: 358, height: 565)
-    headerWeaherViewController.view.frame = frame
+    
+    let headerFrame = CGRect(x: 16, y: 62, width: 358, height: 565)
+    headerWeaherViewController.view.frame = headerFrame
     headerWeaherViewController.view.layer.cornerRadius = 30
     headerWeaherViewController.view.layer.masksToBounds = true
     
-    
+    let footerFrame = CGRect(x: 0, y: 643, width: 390, height: 140)
+    footerWeaherViewController.view.frame = footerFrame
     
   }
-  
-  /*
-   // MARK: - Navigation
-   
-   // In a storyboard-based application, you will often want to do a little preparation before navigation
-   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-   // Get the new view controller using segue.destination.
-   // Pass the selected object to the new view controller.
-   }
-   */
-  
 }

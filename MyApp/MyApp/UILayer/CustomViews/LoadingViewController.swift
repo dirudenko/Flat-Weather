@@ -11,7 +11,7 @@ class LoadingViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     let spinner = UIActivityIndicatorView(style: .large)
-    spinner.color = .systemCyan
+    spinner.color = .systemGray
     spinner.translatesAutoresizingMaskIntoConstraints = false
     spinner.startAnimating()
     view.addSubview(spinner)

@@ -40,12 +40,14 @@ class WeatherCollectionViewCell: UICollectionViewCell {
   }()
   
   
+  
   override init(frame: CGRect) {
     super.init(frame: frame)
     
     contentView.addSubview(conditionImage)
     contentView.addSubview(conditionNameLabel)
     contentView.addSubview(conditionStatusLabel)
+
     backgroundColor = UIColor(named: "backgroundColor")
     addConstraints()
   }
@@ -74,7 +76,7 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     ])
   }
   
-  func configure(with model: CityWeather, index: Int) {
+  func configure(with model: CurrentWeather, index: Int) {
     switch index {
     case 0:
       conditionImage.image = UIImage(systemName: "wind")?.withTintColor(.white, renderingMode: .alwaysOriginal)
@@ -82,8 +84,8 @@ class WeatherCollectionViewCell: UICollectionViewCell {
       conditionNameLabel.text = "Ветер"
     case 1:
       conditionImage.image = UIImage(systemName: "cloud.drizzle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-      conditionStatusLabel.text = "\(model.main.feelsLike)°"
-      conditionNameLabel.text = "Ощущается как"
+      conditionStatusLabel.text = "\(model.clouds.all)%"
+      conditionNameLabel.text = "Вероятность осадков"
     case 2:
       conditionImage.image = UIImage(systemName: "thermometer")?.withTintColor(.white, renderingMode: .alwaysOriginal)
       conditionStatusLabel.text = "\(model.main.pressure) mBar"

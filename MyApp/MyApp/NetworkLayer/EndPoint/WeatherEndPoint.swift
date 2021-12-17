@@ -8,7 +8,8 @@
 import Foundation
 
  enum WeatherApi {
-    case getWeather(city: String)
+    case getCurrentWeather(city: String)
+   case getHourlyWeather(lon: Double, lat: Double)
 }
 
 extension WeatherApi: EndPointType {
@@ -20,8 +21,10 @@ extension WeatherApi: EndPointType {
     
     var path: String {
         switch self {
-        case .getWeather(_):
+        case .getCurrentWeather(_):
           return "/data/2.5/weather"
+        case .getHourlyWeather(_,_):
+          return "/data/2.5/onecall"
         }
     }
     
@@ -31,12 +34,24 @@ extension WeatherApi: EndPointType {
     
     var task: HTTPTask {
         switch self {
-        case .getWeather(let city):
+        case .getCurrentWeather(let city):
             return .requestParameters(bodyParameters: nil,
                                       bodyEncoding: .urlEncoding,
                                       urlParameters: ["q": city,
                                                       "appid": NetworkManager.weatherAPIKey,
+                                                      "units": "metric",
                                                       "lang": "ru"])
+        case .getHourlyWeather(let lon, let lat):
+          return .requestParameters(bodyParameters: nil,
+                                    bodyEncoding: .urlEncoding,
+                                    urlParameters: [
+                                      "lat": lat,
+                                      "lon": lon,
+                                      "exclude": "current,minutely,daily,alerts",
+                                      "appid": NetworkManager.weatherAPIKey,
+                                      "units": "metric",
+                                      "lang": "ru",
+                                    ])
         }
     }
     

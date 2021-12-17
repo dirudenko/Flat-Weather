@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct iconHadler {
+struct IconHadler {
   static let iconDictionary: [Int: String] = [
                                               200:"cloud.heavyrain.fill",
                                               201:"cloud.bolt.rain.fill",
@@ -59,7 +59,7 @@ struct iconHadler {
                                               762:"wind",
                                               771:"wind",
                                               781:"tornado",
-                                              800: "sun.max.fill",
+                                              800:"sun.max.fill",
                                               801:"cloud.sun.fill",
                                               802:"cloud.fill",
                                               803:"smoke.fill",

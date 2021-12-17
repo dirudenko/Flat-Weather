@@ -11,10 +11,9 @@ struct NetworkManager {
   
   static let weatherAPIKey = "4151621f5318e81115ce7581adb25359"
   let router = Router<WeatherApi>()
-
   
-  func getWeaher(city: String, completion: @escaping (Result<CityWeather, NetworkErrors>) -> Void){
-    router.request(.getWeather(city: city)) { data, response, error in
+  func getWeather(city: String, completion: @escaping (Result<CurrentWeather, NetworkErrors>) -> Void) {
+    router.request(.getCurrentWeather(city: city)) { data, response, error in
       
       if let _ = error {
         completion(.failure(.badRequest))
@@ -33,7 +32,7 @@ struct NetworkManager {
             print(responseData)
             //let jsonData = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
             //print(jsonData)
-            let apiResponse = try JSONDecoder().decode(CityWeather.self, from: responseData)
+            let apiResponse = try JSONDecoder().decode(CurrentWeather.self, from: responseData)
             completion(.success(apiResponse))
           } catch {
             print(error)
@@ -45,6 +44,43 @@ struct NetworkManager {
       }
     }
   }
+      
+      func getHourlyWeather(lon: Double, lat: Double, completion: @escaping (Result<HourlyWeather, NetworkErrors>) -> Void) {
+        router.request(.getHourlyWeather(lon: lon, lat: lat)) { data, response, error in
+          
+          if let _ = error {
+            completion(.failure(.badRequest))
+            return
+          }
+          
+          if let response = response as? HTTPURLResponse {
+            let result = self.handleNetworkResponse(response)
+            switch result {
+            case .success:
+              guard let responseData = data else {
+                completion(.failure(.noData))
+                return
+              }
+              do {
+               // print(responseData)
+               // let jsonData = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
+               // print(jsonData)
+                let apiResponse = try JSONDecoder().decode(HourlyWeather.self, from: responseData)
+                completion(.success(apiResponse))
+              } catch {
+                print(error)
+                completion(.failure(.unableToDecode))
+              }
+            case .failure(let networkFailureError):
+              completion(.failure(networkFailureError))
+            }
+          }
+        }
+      
+      
+    }
+
+  
   
   fileprivate func handleNetworkResponse(_ response: HTTPURLResponse) -> ResponseErrors<NetworkErrors>{
     switch response.statusCode {

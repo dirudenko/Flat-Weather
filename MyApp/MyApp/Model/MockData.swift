@@ -8,7 +8,7 @@
 import Foundation
 
 struct MockData {
-static var mockCity = CityWeather(base: "stations",
+static let mockCity = CurrentWeather(base: "stations",
                            id: 420006353,
                            dt: 1560350645,
                            main: main,

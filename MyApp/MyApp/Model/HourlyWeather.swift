@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Модель для почасового вывода погоды
 // MARK: - Hour
 struct HourlyWeather: Codable {
     let lat, lon: Double

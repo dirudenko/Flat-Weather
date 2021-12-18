@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+/// Данные из списка городов в ассетах
 struct CitiList: Codable {
     let id: Int
     let name, state, country: String

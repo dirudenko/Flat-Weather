@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+/// Модель для данных с текущей погодой
 struct CurrentWeather: Codable {
       let base: String
       let id, dt: Int

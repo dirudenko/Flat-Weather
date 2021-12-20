@@ -10,63 +10,82 @@ import UIKit
 class SearchViewController: UIViewController {
   
   private let searchView = SearchView()
-  private var searchResult = String()
-  private var citilist = [CitiList]()
-  private var foundedCities = [CitiList]()
+  private let coreDataManager = CoreDataManager(modelName: "MyApp")
   
+  // MARK: - UIViewController lifecycle methods
   override func loadView() {
     super.loadView()
     self.view = searchView
   }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-      searchView.searchBar.delegate = self
-      searchView.searchBar.becomeFirstResponder()
-      searchView.tableView.delegate = self
-      searchView.tableView.dataSource = self
-      searchView.backgroundColor = UIColor(named: "backgroundColor")
-      DispatchQueue.global(qos: .utility) .async {
-        self.decodeList { result in
-          switch result {
-          case .success(let list):
-            DispatchQueue.main.async {
-              self.citilist = list
-              self.searchView.animation.removeFromSuperview()
-              self.searchView.searchBar.isHidden = false
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    searchView.searchBar.delegate = self
+    searchView.searchBar.becomeFirstResponder()
+    searchView.tableView.delegate = self
+    searchView.tableView.dataSource = self
+    searchView.backgroundColor = UIColor(named: "backgroundColor")
+    fetchDataFromCoreData()
+  }
+  // MARK: - Private functions
+  /// Получение данных из CoreData
+  private func fetchDataFromCoreData() {
+    if coreDataManager.entityIsEmpty() {
+      decodeList { result in
+        switch result {
+        case .success(let list):
+          DispatchQueue.main.async {
+            
+            for item in list {
+              self.coreDataManager.configure(json: item)
             }
-          case .failure(let error):
-            print(error.rawValue)
+            self.coreDataManager.saveContext()
+            self.coreDataManager.loadSavedData()
+            self.searchView.animation.removeFromSuperview()
+            self.searchView.searchBar.isHidden = false
           }
+        case .failure(let error):
+          print(error.rawValue)
         }
       }
-      
+    } else {
+      self.coreDataManager.loadSavedData()
+      self.searchView.animation.removeFromSuperview()
+      self.searchView.searchBar.isHidden = false
     }
+  }
   
+  /// Декодирование JSON файла с городами из Ассетов
   private func decodeList(complition: @escaping (Result<[CitiList], NetworkError>) -> Void) {
     let decoder = JSONDecoder()
-        
     guard let fileURL = Bundle.main.url(forResource:"city.list", withExtension: "json"),
           let fileContents = try? String(contentsOf: fileURL) else { return }
     let data = Data(fileContents.utf8)
     do {
-        let list = try decoder.decode([CitiList].self, from: data)
+      let list = try decoder.decode([CitiList].self, from: data)
       complition(.success(list))
     } catch {
       complition(.failure(.encodingFailed))
     }
   }
 }
-
+// MARK: - UIViewController delegates
 extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return foundedCities.count
+  
+  func numberOfSections(in tableView: UITableView) -> Int {
+    return coreDataManager.fetchedResultsController.sections?.count ?? 0
   }
+  
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    let sectionInfo = coreDataManager.fetchedResultsController.sections![section]
+    return sectionInfo.numberOfObjects
+  }
+  
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
     var content = cell.defaultContentConfiguration()
-    content.text = foundedCities[indexPath.row].name
+    content.text = "\(coreDataManager.fetchedResultsController.object(at: indexPath).name) \(coreDataManager.fetchedResultsController.object(at: indexPath).country)"
     cell.backgroundColor = UIColor(named: "backgroundColor")
     
     cell.contentConfiguration = content
@@ -75,43 +94,23 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
-    print(foundedCities[indexPath.row])
+    print(coreDataManager.fetchedResultsController.object(at: indexPath))
   }
 }
 
 
 extension SearchViewController: UISearchBarDelegate {
   func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-    searchResult.removeAll()
     searchView.tableView.isHidden = true
     searchView.tableView.reloadData()
   }
   
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-    
-    foundedCities.removeAll()
-    
-    searchResult = searchText
-    if !searchResult.isEmpty {
-    citilist.forEach {
-      if $0.name.contains(searchResult.capitalizedFirstLetter) {
-        foundedCities.append($0)
-      }
-    }
-    }
+    /// Передеча текста в качестве предиката для фетчРеквеста
+    coreDataManager.cityNamePredicate = NSPredicate(format: "name CONTAINS %@", searchText)
+    coreDataManager.loadSavedData()
+    print(coreDataManager.fetchedResultsController.fetchedObjects?.count)
     searchView.tableView.isHidden = false
     searchView.tableView.reloadData()
   }
-
-//  func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//      guard let text = searchBar.text, !text.replacingOccurrences(of: " ", with: "").isEmpty else {
-//        return
-//      }
-//    searchView.searchBar.resignFirstResponder()
-//    searchResult.removeAll()
-//    searchResult = text
-//    searchView.tableView.isHidden = false
-//    searchView.tableView.reloadData()
-//  }
-  
 }

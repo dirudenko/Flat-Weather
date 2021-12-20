@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+/// Модель для присвоения икнки погоды в зависимости от полученного кода
 struct IconHadler {
   static let iconDictionary: [Int: String] = [
                                               200:"cloud.heavyrain.fill",

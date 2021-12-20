@@ -21,19 +21,44 @@ class CoreDataTests: XCTestCase {
         coreDataManager = nil
     }
 
-    func testExample() throws {
+    func testAddMockCity() throws {
       coreDataManager.configure(json: mockCity)
       coreDataManager.saveContext()
       coreDataManager.loadSavedData()
-      print(coreDataManager.testFetchedResultsController.object(at: [0,0]).name)
-      XCTAssertTrue(coreDataManager.testFetchedResultsController.object(at: [0,0]).name == "Mock")
+      XCTAssertNotNil(coreDataManager.fetchedResultsController.fetchedObjects?.first?.lat)
+      XCTAssertTrue(coreDataManager.fetchedResultsController.fetchedObjects?.first?.name == "Mock")
     }
+  
+  func testPredicate() throws {
+    coreDataManager.configure(json: mockCity)
+    coreDataManager.saveContext()
+    coreDataManager.cityNamePredicate = NSPredicate(format: "name CONTAINS %@", "M")
+    coreDataManager.loadSavedData()
+    XCTAssertTrue(coreDataManager.fetchedResultsController.fetchedObjects?.first?.name == "Mock")
+  }
+  
+  func testPredicateWithFail() throws {
+    coreDataManager.configure(json: mockCity)
+    coreDataManager.saveContext()
+    coreDataManager.cityNamePredicate = NSPredicate(format: "name CONTAINS %@", "s")
+    coreDataManager.loadSavedData()
+    XCTAssertNil(coreDataManager.fetchedResultsController.fetchedObjects?.first?.name)
+  }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
+//    func testPerformanceFetchFromJSON() throws {
+//      let decoder = JSONDecoder()
+//      guard let fileURL = Bundle.main.url(forResource:"city.list", withExtension: "json"),
+//            let fileContents = try? String(contentsOf: fileURL) else { return }
+//      let data = Data(fileContents.utf8)
+//
+//        let list = try decoder.decode([CitiList].self, from: data)
+//        self.measure {
+//          for item in list {
+//            self.coreDataManager.configure(json: item)
+//          }
+//          coreDataManager.saveContext()
+//          coreDataManager.loadSavedData()
+//        }
+//    }
 
 }

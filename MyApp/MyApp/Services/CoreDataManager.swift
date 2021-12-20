@@ -18,7 +18,7 @@ class CoreDataManager {
     self.modelName = modelName
   }
   
-  private lazy var storeContainer: NSPersistentContainer = {
+  fileprivate lazy var storeContainer: NSPersistentContainer = {
     
     let container = NSPersistentContainer(name: self.modelName)
     container.loadPersistentStores { _, error in
@@ -100,73 +100,27 @@ class CoreDataManager {
   }
 }
 
-
+/// Класс для тестирования КорДаты с инМемори хранением данных
 class TestCoreDataManager: CoreDataManager {
-//  private lazy var testStoreContainer: NSPersistentContainer = {
-//    
-//    let container = NSPersistentContainer(name: self.modelName)
-//    container.loadPersistentStores { _, error in
-//      if let error = error as NSError? {
-//        print("Unresolved error \(error), \(error.userInfo)")
-//      }
-//    }
-//    container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
-//    container.viewContext.shouldDeleteInaccessibleFaults = true
-//    container.viewContext.automaticallyMergesChangesFromParent = true
-//    return container
-//  }()
-//  
-//   lazy var testManagedContext: NSManagedObjectContext = {
-//    return testStoreContainer.viewContext
-//  }()
-//  
-//  lazy var testFetchedResultsController: NSFetchedResultsController<CitiListCD> = {
-//    let request = CitiListCD.createFetchRequest()
-//    request.fetchBatchSize = 20
-//    request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-//    let controller = NSFetchedResultsController(fetchRequest: request, managedObjectContext: testManagedContext, sectionNameKeyPath: nil, cacheName: nil)
-//    
-//    controller.fetchRequest.predicate = cityNamePredicate
-//    do {
-//      try controller.performFetch()
-//    } catch {
-//      print(error.localizedDescription)
-//    }
-//    return controller
-//  }()
-//  
-//  override func saveContext () {
-//    guard testManagedContext.hasChanges else { return }
-//    
-//    do {
-//      try testManagedContext.save()
-//    } catch let error as NSError {
-//      print("Unresolved error \(error), \(error.userInfo)")
-//    }
-//  }
-//  
-//  
-//  override func loadSavedData() {
-//    testFetchedResultsController.fetchRequest.predicate = cityNamePredicate
-//    do {
-//      try testFetchedResultsController.performFetch()
-//    } catch {
-//      print(error.localizedDescription)
-//    }
-//  }
-//  
-//  override func configure(json: CitiList) {
-//    let entity = NSEntityDescription.entity(forEntityName: "CitiListCD",
-//                                            in: testManagedContext)!
-//    let list = CitiListCD(entity: entity, insertInto: testManagedContext)
-//    list.id = Int64(json.id)
-//    list.name = json.name
-//    list.lat = json.coord.lat
-//    list.lon = json.coord.lon
-//    list.country = json.country
-//  }
-  
+  override init(modelName: String) {
+    super.init(modelName: modelName)
+    let container = NSPersistentContainer(
+          name: self.modelName)
+        container.persistentStoreDescriptions[0].url =
+          URL(fileURLWithPath: "/dev/null")
+
+        container.loadPersistentStores { _, error in
+          if let error = error as NSError? {
+            fatalError(
+              "Unresolved error \(error), \(error.userInfo)")
+          }
+        }
+
+        self.storeContainer = container
+      }
+  }
+
  
   
   
-}
+

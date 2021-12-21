@@ -12,7 +12,7 @@ import CoreData
 class CoreDataManager {
   
   fileprivate let modelName: String
-  var cityNamePredicate: NSPredicate?
+  var cityListPredicate: NSPredicate?
   
   init(modelName: String) {
     self.modelName = modelName
@@ -27,19 +27,19 @@ class CoreDataManager {
       }
     }
     container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
-    container.viewContext.shouldDeleteInaccessibleFaults = true
-    container.viewContext.automaticallyMergesChangesFromParent = true
+    //container.viewContext.shouldDeleteInaccessibleFaults = true
+    //container.viewContext.automaticallyMergesChangesFromParent = true
     return container
   }()
   
   
-  lazy var fetchedResultsController: NSFetchedResultsController<CitiListCD> = {
-    let request = CitiListCD.createFetchRequest()
+  lazy var fetchedResultsController: NSFetchedResultsController<MainInfo> = {
+    let request = MainInfo.createFetchRequest()
     request.fetchBatchSize = 20
-    request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+    request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
     let controller = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedContext, sectionNameKeyPath: nil, cacheName: nil)
     
-    controller.fetchRequest.predicate = cityNamePredicate
+    controller.fetchRequest.predicate = cityListPredicate
     do {
       try controller.performFetch()
     } catch {
@@ -59,12 +59,12 @@ class CoreDataManager {
       try managedContext.save()
     } catch let error as NSError {
       print("Unresolved error \(error), \(error.userInfo)")
+      fatalError("Unresolved error \(error), \(error.userInfo)")
     }
   }
   
-  
   func loadSavedData() {
-    fetchedResultsController.fetchRequest.predicate = cityNamePredicate
+    fetchedResultsController.fetchRequest.predicate = cityListPredicate
     do {
       try fetchedResultsController.performFetch()
     } catch {
@@ -74,7 +74,7 @@ class CoreDataManager {
   
   /// Проверка наналичие данных в БД
   func entityIsEmpty() -> Bool {
-    let request = CitiListCD.createFetchRequest()
+    let request = MainInfo.createFetchRequest()
     do {
       let results = try managedContext.fetch(request)
       if results.isEmpty {
@@ -89,15 +89,42 @@ class CoreDataManager {
   
   /// Конфигурация списка городов
   func configure(json: CitiList) {
-    let entity = NSEntityDescription.entity(forEntityName: "CitiListCD",
+    let entity = NSEntityDescription.entity(forEntityName: "MainInfo",
                                             in: managedContext)!
-    let list = CitiListCD(entity: entity, insertInto: managedContext)
+    let list = MainInfo(entity: entity, insertInto: managedContext)
     list.id = Int64(json.id)
     list.name = json.name
     list.lat = json.coord.lat
     list.lon = json.coord.lon
     list.country = json.country
   }
+  
+  func configureTopView(from data: CurrentWeather, list: MainInfo?) {
+    let entity = NSEntityDescription.entity(forEntityName: "TopBar",
+                                             in: managedContext)!
+    let weather = TopBar(entity: entity, insertInto: managedContext)
+    weather.temperature = data.main.temp
+    weather.date = Int64(data.dt)
+    weather.iconId = Int16(data.weather.first?.id ?? 0)
+    weather.desc = data.weather.first?.weatherDescription
+    weather.citiList = list
+    weather.citiList?.name = data.name
+    
+  }
+  
+  func configureBottomView(from data: CurrentWeather, list: MainInfo?) {
+    let entity = NSEntityDescription.entity(forEntityName: "BottomBar",
+                                             in: managedContext)!
+    let weather = BottomBar(entity: entity, insertInto: managedContext)
+    weather.wind = data.wind.speed
+    weather.humidity = Int16(data.main.humidity)
+    weather.pressure = Int16(data.main.pressure)
+    weather.rain = Int16(data.clouds.all)
+    weather.weather = list
+  
+    
+  }
+  
 }
 
 /// Класс для тестирования КорДаты с инМемори хранением данных

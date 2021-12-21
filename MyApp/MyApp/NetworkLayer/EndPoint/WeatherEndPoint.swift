@@ -8,7 +8,7 @@
 import Foundation
 
  enum WeatherApi {
-    case getCurrentWeather(city: String)
+   case getCurrentWeather(city: Int)
    case getHourlyWeather(lon: Double, lat: Double)
 }
 
@@ -37,7 +37,7 @@ extension WeatherApi: EndPointType {
         case .getCurrentWeather(let city):
             return .requestParameters(bodyParameters: nil,
                                       bodyEncoding: .urlEncoding,
-                                      urlParameters: ["q": city,
+                                      urlParameters: ["id": city,
                                                       "appid": NetworkManager.weatherAPIKey,
                                                       "units": "metric",
                                                       "lang": "ru"])

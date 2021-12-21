@@ -8,7 +8,7 @@
 import Foundation
 
 extension String {
-    var capitalizedFirstLetter:String {
+    var capitalizedFirstLetter: String {
           let string = self
           return string.replacingCharacters(in: startIndex...startIndex, with: String(self[startIndex]).capitalized)
     }

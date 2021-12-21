@@ -25,7 +25,7 @@ class MyAppTests: XCTestCase {
     var validateResult: CurrentWeather?
     let expectedResult = 524901
     
-    networkManager.getWeather(city: "Moscow") { result in
+    networkManager.getWeather(city: 524901) { result in
       switch result {
       case .success(let city):
         validateResult = city

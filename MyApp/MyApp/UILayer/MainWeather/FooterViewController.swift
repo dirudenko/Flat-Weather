@@ -13,6 +13,20 @@ final class FooterViewController: UIViewController {
   private let loadingVC = LoadingViewController()
   private let networkManager = NetworkManager()
   private var hourlyWeather: HourlyWeather?
+  private let lat: Double
+  private let lon: Double
+  private let coreDataManager = CoreDataManager(modelName: "MyApp")
+
+  
+  init(lat: Double, lon: Double) {
+    self.lat = lat
+    self.lon = lon
+    super.init(nibName: nil, bundle: nil)
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
   
   override func loadView() {
     super.loadView()
@@ -38,8 +52,7 @@ final class FooterViewController: UIViewController {
   }
   
   private func getHourlyWeather(for city: CurrentWeather) {
-    guard let lon = UserDefaults.standard.object(forKey: "lon") as? Double,
-          let lat = UserDefaults.standard.object(forKey: "lat") as? Double,
+    guard 
     let correctedLon = Double(String(format: "%.2f", lon)),
     let correctedLat = Double(String(format: "%.2f", lat))
     else { return }

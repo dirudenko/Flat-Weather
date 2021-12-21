@@ -1,13 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21C52" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="CitiListCD" representedClassName="CitiListCD" syncable="YES">
+    <entity name="BottomBar" representedClassName="BottomBar" syncable="YES">
+        <attribute name="humidity" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="pressure" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="rain" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="wind" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="weather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MainInfo" inverseName="bottomWeather" inverseEntity="MainInfo"/>
+    </entity>
+    <entity name="List" representedClassName="List" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="inList" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MainInfo" inverseName="toList" inverseEntity="MainInfo"/>
+    </entity>
+    <entity name="MainInfo" representedClassName="MainInfo" syncable="YES">
         <attribute name="country" attributeType="String"/>
         <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="lon" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
+        <relationship name="bottomWeather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BottomBar" inverseName="weather" inverseEntity="BottomBar"/>
+        <relationship name="toList" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="List" inverseName="inList" inverseEntity="List"/>
+        <relationship name="topWeather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TopBar" inverseName="citiList" inverseEntity="TopBar"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="TopBar" representedClassName="TopBar" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="desc" attributeType="String"/>
+        <attribute name="iconId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="pressure" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="temperature" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="citiList" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MainInfo" inverseName="topWeather" inverseEntity="MainInfo"/>
     </entity>
     <elements>
-        <element name="CitiListCD" positionX="-63" positionY="-18" width="128" height="104"/>
+        <element name="BottomBar" positionX="126" positionY="81" width="128" height="104"/>
+        <element name="List" positionX="135" positionY="90" width="128" height="59"/>
+        <element name="MainInfo" positionX="-63" positionY="-18" width="128" height="149"/>
+        <element name="TopBar" positionX="314.96484375" positionY="75.43359375" width="128" height="119"/>
     </elements>
 </model>

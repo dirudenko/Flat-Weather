@@ -27,6 +27,10 @@ class SearchViewController: UIViewController {
     searchView.backgroundColor = UIColor(named: "backgroundColor")
     fetchDataFromCoreData()
   }
+  
+  deinit {
+    print("SearchVC deleted")
+  }
   // MARK: - Private functions
   /// Получение данных из CoreData
   private func fetchDataFromCoreData() {
@@ -94,7 +98,29 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
-    print(coreDataManager.fetchedResultsController.object(at: indexPath))
+    let city = coreDataManager.fetchedResultsController.object(at: indexPath)
+  //  print(coreDataManager.fetchedResultsController.object(at: indexPath))
+//    UserDefaults.standard.set(city.name, forKey: "city")
+//    UserDefaults.standard.set(city.lat, forKey: "lat")
+//    UserDefaults.standard.set(city.lon, forKey: "lon")
+//    UserDefaults.standard.set(city.id, forKey: "id")
+    UserDefaults.standard.appendList(id: city.id)
+
+//    let vc  = MainWeatherViewController()
+//    vc.modalPresentationStyle = .fullScreen
+//
+//      self.dismiss(animated: false)
+//
+//
+//    navigationController?.pushViewController(vc, animated: true)
+//    navigationController?.viewControllers.first?.remove()
+
+   // navigationController?.viewControllers.first?.remove()
+    navigationController?.dismiss(animated: false, completion: nil)
+    let vc  = MainWeatherViewController(city: [Int(city.id)])
+    vc.modalPresentationStyle = .fullScreen
+    present(vc, animated: false)
+    
   }
 }
 
@@ -107,7 +133,7 @@ extension SearchViewController: UISearchBarDelegate {
   
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     /// Передеча текста в качестве предиката для фетчРеквеста
-    coreDataManager.cityNamePredicate = NSPredicate(format: "name CONTAINS %@", searchText)
+    coreDataManager.cityListPredicate = NSPredicate(format: "name CONTAINS %@", searchText)
     coreDataManager.loadSavedData()
     print(coreDataManager.fetchedResultsController.fetchedObjects?.count)
     searchView.tableView.isHidden = false

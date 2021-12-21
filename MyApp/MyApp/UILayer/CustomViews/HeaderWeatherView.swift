@@ -106,8 +106,8 @@ class HeaderWeatherView: UIView {
     NSLayoutConstraint.activate([
       
       cityNameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 16),
-      cityNameLabel.leftAnchor.constraint(equalTo: self.centerXAnchor, constant: -30.5),
-      cityNameLabel.widthAnchor.constraint(equalToConstant: 61),
+      cityNameLabel.leftAnchor.constraint(equalTo: self.centerXAnchor, constant: -60),
+      cityNameLabel.widthAnchor.constraint(equalToConstant: 120),
       cityNameLabel.heightAnchor.constraint(equalToConstant: 32),
       
       weatherImage.topAnchor.constraint(equalTo: self.topAnchor, constant: 48),

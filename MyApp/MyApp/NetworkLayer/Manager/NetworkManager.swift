@@ -12,7 +12,7 @@ struct NetworkManager {
   static let weatherAPIKey = "4151621f5318e81115ce7581adb25359"
   let router = Router<WeatherApi>()
   
-  func getWeather(city: String, completion: @escaping (Result<CurrentWeather, NetworkErrors>) -> Void) {
+  func getWeather(city: Int, completion: @escaping (Result<CurrentWeather, NetworkErrors>) -> Void) {
     router.request(.getCurrentWeather(city: city)) { data, response, error in
       
       if let _ = error {

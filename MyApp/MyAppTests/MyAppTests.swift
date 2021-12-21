@@ -11,9 +11,11 @@ import XCTest
 class MyAppTests: XCTestCase {
   
   var networkManager: NetworkManager!
+  var headerWeatherViewController: HeaderWeaherViewController!
   
   override func setUpWithError() throws {
     networkManager = NetworkManager()
+    headerWeatherViewController = HeaderWeaherViewController(cityId: 0)
   }
   
   override func tearDownWithError() throws {
@@ -42,6 +44,7 @@ class MyAppTests: XCTestCase {
     }
   }
   
+ 
 //  func testCityError() throws {
 //    let expectation = expectation(description: "Expectation in " + #function)
 //    

@@ -12,51 +12,35 @@ final class MainWeatherViewController: UIViewController {
   private var headerWeaherViewController: HeaderWeaherViewController?
   private var footerWeaherViewController: FooterViewController?
   private var searchViewController: SearchViewController?
-  private var fetchedCityList: [Int]
+  private var fetchedCityList: [List]
   private let coreDataManager = CoreDataManager(modelName: "MyApp")
   
-  init(city: [Int]) {
-    self.fetchedCityList = city
+  init(for list: [List]) {
+    self.fetchedCityList = list
     super.init(nibName: nil, bundle: nil)
   }
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
-  private lazy var isFetched: Bool = {
-    let isFetched = Bool()
-    if fetchedCityList != nil { return true }
-    else {
-      return false
-    }
-  }()
-  
-  
+    
+  // MARK: - UIViewController lifecycle methods
+
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.navigationItem.backBarButtonItem?.isEnabled = false
-    print(fetchedCityList.isEmpty)
- //   coreDataManager.loadSavedData()
- //   print(coreDataManager.fetchedResultsController.fetchedObjects?.count)
-    //add(headerWeaherViewController)
-    // add(footerWeaherViewController)
-    // add(searchViewController)
-    
+   // self.navigationItem.backBarButtonItem?.isEnabled = false
     view.backgroundColor = .systemBackground
   }
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    fetchedCityList = UserDefaults.standard.object(forKey: "list") as! [Int]
 
-    if !fetchedCityList.isEmpty {
-      let id = fetchedCityList.first ?? 0
+    if  !fetchedCityList.isEmpty {
+      let id = fetchedCityList.first?.id ?? 0
       coreDataManager.cityListPredicate = NSPredicate(format: "id == %i", id)
       coreDataManager.loadSavedData()
       guard let city = coreDataManager.fetchedResultsController.fetchedObjects?.first else { return }
-      UserDefaults.standard.appendList(id: city.id)
-      headerWeaherViewController = HeaderWeaherViewController(cityId: id)
+      headerWeaherViewController = HeaderWeaherViewController(cityId: Int(id))
       footerWeaherViewController = FooterViewController(lat: city.lat, lon: city.lon)
       add(headerWeaherViewController!)
       add(footerWeaherViewController!)
@@ -65,20 +49,6 @@ final class MainWeatherViewController: UIViewController {
       searchViewController = SearchViewController()
             add(searchViewController!)
     }
-    
-//    if let cityName = UserDefaults.standard.object(forKey: "city") as? String,
-//       let lat = UserDefaults.standard.object(forKey: "lat") as? Double,
-//       let lon = UserDefaults.standard.object(forKey: "lon") as? Double {
-//      headerWeaherViewController = HeaderWeaherViewController(cityName: cityName)
-//      footerWeaherViewController = FooterViewController(lat: lat, lon: lon)
-//
-//      add(headerWeaherViewController!)
-//      add(footerWeaherViewController!)
-//    } else {
-//      searchViewController = SearchViewController()
-//      add(searchViewController!)
-//
-//    }
   }
   
   override func viewDidLayoutSubviews() {

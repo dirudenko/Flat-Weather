@@ -45,6 +45,22 @@ class CoreDataManager {
     } catch {
       print(error.localizedDescription)
     }
+    
+    return controller
+  }()
+  
+  lazy var fetchedListController: NSFetchedResultsController<List> = {
+    let request = List.createFetchRequest()
+    request.fetchBatchSize = 20
+    request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
+    let controller = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedContext, sectionNameKeyPath: nil, cacheName: nil)
+    
+   // controller.fetchRequest.predicate = cityListPredicate
+    do {
+      try controller.performFetch()
+    } catch {
+      print(error.localizedDescription)
+    }
     return controller
   }()
   
@@ -87,6 +103,15 @@ class CoreDataManager {
     }
   }
   
+  /// Сохранение добавленного города в КорДату
+  func saveToList(city: MainInfo) {
+    let entity = NSEntityDescription.entity(forEntityName: "List",
+                                             in: managedContext)!
+    let list = List(entity: entity, insertInto: managedContext)
+    list.id = city.id
+    list.addToInList(city)
+  }
+  
   /// Конфигурация списка городов
   func configure(json: CitiList) {
     let entity = NSEntityDescription.entity(forEntityName: "MainInfo",
@@ -99,6 +124,7 @@ class CoreDataManager {
     list.country = json.country
   }
   
+  /// Конфигурация верхнего бара с текущими погодными данными
   func configureTopView(from data: CurrentWeather, list: MainInfo?) {
     let entity = NSEntityDescription.entity(forEntityName: "TopBar",
                                              in: managedContext)!
@@ -109,9 +135,9 @@ class CoreDataManager {
     weather.desc = data.weather.first?.weatherDescription
     weather.citiList = list
     weather.citiList?.name = data.name
-    
   }
   
+  /// Конфигурация collectionView бара с текущими погодными данными
   func configureBottomView(from data: CurrentWeather, list: MainInfo?) {
     let entity = NSEntityDescription.entity(forEntityName: "BottomBar",
                                              in: managedContext)!
@@ -121,10 +147,7 @@ class CoreDataManager {
     weather.pressure = Int16(data.main.pressure)
     weather.rain = Int16(data.clouds.all)
     weather.weather = list
-  
-    
   }
-  
 }
 
 /// Класс для тестирования КорДаты с инМемори хранением данных

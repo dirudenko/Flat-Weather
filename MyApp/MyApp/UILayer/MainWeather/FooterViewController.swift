@@ -27,7 +27,8 @@ final class FooterViewController: UIViewController {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
+  // MARK: - UIViewController lifecycle methods
+
   override func loadView() {
     super.loadView()
     self.view = weatherView
@@ -50,17 +51,13 @@ final class FooterViewController: UIViewController {
     let footerFrame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height)
     loadingVC.view.frame = footerFrame
   }
-  
+  // MARK: - Private functions
   private func getHourlyWeather(for city: CurrentWeather) {
     guard 
     let correctedLon = Double(String(format: "%.2f", lon)),
     let correctedLat = Double(String(format: "%.2f", lat))
     else { return }
-    
-    
-    //      let lon = city.coord.lon
-    //    let lat = city.coord.lat
-    
+
     networkManager.getHourlyWeather(lon: correctedLon, lat: correctedLat) { result in
       switch result {
       case .success(let weather):
@@ -76,6 +73,7 @@ final class FooterViewController: UIViewController {
     }
   }
 }
+// MARK: - UIViewController delegates
 
 extension FooterViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

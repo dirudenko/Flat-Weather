@@ -8,7 +8,7 @@
         <relationship name="weather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MainInfo" inverseName="bottomWeather" inverseEntity="MainInfo"/>
     </entity>
     <entity name="List" representedClassName="List" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="inList" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MainInfo" inverseName="toList" inverseEntity="MainInfo"/>
     </entity>
     <entity name="MainInfo" representedClassName="MainInfo" syncable="YES">

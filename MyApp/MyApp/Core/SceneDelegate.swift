@@ -10,6 +10,8 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
   var window: UIWindow?
+  let coreDataManager = CoreDataManager(modelName: "MyApp")
+
 
 
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -18,16 +20,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
     guard let windowScene = (scene as? UIWindowScene) else { return }
     let window = UIWindow(windowScene: windowScene)
-  //  UserDefaults.standard.removeObject(forKey: "list")
-
-    var id = [Int]()
-    
-    id = UserDefaults.standard.object(forKey: "list") as? [Int] ?? []
-    if id.isEmpty {
-      UserDefaults.standard.set(id, forKey: "list")
-    }
-    
-    let viewController = MainWeatherViewController(city: id)
+    let list = coreDataManager.fetchedListController.fetchedObjects ?? []
+    let viewController = MainWeatherViewController(for: list)
     let navigationController = UINavigationController(rootViewController: viewController)
     navigationController.setToolbarHidden(true, animated: false)
    

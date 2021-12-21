@@ -12,11 +12,11 @@ import CoreData
 
 extension List {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<List> {
+    @nonobjc public class func createFetchRequest() -> NSFetchRequest<List> {
         return NSFetchRequest<List>(entityName: "List")
     }
 
-    @NSManaged public var id: Int16
+    @NSManaged public var id: Int64
     @NSManaged public var inList: NSSet?
 
 }

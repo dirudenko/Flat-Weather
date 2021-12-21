@@ -25,7 +25,8 @@ class HeaderWeaherViewController: UIViewController {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
+  // MARK: - UIViewController lifecycle methods
+
   override func loadView() {
     super.loadView()
     self.view = weatherView
@@ -50,7 +51,7 @@ class HeaderWeaherViewController: UIViewController {
     let headerFrame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height)
     loadingVC.view.frame = headerFrame
   }
-  
+  // MARK: - Private functions
   // Получение данных из Кордаты и их вывод на экран перед выполнением запроса в сеть
   private func fetchDataFromCoreData() {
     coreDataManager.cityListPredicate = NSPredicate(format: "id == %i", cityId)
@@ -125,6 +126,7 @@ class HeaderWeaherViewController: UIViewController {
   
   
 }
+// MARK: - UIViewController delegates
 
 extension HeaderWeaherViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

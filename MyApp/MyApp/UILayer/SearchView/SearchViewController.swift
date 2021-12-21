@@ -99,25 +99,13 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
     let city = coreDataManager.fetchedResultsController.object(at: indexPath)
-  //  print(coreDataManager.fetchedResultsController.object(at: indexPath))
-//    UserDefaults.standard.set(city.name, forKey: "city")
-//    UserDefaults.standard.set(city.lat, forKey: "lat")
-//    UserDefaults.standard.set(city.lon, forKey: "lon")
-//    UserDefaults.standard.set(city.id, forKey: "id")
-    UserDefaults.standard.appendList(id: city.id)
-
-//    let vc  = MainWeatherViewController()
-//    vc.modalPresentationStyle = .fullScreen
-//
-//      self.dismiss(animated: false)
-//
-//
-//    navigationController?.pushViewController(vc, animated: true)
-//    navigationController?.viewControllers.first?.remove()
-
-   // navigationController?.viewControllers.first?.remove()
+/// сохранение выбранного города в список в КорДате
+    coreDataManager.saveToList(city: city)
+    coreDataManager.saveContext()
     navigationController?.dismiss(animated: false, completion: nil)
-    let vc  = MainWeatherViewController(city: [Int(city.id)])
+
+    let list = coreDataManager.fetchedListController.fetchedObjects ?? []
+    let vc  = MainWeatherViewController(for: list)
     vc.modalPresentationStyle = .fullScreen
     present(vc, animated: false)
     

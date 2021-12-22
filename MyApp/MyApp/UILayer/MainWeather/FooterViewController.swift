@@ -41,7 +41,7 @@ final class FooterViewController: UIViewController {
     weatherView.collectionView.delegate = self
     weatherView.collectionView.register(HourlyCollectionViewCell.self, forCellWithReuseIdentifier: "HourlyCollectionViewCell")
     view.backgroundColor = UIColor(named: "backgroundColor")
-    getHourlyWeather(for: MockData.mockCity)
+   // getHourlyWeather(for: MockData.mockCity)
     weatherView.dateLabel.text = Date().dateFormatter().capitalizedFirstLetter
   }
   

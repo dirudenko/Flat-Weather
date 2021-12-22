@@ -9,53 +9,69 @@ import UIKit
 
 class WeatherCollectionViewCell: UICollectionViewCell {
   
-  private let imageSize: CGFloat = 32
+  //private let imageSize: CGFloat = 32
+
+  private(set)  var conditionImage = MainImage(frame: .zero)
+  //  : UIImageView = {
+  //    let imageView = UIImageView()
+  //    imageView.contentMode = .scaleAspectFit
+  //    imageView.layer.masksToBounds = true
+  //    imageView.translatesAutoresizingMaskIntoConstraints = false
+  //    return imageView
+  //  }()
   
+  private(set)  var conditionStatusLabel = DescriptionLabel()
+  //  : UILabel = {
+  //    let label = UILabel()
+  //    label.font = .systemFont(ofSize: 14, weight: .medium)
+  //    label.adjustsFontSizeToFitWidth = true
+  //    label.textColor = .white
+  //    label.translatesAutoresizingMaskIntoConstraints = false
+  //    return label
+  //  }()
   
-  private(set) lazy var conditionImage: UIImageView = {
-    let imageView = UIImageView()
-    imageView.contentMode = .scaleAspectFit
-    imageView.layer.masksToBounds = true
-    imageView.translatesAutoresizingMaskIntoConstraints = false
-    return imageView
-  }()
-  
-  private(set) lazy var conditionStatusLabel: UILabel = {
-    let label = UILabel()
-    label.font = .systemFont(ofSize: 14, weight: .medium)
-    label.adjustsFontSizeToFitWidth = true
-    label.textColor = .white
-    label.translatesAutoresizingMaskIntoConstraints = false
-    return label
-  }()
-  
-  private(set) lazy var conditionNameLabel: UILabel = {
-    let label = UILabel()
-    label.font = .systemFont(ofSize: 14, weight: .medium)
-    label.adjustsFontSizeToFitWidth = true
-    label.textColor = .white
-    label.numberOfLines = 0
-    label.translatesAutoresizingMaskIntoConstraints = false
-    return label
-  }()
+  private(set)  var conditionNameLabel = DescriptionLabel()
+  //  : UILabel = {
+  //    let label = UILabel()
+  //    label.font = .systemFont(ofSize: 14, weight: .medium)
+  //    label.adjustsFontSizeToFitWidth = true
+  //    label.textColor = .white
+  //    label.numberOfLines = 0
+  //    label.translatesAutoresizingMaskIntoConstraints = false
+  //    return label
+  //  }()
   
   
   
   override init(frame: CGRect) {
     super.init(frame: frame)
-    
-    contentView.addSubview(conditionImage)
-    contentView.addSubview(conditionNameLabel)
-    contentView.addSubview(conditionStatusLabel)
-
     backgroundColor = UIColor(named: "backgroundColor")
+    setupLayouts()
     addConstraints()
+    setupFonts()
   }
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+  
+  private func setupLayouts() {
+    contentView.addSubview(conditionImage)
+    contentView.addSubview(conditionNameLabel)
+    contentView.addSubview(conditionStatusLabel)
+  }
+  
+  private func setupFonts() {
+    conditionStatusLabel.font = AppFont.regular(size: 14)
+    conditionNameLabel.font =  AppFont.regular(size: 14)
+  }
+  
+  
   private func addConstraints() {
+    
+    var imageSize: CGFloat {
+      adapted(dimensionSize: 32, to: .height)
+    }
     
     NSLayoutConstraint.activate([
       
@@ -66,13 +82,13 @@ class WeatherCollectionViewCell: UICollectionViewCell {
       
       conditionStatusLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
       conditionStatusLabel.leftAnchor.constraint(equalTo: conditionImage.rightAnchor, constant: 4),
-      conditionStatusLabel.widthAnchor.constraint(equalToConstant: 50),
-      conditionStatusLabel.heightAnchor.constraint(equalToConstant: 14),
+      conditionStatusLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 50, to: .width)),
+      conditionStatusLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 14, to: .height)),
       
       conditionNameLabel.topAnchor.constraint(equalTo: conditionStatusLabel.bottomAnchor, constant: 5),
       conditionNameLabel.leftAnchor.constraint(equalTo: conditionImage.rightAnchor, constant: 4),
-      conditionNameLabel.widthAnchor.constraint(equalToConstant: 100),
-      conditionNameLabel.heightAnchor.constraint(equalToConstant: 14)
+      conditionNameLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 100, to: .width)),
+      conditionNameLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 14, to: .height))
     ])
   }
   
@@ -85,7 +101,7 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     case 1:
       conditionImage.image = UIImage(systemName: "cloud.drizzle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
       conditionStatusLabel.text = "\(model.clouds.all)%"
-      conditionNameLabel.text = "Вероятность осадков"
+      conditionNameLabel.text = "Дождь"
     case 2:
       conditionImage.image = UIImage(systemName: "thermometer")?.withTintColor(.white, renderingMode: .alwaysOriginal)
       conditionStatusLabel.text = "\(model.main.pressure) mBar"

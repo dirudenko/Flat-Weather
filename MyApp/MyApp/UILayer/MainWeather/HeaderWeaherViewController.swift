@@ -43,7 +43,7 @@ class HeaderWeaherViewController: UIViewController {
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-   // getWeather(for: cityId)
+    getWeather(for: cityId)
   }
   
   override func viewDidLayoutSubviews() {

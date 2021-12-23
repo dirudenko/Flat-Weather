@@ -35,9 +35,7 @@ class SearchView: UIView {
 
   override init(frame: CGRect) {
     super.init(frame: frame)
-    addSubview(searchBar)
-    addSubview(tableView)
-    addSubview(animation)
+    setupLayouts()
    // backgroundColor = UIColor(named: "backgroundColor")
     addConstraints()
   }
@@ -47,25 +45,31 @@ class SearchView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
   
+  private func setupLayouts() {
+    addSubview(searchBar)
+    addSubview(tableView)
+    addSubview(animation)
+  }
+  
   private func addConstraints() {
     let safeArea = self.safeAreaLayoutGuide
 
     NSLayoutConstraint.activate([
           
-      searchBar.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 9),
-      searchBar.leftAnchor.constraint(equalTo: safeArea.leftAnchor, constant: 16),
-      searchBar.rightAnchor.constraint(equalTo: safeArea.rightAnchor, constant: -16),
+      searchBar.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: adapted(dimensionSize: 9, to: .height)),
+      searchBar.leftAnchor.constraint(equalTo: safeArea.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
+      searchBar.rightAnchor.constraint(equalTo: safeArea.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
      // searchBar.heightAnchor.constraint(equalToConstant: 50),
       
-      tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 9),
-      tableView.leftAnchor.constraint(equalTo: safeArea.leftAnchor, constant: 16),
-      tableView.rightAnchor.constraint(equalTo: safeArea.rightAnchor, constant: 16),
+      tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: adapted(dimensionSize: 9, to: .height)),
+      tableView.leftAnchor.constraint(equalTo: safeArea.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
+      tableView.rightAnchor.constraint(equalTo: safeArea.rightAnchor, constant: adapted(dimensionSize: 16, to: .width)),
       tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
       
-      animation.topAnchor.constraint(equalTo: self.centerYAnchor, constant: -50),
-      animation.leftAnchor.constraint(equalTo: self.centerXAnchor, constant: -50),
-      animation.widthAnchor.constraint(equalToConstant: 200),
-      animation.heightAnchor.constraint(equalToConstant: 200)
+      animation.topAnchor.constraint(equalTo: self.centerYAnchor, constant: adapted(dimensionSize: -50, to: .height)),
+      animation.leftAnchor.constraint(equalTo: self.centerXAnchor, constant: adapted(dimensionSize: -50, to: .width)),
+      animation.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 200, to: .width)),
+      animation.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 200, to: .height))
       
     ])
     

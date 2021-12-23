@@ -81,12 +81,12 @@ class WeatherCollectionViewCell: UICollectionViewCell {
       conditionImage.heightAnchor.constraint(equalToConstant: imageSize),
       
       conditionStatusLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-      conditionStatusLabel.leftAnchor.constraint(equalTo: conditionImage.rightAnchor, constant: 4),
+      conditionStatusLabel.leftAnchor.constraint(equalTo: conditionImage.rightAnchor, constant: adapted(dimensionSize: 4, to: .width)),
       conditionStatusLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 50, to: .width)),
       conditionStatusLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 14, to: .height)),
       
-      conditionNameLabel.topAnchor.constraint(equalTo: conditionStatusLabel.bottomAnchor, constant: 5),
-      conditionNameLabel.leftAnchor.constraint(equalTo: conditionImage.rightAnchor, constant: 4),
+      conditionNameLabel.topAnchor.constraint(equalTo: conditionStatusLabel.bottomAnchor, constant: adapted(dimensionSize: 5, to: .height)),
+      conditionNameLabel.leftAnchor.constraint(equalTo: conditionImage.rightAnchor, constant: adapted(dimensionSize: 4, to: .width)),
       conditionNameLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 100, to: .width)),
       conditionNameLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 14, to: .height))
     ])

@@ -88,6 +88,15 @@ class CoreDataManager {
     }
   }
   
+  func loadListData() {
+    //fetchedResultsController.fetchRequest.predicate = cityListPredicate
+    do {
+      try fetchedListController.performFetch()
+    } catch {
+      print(error.localizedDescription)
+    }
+  }
+  
   /// Проверка наналичие данных в БД
   func entityIsEmpty() -> Bool {
     let request = MainInfo.createFetchRequest()

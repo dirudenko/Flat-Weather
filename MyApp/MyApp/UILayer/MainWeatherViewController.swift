@@ -15,9 +15,6 @@ final class MainWeatherViewController: UIViewController {
   private var fetchedCityList: [List]
   private let coreDataManager = CoreDataManager(modelName: "MyApp")
   
-  
-  
-  
   init(for list: [List]) {
     self.fetchedCityList = list
     super.init(nibName: nil, bundle: nil)
@@ -33,11 +30,13 @@ final class MainWeatherViewController: UIViewController {
     super.viewDidLoad()
     // self.navigationItem.backBarButtonItem?.isEnabled = false
     view.backgroundColor = .systemBackground
+
   }
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
   // TODO: - брать данные из List
+  //  print(fetchedCityList.count)
     if  !fetchedCityList.isEmpty {
       let id = fetchedCityList.first?.id ?? 0
       coreDataManager.cityListPredicate = NSPredicate(format: "id == %i", id)
@@ -47,8 +46,7 @@ final class MainWeatherViewController: UIViewController {
       footerWeaherViewController = FooterViewController(lat: city.lon, lon: city.lon)
       add(headerWeaherViewController!)
       add(footerWeaherViewController!)
-    //  setupButtonConstraints()
-      
+      headerWeaherViewController?.weatherView.delegate = self      
     }
     else {
       searchViewController = SearchViewController()
@@ -56,63 +54,38 @@ final class MainWeatherViewController: UIViewController {
     }
   }
   
-  var heightConstraint = NSLayoutConstraint()
-  var widthConstraint  = NSLayoutConstraint()
-  var topConstraint    = NSLayoutConstraint()
-  var centerConstraint = NSLayoutConstraint()
-  
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
-   // updateConstraints()
-    let headerFrame = CGRect(x: adapted(dimensionSize: 16, to: .width), y: topSpace, width: adapted(dimensionSize: 358, to: .width), height: adapted(dimensionSize: 565, to: .height))
+    let headerFrame = CGRect(x: adapted(dimensionSize: 16, to: .width), y: adapted(dimensionSize: 62, to: .height), width: adapted(dimensionSize: 358, to: .width), height: adapted(dimensionSize: 565, to: .height))
         headerWeaherViewController?.view.frame = headerFrame
-        headerWeaherViewController?.view.layer.cornerRadius = 30
+    headerWeaherViewController?.view.layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
         headerWeaherViewController?.view.layer.masksToBounds = true
     
-    let footerFrame = CGRect(x: 0, y: headerFrame.height + adapted(dimensionSize: 78, to: .height), width: view.frame.width, height: footerSize.height)
+    let footerFrame = CGRect(x: 0, y: headerFrame.height + adapted(dimensionSize: 78, to: .height), width: view.frame.width, height: adapted(dimensionSize: 140, to: .height))
      footerWeaherViewController?.view.frame = footerFrame
     
-    let searchFrame = CGRect(x: view.frame.minX, y: view.frame.minY, width: view.frame.width, height: view.frame.height)
+    let searchFrame = CGRect(x: adapted(dimensionSize: 16, to: .width), y: adapted(dimensionSize: 62, to: .height), width: adapted(dimensionSize: 358, to: .width), height: adapted(dimensionSize: 766, to: .height))
     searchViewController?.view.frame = searchFrame
+    searchViewController?.view.layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
+    searchViewController?.view.layer.masksToBounds = true
   }
 }
 
 
-extension MainWeatherViewController {
-  func updateConstraints() {
-    updateButtonConstraints()
-   // view.updateAdaptedConstraints()
-  }
-  
-  var headerSize: CGSize {
-    resized(size: CGSize(width: 358, height: 565), basedOn: .height)
-  }
-  
-  var footerSize: CGSize {
-    resized(size: CGSize(width: 390, height: 140), basedOn: .height)
-  }
-  
-  var topSpace: CGFloat {
-    adapted(dimensionSize: 62, to: .height)
-  }
-  
-  func setupButtonConstraints() {
-    widthConstraint  = headerWeaherViewController!.view.widthAnchor.constraint(equalToConstant: headerSize.width)
-    heightConstraint = headerWeaherViewController!.view.heightAnchor.constraint(equalToConstant: headerSize.height)
-    topConstraint    = headerWeaherViewController!.view.topAnchor.constraint(equalTo: self.view.topAnchor, constant: topSpace)
-    centerConstraint = headerWeaherViewController!.view.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+
+
+extension MainWeatherViewController: HeaderButtonsProtocol {
+  func plusButtonTapped() {
+//    let vc  = SearchViewController()
+//    vc.modalPresentationStyle = .fullScreen
+//    //present(vc, animated: false)
+//    navigationController?.pushViewController(vc, animated: true)
     
-    NSLayoutConstraint.activate([
-      widthConstraint,
-      heightConstraint,
-      topConstraint,
-      centerConstraint
-    ])
+    headerWeaherViewController?.remove()
+    footerWeaherViewController?.remove()
+    searchViewController = SearchViewController()
+    add(searchViewController!)
   }
   
-  func updateButtonConstraints() {
-    topConstraint.constant    = topSpace
-    widthConstraint.constant  = headerSize.width
-    heightConstraint.constant = headerSize.height
-  }
+  
 }

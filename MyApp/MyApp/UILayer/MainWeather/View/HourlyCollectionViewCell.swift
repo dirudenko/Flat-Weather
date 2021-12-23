@@ -13,14 +13,15 @@ class HourlyCollectionViewCell: UICollectionViewCell {
   
  
   
-  private(set) lazy var conditionImage: UIImageView = {
-    let imageView = UIImageView()
-    imageView.contentMode = .scaleAspectFit
-    imageView.layer.masksToBounds = true
-    imageView.translatesAutoresizingMaskIntoConstraints = false
-    return imageView
-  }()
-  
+  private(set) var conditionImage = MainImage(frame: .zero)
+//  : UIImageView = {
+//    let imageView = UIImageView()
+//    imageView.contentMode = .scaleAspectFit
+//    imageView.layer.masksToBounds = true
+//    imageView.translatesAutoresizingMaskIntoConstraints = false
+//    return imageView
+//  }()
+//
   private(set) var timeLabel = DescriptionLabel()
   //  = {
   //    let label = UILabel()

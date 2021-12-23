@@ -7,6 +7,8 @@
 
 import UIKit
 
+
+
 class HeaderWeaherViewController: UIViewController {
   
   private let networkManager = NetworkManager()
@@ -37,13 +39,14 @@ class HeaderWeaherViewController: UIViewController {
     weatherView.collectionView.dataSource = self
     weatherView.collectionView.delegate = self
     weatherView.collectionView.register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "WeatherCollectionViewCell")
-    add(loadingVC)
+   // add(loadingVC)
     fetchDataFromCoreData()
+    
   }
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    getWeather(for: cityId)
+   // getWeather(for: cityId)
   }
   
   override func viewDidLayoutSubviews() {

@@ -7,10 +7,15 @@
 
 import UIKit
 
+protocol HeaderButtonsProtocol: AnyObject {
+  func plusButtonTapped()
+}
+
 class HeaderWeatherView: UIView {
   
   // let imageSize: CGFloat = 240
-  
+  var delegate: HeaderButtonsProtocol?
+
   
   
   private(set) lazy var collectionView: UICollectionView = {
@@ -78,6 +83,7 @@ class HeaderWeatherView: UIView {
   //    return label
   //  }()
   
+  private(set) var addButton = Button(backgroundColor: UIColor(named: "backgroundColor")!, systemImage: "plus")
   
   
   override init(frame: CGRect) {
@@ -87,6 +93,8 @@ class HeaderWeatherView: UIView {
     setupLayouts()
     addConstraints()
     setupFonts()
+    
+    addButton.addTarget(self, action: #selector(didTapAdd), for: .touchDown)
   }
   
   private func setupLayouts() {
@@ -96,6 +104,7 @@ class HeaderWeatherView: UIView {
     addSubview(temperatureLabel)
     addSubview(conditionLabel)
     addSubview(collectionView)
+    addSubview(addButton)
   }
   
   private func setupFonts() {
@@ -103,6 +112,10 @@ class HeaderWeatherView: UIView {
     cityNameLabel.font = AppFont.bold(size: 20)
     temperatureLabel.font = AppFont.bold(size: 50)
     conditionLabel.font =  AppFont.regular(size: 19)
+  }
+  
+  @objc func didTapAdd() {
+    delegate?.plusButtonTapped()
   }
   
   override func draw(_ rect: CGRect) {
@@ -127,6 +140,12 @@ class HeaderWeatherView: UIView {
     }
     
     NSLayoutConstraint.activate([
+      
+      addButton.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 16, to: .height)),
+      addButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
+      addButton.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 32, to: .width)),
+      addButton.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 32, to: .height)),
+      
       
       cityNameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 16, to: .height)),
       cityNameLabel.leftAnchor.constraint(equalTo: self.centerXAnchor, constant: adapted(dimensionSize: -60, to: .width)),

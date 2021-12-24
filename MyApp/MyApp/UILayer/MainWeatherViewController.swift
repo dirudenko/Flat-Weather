@@ -13,10 +13,12 @@ final class MainWeatherViewController: UIViewController {
   private var footerWeaherViewController: FooterViewController?
   private var searchViewController: SearchViewController?
   private var fetchedCityList: [List]
+  var index: Int
   private let coreDataManager = CoreDataManager(modelName: "MyApp")
   
-  init(for list: [List]) {
+  init(for list: [List], index: Int) {
     self.fetchedCityList = list
+    self.index = index
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -38,12 +40,13 @@ final class MainWeatherViewController: UIViewController {
   // TODO: - брать данные из List
   //  print(fetchedCityList.count)
     if  !fetchedCityList.isEmpty {
-      let id = fetchedCityList.first?.id ?? 0
-      coreDataManager.cityListPredicate = NSPredicate(format: "id == %i", id)
-      coreDataManager.loadSavedData()
-      guard let city = coreDataManager.fetchedResultsController.fetchedObjects?.first else { return }
-      headerWeaherViewController = HeaderWeaherViewController(cityId: Int(city.id))
-      footerWeaherViewController = FooterViewController(lat: city.lon, lon: city.lon)
+      let id = Int(fetchedCityList[index].id)
+//      coreDataManager.cityListPredicate = NSPredicate(format: "id == %i", id)
+//      coreDataManager.loadSavedData()
+//      guard let city = coreDataManager.fetchedListController.fetchedObjects?.first
+//                  else { return }
+      headerWeaherViewController = HeaderWeaherViewController(cityId: id)
+      footerWeaherViewController = FooterViewController(cityId: id)
       add(headerWeaherViewController!)
       add(footerWeaherViewController!)
       headerWeaherViewController?.weatherView.delegate = self      

@@ -21,7 +21,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     guard let windowScene = (scene as? UIWindowScene) else { return }
     let window = UIWindow(windowScene: windowScene)
     let list = coreDataManager.fetchedListController.fetchedObjects ?? []
-    let viewController = MainWeatherViewController(for: list)
+    //let viewController = MainWeatherViewController(for: list, index: 1)
+    let viewController = CityListPageViewController(for: list, index: 0)
     let navigationController = UINavigationController(rootViewController: viewController)
     navigationController.setToolbarHidden(true, animated: false)
    

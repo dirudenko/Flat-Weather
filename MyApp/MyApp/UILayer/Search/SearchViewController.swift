@@ -81,7 +81,7 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
   func numberOfSections(in tableView: UITableView) -> Int {
     switch tableView {
     case searchView.searchTableView:
-    return coreDataManager.fetchedResultsController.sections?.count ?? 0
+      return coreDataManager.fetchedResultsController.sections?.count ?? 0
     case searchView.cityListTableView:
       return coreDataManager.fetchedListController.fetchedObjects?.count ?? 0
     default: return 0
@@ -94,7 +94,7 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
       let sectionInfo = coreDataManager.fetchedResultsController.sections![section]
       return sectionInfo.numberOfObjects
     case searchView.cityListTableView:
-     // let sectionInfo = coreDataManager.fetchedListController.sections![section]
+      // let sectionInfo = coreDataManager.fetchedListController.sections![section]
       return 1
     default: return 0
     }
@@ -102,37 +102,30 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
     return adapted(dimensionSize: 16, to: .height)
-      }
+  }
   
   func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
     let headerView = UIView(frame: .zero)
-          headerView.backgroundColor = UIColor(named: "backgroundColor")
-          return headerView
-      }
+    headerView.backgroundColor = UIColor(named: "backgroundColor")
+    return headerView
+  }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
     switch tableView {
     case searchView.searchTableView:
-    let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
-    var content = cell.defaultContentConfiguration()
-    content.text = "\(coreDataManager.fetchedResultsController.object(at: indexPath).name) \(coreDataManager.fetchedResultsController.object(at: indexPath).country)"
-    cell.backgroundColor = UIColor(named: "backgroundColor")
-    cell.contentConfiguration = content
-    return cell
+      let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
+      var content = cell.defaultContentConfiguration()
+      content.text = "\(coreDataManager.fetchedResultsController.object(at: indexPath).name) \(coreDataManager.fetchedResultsController.object(at: indexPath).country)"
+      cell.backgroundColor = UIColor(named: "backgroundColor")
+      cell.contentConfiguration = content
+      return cell
       
     case searchView.cityListTableView:
       guard let cell = tableView.dequeueReusableCell(withIdentifier: "CityListTableViewCell", for: indexPath) as? CityListTableViewCell,
             let model = coreDataManager.fetchedListController.fetchedObjects?[indexPath.section]
       else { return UITableViewCell() }
-     // cell.conditionImage.image = UIImage(systemName: "thermometer.sun")?.withTintColor(.black, renderingMode: .alwaysOriginal)
       cell.configure(with: model)
-//      cell.descriptionLabel.text = "descriptionLabel"
-//      cell.nameLabel.text = "nameLabel"
-//      cell.temperatureLabel.text = "TEMP"
-    //  cell.layer.cornerRadius = 16
-      //cell.frame = CGRect(x: 0, y: 0, width: 300, height: 80)
-    //  cell.clipsToBounds = true
       return cell
       
     default : return UITableViewCell()
@@ -143,20 +136,20 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     tableView.deselectRow(at: indexPath, animated: true)
     switch tableView {
     case searchView.searchTableView:
-    let city = coreDataManager.fetchedResultsController.object(at: indexPath)
-/// сохранение выбранного города в список в КорДате
-    coreDataManager.saveToList(city: city)
-    coreDataManager.saveContext()
-    navigationController?.dismiss(animated: false, completion: nil)
-
-    let list = coreDataManager.fetchedListController.fetchedObjects ?? []
-    let vc  = MainWeatherViewController(for: list)
-    vc.modalPresentationStyle = .fullScreen
-    present(vc, animated: false)
+      let city = coreDataManager.fetchedResultsController.object(at: indexPath)
+      /// сохранение выбранного города в список в КорДате
+      coreDataManager.saveToList(city: city)
+      coreDataManager.saveContext()
+      navigationController?.dismiss(animated: false, completion: nil)
+      
+      let list = coreDataManager.fetchedListController.fetchedObjects ?? []
+      let vc  = CityListPageViewController(for: list, index: 0)
+      vc.modalPresentationStyle = .fullScreen
+      present(vc, animated: false)
     default: return
     }
   }
-
+  
 }
 
 
@@ -164,15 +157,15 @@ extension SearchViewController: UISearchBarDelegate {
   func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
     searchView.searchTableView.isHidden = true
     searchView.cityListTableView.isHidden = false
-   // searchView.cityListTableView.reloadData()
-   // searchView.searchTableView.reloadData()
+    // searchView.cityListTableView.reloadData()
+    // searchView.searchTableView.reloadData()
   }
   
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     /// Передеча текста в качестве предиката для фетчРеквеста
     coreDataManager.cityListPredicate = NSPredicate(format: "name CONTAINS %@", searchText)
     coreDataManager.loadSavedData()
-   // print(coreDataManager.fetchedResultsController.fetchedObjects?.count)
+    // print(coreDataManager.fetchedResultsController.fetchedObjects?.count)
     searchView.searchTableView.isHidden = false
     searchView.cityListTableView.isHidden = true
     searchView.searchTableView.reloadData()

@@ -21,6 +21,7 @@ class HeaderWeaherViewController: UIViewController {
   
   init(cityId: Int) {
     self.cityId = cityId
+
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -41,6 +42,7 @@ class HeaderWeaherViewController: UIViewController {
     weatherView.collectionView.register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "WeatherCollectionViewCell")
    // add(loadingVC)
     fetchDataFromCoreData()
+    print("HeaderWeaherViewController viewDidLoad")
     
   }
   

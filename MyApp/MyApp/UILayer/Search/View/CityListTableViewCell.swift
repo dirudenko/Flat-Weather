@@ -14,14 +14,7 @@ class CityListTableViewCell: UITableViewCell {
   private(set) var temperatureLabel = DescriptionLabel()
   private(set) var descriptionLabel = DescriptionLabel()
   
-
-
-//    override func awakeFromNib() {
-//        super.awakeFromNib()
-//        setupLayouts()
-//        setupFonts()
-//        addConstraints()
-//    }
+  
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     layer.cornerRadius = adapted(dimensionSize: 16, to: .height)

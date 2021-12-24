@@ -65,6 +65,7 @@
 		69DB9760276DBD1200D0D0D4 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DB975F276DBD1200D0D0D4 /* CoreDataManager.swift */; };
 		69DB976A276E06DC00D0D0D4 /* CoreDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DB9769276E06DC00D0D0D4 /* CoreDataTests.swift */; };
 		69DB976C2770730F00D0D0D4 /* RouterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DB976B2770730F00D0D0D4 /* RouterManager.swift */; };
+		69DD879E2775B27100566053 /* CityListPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DD879D2775B27100566053 /* CityListPageViewController.swift */; };
 		69FD6E7D2771C95B00F4B865 /* MainInfo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69FD6E752771C95B00F4B865 /* MainInfo+CoreDataClass.swift */; };
 		69FD6E7E2771C95B00F4B865 /* MainInfo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69FD6E762771C95B00F4B865 /* MainInfo+CoreDataProperties.swift */; };
 		69FD6E7F2771C95B00F4B865 /* List+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69FD6E772771C95B00F4B865 /* List+CoreDataClass.swift */; };
@@ -155,6 +156,7 @@
 		69DB975F276DBD1200D0D0D4 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		69DB9769276E06DC00D0D0D4 /* CoreDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTests.swift; sourceTree = "<group>"; };
 		69DB976B2770730F00D0D0D4 /* RouterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterManager.swift; sourceTree = "<group>"; };
+		69DD879D2775B27100566053 /* CityListPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityListPageViewController.swift; sourceTree = "<group>"; };
 		69FD6E752771C95B00F4B865 /* MainInfo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		69FD6E762771C95B00F4B865 /* MainInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		69FD6E772771C95B00F4B865 /* List+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "List+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -289,6 +291,7 @@
 				69194DF9276B360000430597 /* CustomViews */,
 				69194DCD2769E10000430597 /* MainWeather */,
 				69194DF7276A775900430597 /* MainWeatherViewController.swift */,
+				69DD879D2775B27100566053 /* CityListPageViewController.swift */,
 			);
 			path = UILayer;
 			sourceTree = "<group>";
@@ -657,6 +660,7 @@
 				69D074AC2771F55900B901E5 /* UIVIew+ Adopted.swift in Sources */,
 				69194DED276A014600430597 /* WeatherEndPoint.swift in Sources */,
 				691625A82769CC0C00C736C7 /* SceneDelegate.swift in Sources */,
+				69DD879E2775B27100566053 /* CityListPageViewController.swift in Sources */,
 				69D074B62772063D00B901E5 /* TitleLabel.swift in Sources */,
 				69194DE52769F0A800430597 /* JSONParameterEncoder.swift in Sources */,
 				69194DCF2769E14D00430597 /* HeaderWeatherView.swift in Sources */,

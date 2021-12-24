@@ -13,14 +13,12 @@ final class FooterViewController: UIViewController {
   private let loadingVC = LoadingViewController()
   private let networkManager = NetworkManager()
   private var hourlyWeather: HourlyWeather?
-  private let lat: Double
-  private let lon: Double
+  private let cityId: Int
   private let coreDataManager = CoreDataManager(modelName: "MyApp")
 
   
-  init(lat: Double, lon: Double) {
-    self.lat = lat
-    self.lon = lon
+  init(cityId: Int) {
+    self.cityId = cityId
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -41,7 +39,7 @@ final class FooterViewController: UIViewController {
     weatherView.collectionView.delegate = self
     weatherView.collectionView.register(HourlyCollectionViewCell.self, forCellWithReuseIdentifier: "HourlyCollectionViewCell")
     view.backgroundColor = UIColor(named: "backgroundColor")
-   // getHourlyWeather(for: MockData.mockCity)
+    //getHourlyWeather(for: cityId)
     weatherView.dateLabel.text = Date().dateFormatter().capitalizedFirstLetter
   }
   
@@ -52,10 +50,14 @@ final class FooterViewController: UIViewController {
     loadingVC.view.frame = footerFrame
   }
   // MARK: - Private functions
-  private func getHourlyWeather(for city: CurrentWeather) {
+  private func getHourlyWeather(for city: Int) {
+    self.coreDataManager.cityListPredicate = NSPredicate(format: "id == %i", self.cityId)
+    self.coreDataManager.loadSavedData()
+    guard let city = self.coreDataManager.fetchedListController.fetchedObjects?.first,
+          let cityWeather = city.inList as? Set<MainInfo> else { return }
     guard 
-    let correctedLon = Double(String(format: "%.2f", lon)),
-    let correctedLat = Double(String(format: "%.2f", lat))
+      let correctedLon = Double(String(format: "%.2f", cityWeather.first!.lon)),
+      let correctedLat = Double(String(format: "%.2f", cityWeather.first!.lon))
     else { return }
 
     networkManager.getHourlyWeather(lon: correctedLon, lat: correctedLat) { result in

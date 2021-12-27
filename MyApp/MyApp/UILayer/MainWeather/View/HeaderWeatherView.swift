@@ -24,7 +24,7 @@ class HeaderWeatherView: UIView {
     layout.itemSize = CGSize(width: adapted(dimensionSize: 122, to: .width), height: adapted(dimensionSize: 32, to: .height))
     let frame = CGRect(x: adapted(dimensionSize: 16, to: .width), y: adapted(dimensionSize: 444, to: .height), width: adapted(dimensionSize: 326, to: .width), height: adapted(dimensionSize: 105, to: .height))
     let myCollectionView: UICollectionView = UICollectionView(frame: frame, collectionViewLayout: layout)
-    //myCollectionView.isScrollEnabled = false
+    myCollectionView.isScrollEnabled = false
     myCollectionView.backgroundColor = UIColor(named: "backgroundColor")
     return myCollectionView
   }()

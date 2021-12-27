@@ -20,10 +20,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
     guard let windowScene = (scene as? UIWindowScene) else { return }
     let window = UIWindow(windowScene: windowScene)
+    var viewController = UIViewController()
+    var navigationController = UINavigationController()
     let list = coreDataManager.fetchedListController.fetchedObjects ?? []
-    //let viewController = MainWeatherViewController(for: list, index: 1)
-    let viewController = CityListPageViewController(for: list, index: 0)
-    let navigationController = UINavigationController(rootViewController: viewController)
+    if list.isEmpty {
+      viewController = SearchViewController()
+      navigationController = UINavigationController(rootViewController: viewController)
+    } else {
+      viewController = CityListPageViewController(for: list, index: 0)
+      navigationController = UINavigationController(rootViewController: viewController)
+
+    }
+    //let viewController = InitiateViewController(for: list, index: 0)
     navigationController.setToolbarHidden(true, animated: false)
    
     

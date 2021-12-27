@@ -9,96 +9,109 @@ import UIKit
 
 class CityListPageViewController: UIPageViewController {
   
-  var viewController: [MainWeatherViewController] = []
+  private let pageControl = UIPageControl()
   private let coreDataManager = CoreDataManager(modelName: "MyApp")
-  let list: [List]
-  private var currentIndex = 0
+  /// Список городов, сохраненных в БД
+  private let list: [List]
+  /// Индекс города, показанного на экране
+  private var currentIndex: Int
+  /// Массив контроллеров с городами из list с прогрнозами погоды
+  private var cityPage = [MainWeatherViewController]()
+  
   
   init(for list: [List], index: Int) {
     self.list = list
     self.currentIndex = index
-    //viewController = MainWeatherViewController(for: list, index: index)
-    super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [:])
+    super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
   }
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+  // MARK: - UIViewController lifecycle methods
   
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    setupPageController()
+    configurePageControl()
+    pageControl.addTarget(self, action: #selector(pageControlTapped(_:)), for: .valueChanged)
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-      view.backgroundColor = .systemBackground
-      setupPageController()
-      for item in 0 ... list.count {
-        print(list.count)
-        let vc = MainWeatherViewController(for: list, index: item)
-        viewController.append(vc)
-        print(viewController.count)
-      }
-      let initialVC = MainWeatherViewController(for: list, index: currentIndex)
-      setViewControllers([initialVC], direction: .forward, animated: true, completion: nil)
-
-    }
-  
-  private func setupPageController() {
-  //self = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-  self.dataSource = self
-  self.delegate = self
-  self.view.backgroundColor = .clear
-  self.view.frame = CGRect(x: 0,y: 0,width: self.view.frame.width,height: self.view.frame.height)
   }
-    
+  
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
+  }
+  
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    let pageFrame = CGRect(x: view.frame.width / 2 - pageControl.frame.width / 2, y: adapted(dimensionSize: 105, to: .height), width: pageControl.frame.width, height: adapted(dimensionSize: 8, to: .height))
+    pageControl.frame = pageFrame
     
   }
-
-
+  
+  // MARK: - Private functions
+  
+  private func configurePageControl() {
+    pageControl.numberOfPages = list.count
+    pageControl.currentPage = currentIndex
+    pageControl.tintColor = .green
+    pageControl.pageIndicatorTintColor = .black
+    pageControl.currentPageIndicatorTintColor = .white
+    pageControl.hidesForSinglePage = true
+    pageControl.backgroundStyle = .automatic
+    pageControl.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(pageControl)
+  }
+  
+  @objc private func pageControlTapped(_ sender: UIPageControl) {
+    setViewControllers([cityPage[sender.currentPage]], direction: .forward, animated: true, completion: nil)
+  }
+  
+  private func setupPageController() {
+    self.dataSource = self
+    self.delegate = self
+    
+    
+    list.forEach {
+      let vc = MainWeatherViewController(for: $0)
+      cityPage.append(vc)
+    }
+    setViewControllers([cityPage[currentIndex]], direction: .forward, animated: true, completion: nil)
+  }
+  
 }
+
+// MARK: - UIViewController delegates
 
 extension CityListPageViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
   func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-    
-    guard let currentVC = viewController as? MainWeatherViewController else {
-               return nil
-           }
-           
-    var index = currentVC.index
-           
-           if index == 0 {
-               return nil
-           }
-           
-           index -= 1
-           
-           let vc: MainWeatherViewController = MainWeatherViewController(for: list, index: index)
-           
-           return self.viewController[index]
+    guard let currentIndex = cityPage.firstIndex(of: viewController as! MainWeatherViewController) else { return nil }
+    if currentIndex == 0 {
+      return cityPage.last
+    } else {
+      return self.cityPage[currentIndex - 1]
+    }
   }
+  
   func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-    guard let currentVC = viewController as? MainWeatherViewController else {
-                return nil
-            }
-            
-            var index = currentVC.index
-            
-            if index >= self.list.count - 1 {
-                return nil
-            }
-            
-            index += 1
-            
-    
-            
-    return self.viewController[index]
+    guard let currentIndex = cityPage.firstIndex(of: viewController as! MainWeatherViewController) else { return nil }
+    if currentIndex < cityPage.count - 1 {
+      return cityPage[currentIndex + 1]
+    } else {
+      return cityPage.first
+    }
   }
   
-  func presentationCount(for pageViewController: UIPageViewController) -> Int {
-  return list.count
+  func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+    guard let viewControllers = pageViewController.viewControllers else { return }
+    guard let currentIndex = cityPage.firstIndex(of: viewControllers[0] as! MainWeatherViewController) else { return }
+    pageControl.currentPage = currentIndex
+    pageControl.isHidden = false
   }
   
-  func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-  return self.currentIndex
+  func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
+    pageControl.isHidden = true
   }
 }
+
+

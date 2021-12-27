@@ -28,11 +28,21 @@ class SearchViewController: UIViewController {
     searchView.cityListTableView.dataSource = self
     searchView.backgroundColor = UIColor(named: "backgroundColor")
     fetchDataFromCoreData()
+    //view.backgroundColor = .systembac
   }
   
   deinit {
     print("SearchVC deleted")
   }
+  
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    let searchFrame = CGRect(x: adapted(dimensionSize: 16, to: .width), y: adapted(dimensionSize: 62, to: .height), width: adapted(dimensionSize: 358, to: .width), height: adapted(dimensionSize: 766, to: .height))
+    view.frame = searchFrame
+    view.layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
+    view.layer.masksToBounds = true
+  }
+
   // MARK: - Private functions
   /// Получение данных из CoreData
   private func fetchDataFromCoreData() {
@@ -138,14 +148,21 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     case searchView.searchTableView:
       let city = coreDataManager.fetchedResultsController.object(at: indexPath)
       /// сохранение выбранного города в список в КорДате
-      coreDataManager.saveToList(city: city)
-      coreDataManager.saveContext()
       navigationController?.dismiss(animated: false, completion: nil)
+
+      coreDataManager.saveToList(city: city)
+      coreDataManager.loadListData()
       
       let list = coreDataManager.fetchedListController.fetchedObjects ?? []
       let vc  = CityListPageViewController(for: list, index: 0)
       vc.modalPresentationStyle = .fullScreen
       present(vc, animated: false)
+    case searchView.cityListTableView:
+      let list = coreDataManager.fetchedListController.fetchedObjects ?? []
+      let vc  = CityListPageViewController(for: list, index: indexPath.section)
+      vc.modalPresentationStyle = .fullScreen
+      present(vc, animated: false)
+
     default: return
     }
   }

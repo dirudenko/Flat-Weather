@@ -15,7 +15,7 @@ class SearchView: UIView {
     searchBar.placeholder = "Найти город..."
     searchBar.searchTextField.layer.cornerRadius = 16
     searchBar.searchTextField.borderStyle = .roundedRect
-
+    searchBar.isHidden = true
     searchBar.barTintColor = UIColor(named: "backgroundColor")
     searchBar.searchTextField.backgroundColor = .systemGray6
     return searchBar

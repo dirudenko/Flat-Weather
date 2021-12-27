@@ -12,13 +12,11 @@ final class MainWeatherViewController: UIViewController {
   private var headerWeaherViewController: HeaderWeaherViewController?
   private var footerWeaherViewController: FooterViewController?
   private var searchViewController: SearchViewController?
-  private var fetchedCityList: [List]
-  var index: Int
+  private var fetchedCityList: List
   private let coreDataManager = CoreDataManager(modelName: "MyApp")
   
-  init(for list: [List], index: Int) {
+  init(for list: List) {
     self.fetchedCityList = list
-    self.index = index
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -37,10 +35,7 @@ final class MainWeatherViewController: UIViewController {
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-  // TODO: - брать данные из List
-  //  print(fetchedCityList.count)
-    if  !fetchedCityList.isEmpty {
-      let id = Int(fetchedCityList[index].id)
+      let id = Int(fetchedCityList.id)
 //      coreDataManager.cityListPredicate = NSPredicate(format: "id == %i", id)
 //      coreDataManager.loadSavedData()
 //      guard let city = coreDataManager.fetchedListController.fetchedObjects?.first
@@ -50,11 +45,11 @@ final class MainWeatherViewController: UIViewController {
       add(headerWeaherViewController!)
       add(footerWeaherViewController!)
       headerWeaherViewController?.weatherView.delegate = self      
-    }
-    else {
-      searchViewController = SearchViewController()
-      add(searchViewController!)
-    }
+  //  }
+//    else {
+//      searchViewController = SearchViewController()
+//      add(searchViewController!)
+//    }
   }
   
   override func viewDidLayoutSubviews() {

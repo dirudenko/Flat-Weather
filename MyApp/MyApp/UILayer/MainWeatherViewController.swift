@@ -9,14 +9,21 @@ import UIKit
 
 final class MainWeatherViewController: UIViewController {
   
-  private var headerWeaherViewController: HeaderWeaherViewController?
-  private var footerWeaherViewController: FooterViewController?
+  private var headerWeaherViewController: HeaderWeaherViewController
+  private var headerWeaherViewHeightSmall: NSLayoutConstraint?
+  private var headerWeaherViewHeightBig: NSLayoutConstraint?
+  
+  private var footerWeaherViewController: FooterViewController
   private var searchViewController: SearchViewController?
   private var fetchedCityList: List
   private let coreDataManager = CoreDataManager(modelName: "MyApp")
+  private var isPressed = false
   
   init(for list: List) {
     self.fetchedCityList = list
+    let id = Int(fetchedCityList.id)
+    headerWeaherViewController = HeaderWeaherViewController(cityId: id)
+    footerWeaherViewController = FooterViewController(cityId: id)
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -30,37 +37,26 @@ final class MainWeatherViewController: UIViewController {
     super.viewDidLoad()
     // self.navigationItem.backBarButtonItem?.isEnabled = false
     view.backgroundColor = .systemBackground
-
+    //let id = Int(fetchedCityList.id)
+    
+    //add(headerWeaherViewController!)
+    //add(footerWeaherViewController)
+    view.addSubview(headerWeaherViewController.view)
+    view.addSubview(footerWeaherViewController.view)
+    headerWeaherViewController.weatherView.delegate = self
+    setupConstraints()
+    
   }
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-      let id = Int(fetchedCityList.id)
-//      coreDataManager.cityListPredicate = NSPredicate(format: "id == %i", id)
-//      coreDataManager.loadSavedData()
-//      guard let city = coreDataManager.fetchedListController.fetchedObjects?.first
-//                  else { return }
-      headerWeaherViewController = HeaderWeaherViewController(cityId: id)
-      footerWeaherViewController = FooterViewController(cityId: id)
-      add(headerWeaherViewController!)
-      add(footerWeaherViewController!)
-      headerWeaherViewController?.weatherView.delegate = self      
-  //  }
-//    else {
-//      searchViewController = SearchViewController()
-//      add(searchViewController!)
-//    }
+
   }
   
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
-    let headerFrame = CGRect(x: adapted(dimensionSize: 16, to: .width), y: adapted(dimensionSize: 62, to: .height), width: adapted(dimensionSize: 358, to: .width), height: adapted(dimensionSize: 565, to: .height))
-        headerWeaherViewController?.view.frame = headerFrame
-    headerWeaherViewController?.view.layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
-        headerWeaherViewController?.view.layer.masksToBounds = true
-    
-    let footerFrame = CGRect(x: 0, y: headerFrame.height + adapted(dimensionSize: 78, to: .height), width: view.frame.width, height: adapted(dimensionSize: 140, to: .height))
-     footerWeaherViewController?.view.frame = footerFrame
+    headerWeaherViewController.view.layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
+    headerWeaherViewController.view.layer.masksToBounds = true
     
     let searchFrame = CGRect(x: adapted(dimensionSize: 16, to: .width), y: adapted(dimensionSize: 62, to: .height), width: adapted(dimensionSize: 358, to: .width), height: adapted(dimensionSize: 766, to: .height))
     searchViewController?.view.frame = searchFrame
@@ -74,16 +70,50 @@ final class MainWeatherViewController: UIViewController {
 
 extension MainWeatherViewController: HeaderButtonsProtocol {
   func plusButtonTapped() {
-//    let vc  = SearchViewController()
-//    vc.modalPresentationStyle = .fullScreen
-//    //present(vc, animated: false)
-//    navigationController?.pushViewController(vc, animated: true)
+    isPressed = !isPressed
+    headerWeaherViewController.weatherView.changeConstraints(isPressed: isPressed)
+    if isPressed {
+      headerWeaherViewHeightBig?.isActive = false
+      headerWeaherViewHeightSmall?.isActive = true
+      UIView.animate(withDuration: 0.3) {
+        self.view.layoutIfNeeded()
+      }
+    } else {
+      headerWeaherViewHeightSmall?.isActive = false
+      headerWeaherViewHeightBig?.isActive = true
+      UIView.animate(withDuration: 0.3) {
+        self.view.layoutIfNeeded()
+      }
+    }
     
-    headerWeaherViewController?.remove()
-    footerWeaherViewController?.remove()
-    searchViewController = SearchViewController()
-    add(searchViewController!)
   }
-  
-  
 }
+//    headerWeaherViewController?.remove()
+//    footerWeaherViewController?.remove()
+//    searchViewController = SearchViewController()
+//    add(searchViewController!)
+// }
+
+extension MainWeatherViewController {
+  private func setupConstraints() {
+    headerWeaherViewController.view.translatesAutoresizingMaskIntoConstraints = false
+    footerWeaherViewController.view.translatesAutoresizingMaskIntoConstraints = false
+    
+    NSLayoutConstraint.activate([
+      headerWeaherViewController.view.topAnchor.constraint(equalTo: view.topAnchor, constant: adapted(dimensionSize: 62, to: .height)),
+      headerWeaherViewController.view.leftAnchor.constraint(equalTo: view.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
+      headerWeaherViewController.view.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 353, to: .width)),
+      
+      footerWeaherViewController.view.topAnchor.constraint(equalTo: headerWeaherViewController.view.bottomAnchor, constant: adapted(dimensionSize: 16, to: .height)),
+      footerWeaherViewController.view.leftAnchor.constraint(equalTo: view.leftAnchor, constant: adapted(dimensionSize: 0, to: .width)),
+      footerWeaherViewController.view.rightAnchor.constraint(equalTo: view.rightAnchor, constant: adapted(dimensionSize: 0, to: .width)),
+      footerWeaherViewController.view.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 140, to: .height))
+    ])
+    headerWeaherViewHeightBig = headerWeaherViewController.view.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 565, to: .height))
+    headerWeaherViewHeightBig?.isActive = true
+    headerWeaherViewHeightSmall = headerWeaherViewController.view.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 353, to: .height))
+    
+  }
+}
+
+

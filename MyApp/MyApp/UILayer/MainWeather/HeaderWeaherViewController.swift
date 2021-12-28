@@ -7,8 +7,6 @@
 
 import UIKit
 
-
-
 class HeaderWeaherViewController: UIViewController {
   
   private let networkManager = NetworkManager()
@@ -18,10 +16,8 @@ class HeaderWeaherViewController: UIViewController {
   private let cityId: Int
   private let coreDataManager = CoreDataManager(modelName: "MyApp")
   
-  
   init(cityId: Int) {
     self.cityId = cityId
-
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -29,7 +25,7 @@ class HeaderWeaherViewController: UIViewController {
     fatalError("init(coder:) has not been implemented")
   }
   // MARK: - UIViewController lifecycle methods
-
+  
   override func loadView() {
     super.loadView()
     self.view = weatherView
@@ -40,15 +36,16 @@ class HeaderWeaherViewController: UIViewController {
     weatherView.collectionView.dataSource = self
     weatherView.collectionView.delegate = self
     weatherView.collectionView.register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "WeatherCollectionViewCell")
-   // add(loadingVC)
+    add(loadingVC)
     fetchDataFromCoreData()
-    print("HeaderWeaherViewController viewDidLoad")
+    //  print("HeaderWeaherViewController viewDidLoad")
+    // getWeather(for: cityId)
+    
     
   }
   
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
-   // getWeather(for: cityId)
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
   }
   
   override func viewDidLayoutSubviews() {
@@ -98,9 +95,6 @@ class HeaderWeaherViewController: UIViewController {
                                         timezone: 0,
                                         cod: 0,
                                         name: city.name )
-    
-    
-    
     return currentWeather
   }
   

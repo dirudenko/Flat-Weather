@@ -22,7 +22,7 @@ class MainImage: UIImageView {
       
       private func configure() {
         contentMode         = .scaleAspectFit
-          clipsToBounds       = true
+         // clipsToBounds       = true
           translatesAutoresizingMaskIntoConstraints = false
       }
       

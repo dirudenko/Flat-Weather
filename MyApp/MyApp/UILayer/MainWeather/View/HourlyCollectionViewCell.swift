@@ -9,53 +9,16 @@ import UIKit
 
 class HourlyCollectionViewCell: UICollectionViewCell {
   
-  //private let imageSize: CGFloat = 24
   
  
   
   private(set) var conditionImage = MainImage(frame: .zero)
-//  : UIImageView = {
-//    let imageView = UIImageView()
-//    imageView.contentMode = .scaleAspectFit
-//    imageView.layer.masksToBounds = true
-//    imageView.translatesAutoresizingMaskIntoConstraints = false
-//    return imageView
-//  }()
-//
+  
   private(set) var timeLabel = DescriptionLabel()
-  //  = {
-  //    let label = UILabel()
-  //    label.font = .systemFont(ofSize: 19, weight: .medium)
-  //    label.adjustsFontSizeToFitWidth = true
-  //    label.textColor = .white
-  //    label.textAlignment = .center
-  //    label.translatesAutoresizingMaskIntoConstraints = false
-  //    return label
-  //  }()
   
   private(set) var temperatureLabel = DescriptionLabel()
-  //  : UILabel = {
-  //    let label = UILabel()
-  //    label.font = .systemFont(ofSize: 14, weight: .medium)
-  //    label.adjustsFontSizeToFitWidth = true
-  //    label.textColor = .white
-  //    label.textAlignment = .center
-  //    label.numberOfLines = 0
-  //    label.translatesAutoresizingMaskIntoConstraints = false
-  //    return label
-  //  }()
   
   private(set) var rainLabel = DescriptionLabel()
-  //  = {
-  //    let label = UILabel()
-  //    label.font = .systemFont(ofSize: 14, weight: .medium)
-  //    label.adjustsFontSizeToFitWidth = true
-  //    label.textColor = .white
-  //    label.textAlignment = .center
-  //    label.numberOfLines = 0
-  //    label.translatesAutoresizingMaskIntoConstraints = false
-  //    return label
-  //  }()
   
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -74,6 +37,8 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     contentView.addSubview(temperatureLabel)
     contentView.addSubview(timeLabel)
     contentView.addSubview(rainLabel)
+    
+    temperatureLabel.textAlignment = .center
   }
   
   private func setupFonts() {

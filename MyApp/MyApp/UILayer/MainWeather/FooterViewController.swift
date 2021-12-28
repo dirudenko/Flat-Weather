@@ -16,7 +16,6 @@ final class FooterViewController: UIViewController {
   private let cityId: Int
   private let coreDataManager = CoreDataManager(modelName: "MyApp")
 
-  
   init(cityId: Int) {
     self.cityId = cityId
     super.init(nibName: nil, bundle: nil)
@@ -39,7 +38,7 @@ final class FooterViewController: UIViewController {
     weatherView.collectionView.delegate = self
     weatherView.collectionView.register(HourlyCollectionViewCell.self, forCellWithReuseIdentifier: "HourlyCollectionViewCell")
     view.backgroundColor = UIColor(named: "backgroundColor")
-    //getHourlyWeather(for: cityId)
+  //  getHourlyWeather(for: cityId)
     weatherView.dateLabel.text = Date().dateFormatter().capitalizedFirstLetter
   }
   
@@ -79,7 +78,8 @@ final class FooterViewController: UIViewController {
 
 extension FooterViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return hourlyWeather?.hourly.count ?? 0
+    guard let hourly = hourlyWeather?.hourly else { return 0 }
+    return hourly.isEmpty ? 0 : 24
   }
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

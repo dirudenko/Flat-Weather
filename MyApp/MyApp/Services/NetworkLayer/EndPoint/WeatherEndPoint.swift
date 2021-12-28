@@ -7,55 +7,70 @@
 
 import Foundation
 
- enum WeatherApi {
-   case getCurrentWeather(city: Int)
-   case getHourlyWeather(lon: Double, lat: Double)
+enum WeatherApi {
+  case getCurrentWeather(city: Int)
+  case getHourlyWeather(lon: Double, lat: Double)
+  case getWeeklyWeather(lon: Double, lat: Double)
 }
 
 extension WeatherApi: EndPointType {
-    
-    var baseURL: URL {
-        guard let url = URL(string: "https://api.openweathermap.org") else { fatalError("baseURL could not be configured.")}
-        return url
+  
+  var baseURL: URL {
+    guard let url = URL(string: "https://api.openweathermap.org") else { fatalError("baseURL could not be configured.")}
+    return url
+  }
+  
+  var path: String {
+    switch self {
+    case .getCurrentWeather(_):
+      return "/data/2.5/weather"
+    case .getHourlyWeather(_,_):
+      return "/data/2.5/onecall"
+    case .getWeeklyWeather(_,_):
+      return "/data/2.5/onecall"
     }
-    
-    var path: String {
-        switch self {
-        case .getCurrentWeather(_):
-          return "/data/2.5/weather"
-        case .getHourlyWeather(_,_):
-          return "/data/2.5/onecall"
-        }
+  }
+  
+  
+  var httpMethod: HTTPMethod {
+    return .get
+  }
+  
+  var task: HTTPTask {
+    switch self {
+    case .getCurrentWeather(let city):
+      return .requestParameters(bodyParameters: nil,
+                                bodyEncoding: .urlEncoding,
+                                urlParameters: ["id": city,
+                                                "appid": NetworkManager.weatherAPIKey,
+                                                "units": "metric",
+                                                "lang": "ru"])
+    case .getHourlyWeather(let lon, let lat):
+      return .requestParameters(bodyParameters: nil,
+                                bodyEncoding: .urlEncoding,
+                                urlParameters: [
+                                  "lat": lat,
+                                  "lon": lon,
+                                  "exclude": "current,minutely,daily,alerts",
+                                  "appid": NetworkManager.weatherAPIKey,
+                                  "units": "metric",
+                                  "lang": "ru",
+                                ])
+    case .getWeeklyWeather(let lon, let lat):
+      return .requestParameters(bodyParameters: nil,
+                                bodyEncoding: .urlEncoding,
+                                urlParameters: [
+                                  "lat": lat,
+                                  "lon": lon,
+                                  "exclude": "current,minutely,hourly,alerts",
+                                  "appid": NetworkManager.weatherAPIKey,
+                                  "units": "metric",
+                                  "lang": "ru",
+                                ])
     }
-    
-    var httpMethod: HTTPMethod {
-        return .get
-    }
-    
-    var task: HTTPTask {
-        switch self {
-        case .getCurrentWeather(let city):
-            return .requestParameters(bodyParameters: nil,
-                                      bodyEncoding: .urlEncoding,
-                                      urlParameters: ["id": city,
-                                                      "appid": NetworkManager.weatherAPIKey,
-                                                      "units": "metric",
-                                                      "lang": "ru"])
-        case .getHourlyWeather(let lon, let lat):
-          return .requestParameters(bodyParameters: nil,
-                                    bodyEncoding: .urlEncoding,
-                                    urlParameters: [
-                                      "lat": lat,
-                                      "lon": lon,
-                                      "exclude": "current,minutely,daily,alerts",
-                                      "appid": NetworkManager.weatherAPIKey,
-                                      "units": "metric",
-                                      "lang": "ru",
-                                    ])
-        }
-    }
-    
-    var headers: HTTPHeaders? {
-        return nil
-    }
+  }
+  
+  var headers: HTTPHeaders? {
+    return nil
+  }
 }

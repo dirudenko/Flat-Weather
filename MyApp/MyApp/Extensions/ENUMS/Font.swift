@@ -9,11 +9,11 @@ import UIKit
 
 enum AppFont {
     static func regular(size: CGFloat) -> UIFont {
-        UIFont(name: "Helvetica", size: size.adaptedFontSize)!
+        UIFont(name: "HelveticaNeue-Medium", size: size.adaptedFontSize)!
     }
     
     static func bold(size: CGFloat) -> UIFont {
-        UIFont(name: "Helvetica-Bold", size: size.adaptedFontSize)!
+        UIFont(name: "HelveticaNeue-Bold", size: size.adaptedFontSize)!
     }
   
   static func Oblique(size: CGFloat) -> UIFont {

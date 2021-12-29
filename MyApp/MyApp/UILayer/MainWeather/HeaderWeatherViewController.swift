@@ -7,12 +7,12 @@
 
 import UIKit
 
-class HeaderWeaherViewController: UIViewController {
+class HeaderWeatherViewController: UIViewController {
   
   private let networkManager = NetworkManager()
   private var currentWeather: CurrentWeather?
   let weatherView = HeaderWeatherView()
-  let loadingVC = LoadingViewController()
+  private let loadingVC = LoadingViewController()
   private let cityId: Int
   private let coreDataManager = CoreDataManager(modelName: "MyApp")
   
@@ -36,10 +36,10 @@ class HeaderWeaherViewController: UIViewController {
     weatherView.collectionView.dataSource = self
     weatherView.collectionView.delegate = self
     weatherView.collectionView.register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "WeatherCollectionViewCell")
-    add(loadingVC)
+   // add(loadingVC)
     fetchDataFromCoreData()
     //  print("HeaderWeaherViewController viewDidLoad")
-    // getWeather(for: cityId)
+     getWeather(for: cityId)
     
     
   }
@@ -56,7 +56,7 @@ class HeaderWeaherViewController: UIViewController {
   // MARK: - Private functions
   // Получение данных из Кордаты и их вывод на экран перед выполнением запроса в сеть
   private func fetchDataFromCoreData() {
-    coreDataManager.cityListPredicate = NSPredicate(format: "id == %i", cityId)
+    coreDataManager.cityResultsPredicate = NSPredicate(format: "id == %i", cityId)
     coreDataManager.loadSavedData()
     // print(coreDataManager.fetchedResultsController.fetchedObjects?.count)
     guard let data = coreDataManager.fetchedResultsController.fetchedObjects else { return }
@@ -68,19 +68,22 @@ class HeaderWeaherViewController: UIViewController {
   /// Конвертирование данных, полученных из Кордаты, в тип, необходимый для вывода на экран
   private func dataConverter(data: [MainInfo]) -> CurrentWeather? {
     guard let city = data.first else { return nil }
-    let main = Main(humidity: 0,
+    let main = Main(humidity: Int(city.bottomWeather?.humidity ?? 0),
                     feelsLike: 0,
                     tempMin: 0,
                     tempMax: 0,
                     temp: city.topWeather?.temperature ?? 0,
-                    pressure: 500,
+                    pressure: Int(city.bottomWeather?.pressure ?? 0),
                     seaLevel: 100,
                     grndLevel: 0
     )
     let coord = Coord(lon: city.lon, lat: city.lat)
-    let wind = Wind(speed: 0.0, deg: 0, gust: 0.0)
+    let wind = Wind(speed: city.bottomWeather?.wind ?? 0, deg: 0, gust: 0.0)
     let sys = Sys(id: 0, country: "", sunset: 0, type: 0, sunrise: 0)
-    let weather = Weather(id: Int(city.topWeather?.iconId ?? 0), main: "", icon: "", weatherDescription: city.topWeather?.desc ?? "---")
+    let weather = Weather(id: Int(city.topWeather?.iconId ?? 0),
+                          main: "",
+                          icon: "",
+                          weatherDescription: city.topWeather?.desc ?? "---")
     let clouds = Clouds(all: 1)
     let currentWeather = CurrentWeather(base: "",
                                         id: Int(city.id),
@@ -104,8 +107,8 @@ class HeaderWeaherViewController: UIViewController {
       switch result {
       case .success(let weather):
         DispatchQueue.main.async {
-          self.coreDataManager.cityListPredicate = NSPredicate(format: "id == %i", self.cityId)
-          self.coreDataManager.loadSavedData()
+          self.coreDataManager.cityResultsPredicate = NSPredicate(format: "id == %i", self.cityId)
+          self.coreDataManager.loadListData()
           let city = self.coreDataManager.fetchedResultsController.fetchedObjects?.first
           self.coreDataManager.configureTopView(from: weather, list: city)
           self.coreDataManager.configureBottomView(from: weather, list: city)
@@ -127,7 +130,7 @@ class HeaderWeaherViewController: UIViewController {
 }
 // MARK: - UIViewController delegates
 
-extension HeaderWeaherViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension HeaderWeatherViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return currentWeather != nil ? 4 : 0
   }

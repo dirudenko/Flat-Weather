@@ -24,4 +24,11 @@ extension Date {
     return stringDate
   }
   
+  func dateDayFormatter() -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "EEEE"
+    let stringDate = formatter.string(from: self)
+    return stringDate
+  }
+  
 }

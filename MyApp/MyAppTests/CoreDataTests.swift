@@ -32,7 +32,7 @@ class CoreDataTests: XCTestCase {
   func testPredicate() throws {
     coreDataManager.configure(json: mockCity)
     coreDataManager.saveContext()
-    coreDataManager.cityListPredicate = NSPredicate(format: "name CONTAINS %@", "M")
+    coreDataManager.cityResultsPredicate = NSPredicate(format: "name CONTAINS %@", "M")
     coreDataManager.loadSavedData()
     XCTAssertTrue(coreDataManager.fetchedResultsController.fetchedObjects?.first?.name == "Mock")
   }
@@ -40,7 +40,7 @@ class CoreDataTests: XCTestCase {
   func testPredicateWithFail() throws {
     coreDataManager.configure(json: mockCity)
     coreDataManager.saveContext()
-    coreDataManager.cityListPredicate = NSPredicate(format: "name CONTAINS %@", "s")
+    coreDataManager.cityResultsPredicate = NSPredicate(format: "name CONTAINS %@", "s")
     coreDataManager.loadSavedData()
     XCTAssertNil(coreDataManager.fetchedResultsController.fetchedObjects?.first?.name)
   }

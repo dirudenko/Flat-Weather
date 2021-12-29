@@ -12,7 +12,9 @@ import CoreData
 class CoreDataManager {
   
   fileprivate let modelName: String
+  var cityResultsPredicate: NSPredicate?
   var cityListPredicate: NSPredicate?
+
   
   init(modelName: String) {
     self.modelName = modelName
@@ -39,7 +41,7 @@ class CoreDataManager {
     request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
     let controller = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedContext, sectionNameKeyPath: nil, cacheName: nil)
     
-    controller.fetchRequest.predicate = cityListPredicate
+    controller.fetchRequest.predicate = cityResultsPredicate
     do {
       try controller.performFetch()
     } catch {
@@ -80,7 +82,7 @@ class CoreDataManager {
   }
   
   func loadSavedData() {
-    fetchedResultsController.fetchRequest.predicate = cityListPredicate
+    fetchedResultsController.fetchRequest.predicate = cityResultsPredicate
     do {
       try fetchedResultsController.performFetch()
     } catch {
@@ -89,7 +91,7 @@ class CoreDataManager {
   }
   
   func loadListData() {
-    //fetchedResultsController.fetchRequest.predicate = cityListPredicate
+    fetchedListController.fetchRequest.predicate = cityListPredicate
     do {
       try fetchedListController.performFetch()
     } catch {
@@ -119,6 +121,7 @@ class CoreDataManager {
     let list = List(entity: entity, insertInto: managedContext)
     list.id = city.id
     list.addToInList(city)
+    saveContext()
   }
   
   /// Конфигурация списка городов
@@ -144,6 +147,7 @@ class CoreDataManager {
     weather.desc = data.weather.first?.weatherDescription
     weather.citiList = list
     weather.citiList?.name = data.name
+    saveContext()
   }
   
   /// Конфигурация collectionView бара с текущими погодными данными
@@ -156,6 +160,7 @@ class CoreDataManager {
     weather.pressure = Int16(data.main.pressure)
     weather.rain = Int16(data.clouds.all)
     weather.weather = list
+    saveContext()
   }
 }
 

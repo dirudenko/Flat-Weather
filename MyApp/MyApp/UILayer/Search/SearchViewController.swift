@@ -13,22 +13,24 @@ class SearchViewController: UIViewController {
   private let coreDataManager = CoreDataManager(modelName: "MyApp")
   
   // MARK: - UIViewController lifecycle methods
-  override func loadView() {
-    super.loadView()
-    self.view = searchView
-  }
+//  override func loadView() {
+//    super.loadView()
+//    self.view = searchView
+//  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    view.addSubview(searchView)
+    setupConstraints()
     searchView.searchBar.delegate = self
-    searchView.searchBar.becomeFirstResponder()
     searchView.searchTableView.delegate = self
     searchView.searchTableView.dataSource = self
     searchView.cityListTableView.delegate = self
     searchView.cityListTableView.dataSource = self
     searchView.backgroundColor = UIColor(named: "backgroundColor")
     fetchDataFromCoreData()
-    //view.backgroundColor = .systembac
+    
+    view.backgroundColor = .systemBackground
   }
   
   deinit {
@@ -37,10 +39,9 @@ class SearchViewController: UIViewController {
   
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
-    let searchFrame = CGRect(x: adapted(dimensionSize: 16, to: .width), y: adapted(dimensionSize: 62, to: .height), width: adapted(dimensionSize: 358, to: .width), height: adapted(dimensionSize: 766, to: .height))
-    view.frame = searchFrame
-    view.layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
-    view.layer.masksToBounds = true
+    
+    searchView.layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
+    searchView.layer.masksToBounds = true
   }
 
   // MARK: - Private functions
@@ -59,6 +60,8 @@ class SearchViewController: UIViewController {
             self.coreDataManager.loadSavedData()
             self.searchView.animation.removeFromSuperview()
             self.searchView.searchBar.isHidden = false
+            self.searchView.searchBar.becomeFirstResponder()
+
           }
         case .failure(let error):
           print(error.rawValue)
@@ -146,22 +149,26 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     tableView.deselectRow(at: indexPath, animated: true)
     switch tableView {
     case searchView.searchTableView:
-      let city = coreDataManager.fetchedResultsController.object(at: indexPath)
+      //navigationController?.dismiss(animated: false, completion: nil)
       /// сохранение выбранного города в список в КорДате
-      navigationController?.dismiss(animated: false, completion: nil)
-
+      let city = coreDataManager.fetchedResultsController.object(at: indexPath)
       coreDataManager.saveToList(city: city)
       coreDataManager.loadListData()
-      
       let list = coreDataManager.fetchedListController.fetchedObjects ?? []
-      let vc  = CityListPageViewController(for: list, index: 0)
-      vc.modalPresentationStyle = .fullScreen
-      present(vc, animated: false)
+      let vc  = CityListPageViewController(for: list, index: list.count - 1)
+      navigationController?.setViewControllers([vc], animated: true)
+
+//      let navigationController = UINavigationController(rootViewController: vc)
+//      navigationController.modalPresentationStyle = .fullScreen
+//      present(navigationController, animated: false)
     case searchView.cityListTableView:
+//      navigationController?.dismiss(animated: false, completion: nil)
       let list = coreDataManager.fetchedListController.fetchedObjects ?? []
       let vc  = CityListPageViewController(for: list, index: indexPath.section)
-      vc.modalPresentationStyle = .fullScreen
-      present(vc, animated: false)
+//      let navigationController = UINavigationController(rootViewController: vc)
+//      navigationController.modalPresentationStyle = .fullScreen
+//      present(navigationController, animated: false)
+      navigationController?.setViewControllers([vc], animated: true)
 
     default: return
     }
@@ -180,7 +187,7 @@ extension SearchViewController: UISearchBarDelegate {
   
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     /// Передеча текста в качестве предиката для фетчРеквеста
-    coreDataManager.cityListPredicate = NSPredicate(format: "name CONTAINS %@", searchText)
+    coreDataManager.cityResultsPredicate = NSPredicate(format: "name CONTAINS %@", searchText)
     coreDataManager.loadSavedData()
     // print(coreDataManager.fetchedResultsController.fetchedObjects?.count)
     searchView.searchTableView.isHidden = false
@@ -193,4 +200,22 @@ extension SearchViewController: UISearchBarDelegate {
       //searchView.searchTableView.reloadData()
     }
   }
+}
+
+extension SearchViewController{
+  func setupConstraints() {
+  searchView.translatesAutoresizingMaskIntoConstraints = false
+//    let searchFrame = CGRect(x: adapted(dimensionSize: 16, to: .width), y: adapted(dimensionSize: 62, to: .height), width: adapted(dimensionSize: 358, to: .width), height: adapted(dimensionSize: 766, to: .height))
+//    view.frame = searchFrame
+    NSLayoutConstraint.activate([
+    
+      
+      searchView.topAnchor.constraint(equalTo: view.topAnchor, constant: adapted(dimensionSize: 62, to: .height)),
+      searchView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
+      searchView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
+      searchView.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 766, to: .height))
+    ])
+
+  }
+
 }

@@ -11,11 +11,11 @@ import XCTest
 class MyAppTests: XCTestCase {
   
   var networkManager: NetworkManager!
-  var headerWeatherViewController: HeaderWeaherViewController!
+  var headerWeatherViewController: HeaderWeatherViewController!
   
   override func setUpWithError() throws {
     networkManager = NetworkManager()
-    headerWeatherViewController = HeaderWeaherViewController(cityId: 0)
+    headerWeatherViewController = HeaderWeatherViewController(cityId: 0)
   }
   
   override func tearDownWithError() throws {

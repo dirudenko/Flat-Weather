@@ -9,40 +9,10 @@ import UIKit
 
 class WeatherCollectionViewCell: UICollectionViewCell {
   
-  //private let imageSize: CGFloat = 32
-
   private(set)  var conditionImage = MainImage(frame: .zero)
-  //  : UIImageView = {
-  //    let imageView = UIImageView()
-  //    imageView.contentMode = .scaleAspectFit
-  //    imageView.layer.masksToBounds = true
-  //    imageView.translatesAutoresizingMaskIntoConstraints = false
-  //    return imageView
-  //  }()
-  
   private(set)  var conditionStatusLabel = DescriptionLabel()
-  //  : UILabel = {
-  //    let label = UILabel()
-  //    label.font = .systemFont(ofSize: 14, weight: .medium)
-  //    label.adjustsFontSizeToFitWidth = true
-  //    label.textColor = .white
-  //    label.translatesAutoresizingMaskIntoConstraints = false
-  //    return label
-  //  }()
-  
   private(set)  var conditionNameLabel = DescriptionLabel()
-  //  : UILabel = {
-  //    let label = UILabel()
-  //    label.font = .systemFont(ofSize: 14, weight: .medium)
-  //    label.adjustsFontSizeToFitWidth = true
-  //    label.textColor = .white
-  //    label.numberOfLines = 0
-  //    label.translatesAutoresizingMaskIntoConstraints = false
-  //    return label
-  //  }()
-  
-  
-  
+
   override init(frame: CGRect) {
     super.init(frame: frame)
     backgroundColor = UIColor(named: "backgroundColor")
@@ -62,8 +32,8 @@ class WeatherCollectionViewCell: UICollectionViewCell {
   }
   
   private func setupFonts() {
-    conditionStatusLabel.font = AppFont.regular(size: 14)
-    conditionNameLabel.font =  AppFont.regular(size: 14)
+    conditionStatusLabel.font = AppFont.regular(size: 12)
+    conditionNameLabel.font =  AppFont.regular(size: 12)
   }
   
   

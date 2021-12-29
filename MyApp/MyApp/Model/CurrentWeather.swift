@@ -51,9 +51,11 @@ struct CurrentWeather: Codable {
 
   // MARK: - Sys
   struct Sys: Codable {
-      let id: Int
+      let id: Int?
       let country: String
-      let sunset, type, sunrise: Int
+      let sunset: Int
+      let type: Int?
+      let sunrise: Int
   }
 
   // MARK: - Weather

@@ -9,9 +9,6 @@ import UIKit
 
 class HourlyCollectionViewCell: UICollectionViewCell {
   
-  
- 
-  
   private(set) var conditionImage = MainImage(frame: .zero)
   
   private(set) var timeLabel = DescriptionLabel()

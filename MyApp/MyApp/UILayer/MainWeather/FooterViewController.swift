@@ -38,7 +38,8 @@ final class FooterViewController: UIViewController {
     weatherView.collectionView.delegate = self
     weatherView.collectionView.register(HourlyCollectionViewCell.self, forCellWithReuseIdentifier: "HourlyCollectionViewCell")
     view.backgroundColor = UIColor(named: "backgroundColor")
-  //  getHourlyWeather(for: cityId)
+    getHourlyWeather(for: cityId)
+    print(cityId)
     weatherView.dateLabel.text = Date().dateFormatter().capitalizedFirstLetter
   }
   
@@ -51,12 +52,12 @@ final class FooterViewController: UIViewController {
   // MARK: - Private functions
   private func getHourlyWeather(for city: Int) {
     self.coreDataManager.cityListPredicate = NSPredicate(format: "id == %i", self.cityId)
-    self.coreDataManager.loadSavedData()
+    self.coreDataManager.loadListData()
     guard let city = self.coreDataManager.fetchedListController.fetchedObjects?.first,
           let cityWeather = city.inList as? Set<MainInfo> else { return }
     guard 
       let correctedLon = Double(String(format: "%.2f", cityWeather.first!.lon)),
-      let correctedLat = Double(String(format: "%.2f", cityWeather.first!.lon))
+      let correctedLat = Double(String(format: "%.2f", cityWeather.first!.lat))
     else { return }
 
     networkManager.getHourlyWeather(lon: correctedLon, lat: correctedLat) { result in

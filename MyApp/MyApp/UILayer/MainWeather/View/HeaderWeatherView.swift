@@ -36,6 +36,8 @@ class HeaderWeatherView: UIView {
   private(set) var weatherImageLeftSmall: NSLayoutConstraint?
   private(set) var weatherImageSizeSmall: NSLayoutConstraint?
   private(set) var weatherImageSizeBig: NSLayoutConstraint?
+  private(set) var weatherImageHeightSmall: NSLayoutConstraint?
+  private(set) var weatherImageHeightBig: NSLayoutConstraint?
   
   private(set) var dateLabel = TitleLabel(textAlignment: .center)
   private(set) var dateLabelTopSmall: NSLayoutConstraint?
@@ -51,7 +53,7 @@ class HeaderWeatherView: UIView {
   private(set) var temperatureLabelLeftBig: NSLayoutConstraint?
   private(set) var temperatureLabelLeftSmall: NSLayoutConstraint?
   
-  private(set) var conditionLabel = TitleLabel(textAlignment: .center)
+  private(set) var conditionLabel = DescriptionLabel()
   private(set) var conditionLabelTopSmall: NSLayoutConstraint?
   private(set) var conditionLabelTopBig: NSLayoutConstraint?
   private(set) var conditionLabelLeftBig: NSLayoutConstraint?
@@ -82,10 +84,11 @@ class HeaderWeatherView: UIView {
   }
   
   private func setupFonts() {
-    dateLabel.font = AppFont.regular(size: 19)
-    cityNameLabel.font = AppFont.bold(size: 20)
-    temperatureLabel.font = AppFont.bold(size: 50)
-    conditionLabel.font =  AppFont.regular(size: 19)
+    dateLabel.font = AppFont.regular(size: 16)
+    cityNameLabel.font = AppFont.bold(size: 16)
+    temperatureLabel.font = AppFont.bold(size: 72)
+    conditionLabel.font =  AppFont.regular(size: 16)
+    conditionLabel.textAlignment = .center
   }
   
   @objc func didTapAdd() {
@@ -121,17 +124,16 @@ class HeaderWeatherView: UIView {
       
       
       cityNameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 16, to: .height)),
-      cityNameLabel.leftAnchor.constraint(equalTo: self.centerXAnchor, constant: adapted(dimensionSize: -60, to: .width)),
+      cityNameLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
      // cityNameLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 120, to: .width)),
       cityNameLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 32, to: .height)),
       
       weatherImage.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 48, to: .height)),
-      dateLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 19, to: .height)),
-      temperatureLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 88, to: .height)),
-      conditionLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 19, to: .height)),
-      temperatureLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 97, to: .width)),
-      temperatureLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 97, to: .width)),
-      
+      //dateLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 19, to: .height)),
+     // temperatureLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 86, to: .height)),
+      conditionLabel.rightAnchor.constraint(lessThanOrEqualTo: self.rightAnchor ,constant: adapted(dimensionSize: -16, to: .width)),
+      dateLabel.rightAnchor.constraint(equalTo: self.rightAnchor ,constant: adapted(dimensionSize: -16, to: .width)),
+     // temperatureLabel.rightAnchor.constraint(lessThanOrEqualTo: self.rightAnchor ,constant: adapted(dimensionSize: -16, to: .width)),
       
      
       collectionView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
@@ -143,36 +145,36 @@ class HeaderWeatherView: UIView {
     collectionViewTopBig?.isActive = true
     collectionViewTopSmall = collectionView.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 232, to: .height))
     
-    weatherImageLeftBig = weatherImage.leftAnchor.constraint(equalTo: self.centerXAnchor, constant: -imageSizeBig / 2)
+    weatherImageLeftBig = weatherImage.centerXAnchor.constraint(equalTo: self.centerXAnchor)
     weatherImageLeftBig?.isActive = true
-    weatherImageLeftSmall = weatherImage.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 6, to: .width))
+    weatherImageLeftSmall = weatherImage.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width))
     weatherImageSizeBig = weatherImage.widthAnchor.constraint(equalToConstant: imageSizeBig)
     weatherImageSizeBig?.isActive = true
     weatherImageSizeSmall = weatherImage.widthAnchor.constraint(equalToConstant: imageSizeSmall)
-    weatherImageSizeBig = weatherImage.heightAnchor.constraint(equalToConstant: imageSizeBig)
-    weatherImageSizeBig?.isActive = true
-    weatherImageSizeSmall = weatherImage.heightAnchor.constraint(equalToConstant: imageSizeSmall)
+    weatherImageHeightBig = weatherImage.heightAnchor.constraint(equalToConstant: imageSizeBig)
+    weatherImageHeightBig?.isActive = true
+    weatherImageHeightSmall = weatherImage.heightAnchor.constraint(equalToConstant: imageSizeSmall)
     
     dateLabelTopBig = dateLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 288, to: .height))
     dateLabelTopBig?.isActive = true
     dateLabelTopSmall = dateLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 68, to: .height))
-    dateLabelLeftBig = dateLabel.leftAnchor.constraint(equalTo: self.centerXAnchor, constant: adapted(dimensionSize: -(133/2), to: .width))
+    dateLabelLeftBig = dateLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor)
     dateLabelLeftBig?.isActive = true
     dateLabelLeftSmall = dateLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 199, to: .width))
     
     temperatureLabelTopBig = temperatureLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 323, to: .height))
     temperatureLabelTopBig?.isActive = true
     temperatureLabelTopSmall = temperatureLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 103, to: .height))
-    temperatureLabelLeftBig = temperatureLabel.leftAnchor.constraint(equalTo: self.centerXAnchor, constant: adapted(dimensionSize: -(97/2), to: .width))
+    temperatureLabelLeftBig = temperatureLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor)
     temperatureLabelLeftBig?.isActive = true
-    temperatureLabelLeftSmall = temperatureLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 218, to: .width))
+    temperatureLabelLeftSmall = temperatureLabel.centerXAnchor.constraint(equalTo: dateLabel.centerXAnchor)
     
     conditionLabelTopBig = conditionLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 409, to: .height))
     conditionLabelTopBig?.isActive = true
     conditionLabelTopSmall = conditionLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 189, to: .height))
-    conditionLabelLeftBig = conditionLabel.leftAnchor.constraint(equalTo: self.centerXAnchor, constant: adapted(dimensionSize: -(83/2), to: .width))
+    conditionLabelLeftBig = conditionLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor)
     conditionLabelLeftBig?.isActive = true
-    conditionLabelLeftSmall = conditionLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 225, to: .width))
+    conditionLabelLeftSmall = conditionLabel.centerXAnchor.constraint(equalTo: temperatureLabel.centerXAnchor)
   }
   
   
@@ -189,6 +191,8 @@ extension HeaderWeatherView {
       weatherImageLeftSmall?.isActive = true
       weatherImageSizeBig?.isActive = false
       weatherImageSizeSmall?.isActive = true
+      weatherImageHeightBig?.isActive = false
+      weatherImageHeightSmall?.isActive = true
       
       dateLabelTopBig?.isActive = false
       dateLabelTopSmall?.isActive = true
@@ -222,6 +226,8 @@ extension HeaderWeatherView {
       weatherImageLeftBig?.isActive = true
       weatherImageSizeSmall?.isActive = false
       weatherImageSizeBig?.isActive = true
+      weatherImageHeightSmall?.isActive = false
+      weatherImageHeightBig?.isActive = true
       
       dateLabelTopSmall?.isActive = false
       dateLabelTopBig?.isActive = true

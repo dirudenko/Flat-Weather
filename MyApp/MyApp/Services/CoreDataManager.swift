@@ -51,8 +51,8 @@ class CoreDataManager {
     return controller
   }()
   
-  lazy var fetchedListController: NSFetchedResultsController<List> = {
-    let request = List.createFetchRequest()
+  lazy var fetchedListController: NSFetchedResultsController<CityList> = {
+    let request = CityList.createFetchRequest()
     request.fetchBatchSize = 20
     request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
     let controller = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedContext, sectionNameKeyPath: nil, cacheName: nil)
@@ -101,7 +101,7 @@ class CoreDataManager {
   
   /// Проверка наналичие данных в БД
   func entityIsEmpty() -> Bool {
-    let request = MainInfo.createFetchRequest()
+    let request = CityList.createFetchRequest()
     do {
       let results = try managedContext.fetch(request)
       if results.isEmpty {
@@ -114,21 +114,24 @@ class CoreDataManager {
     }
   }
   
-  /// Сохранение добавленного города в КорДату
-  func saveToList(city: MainInfo) {
-    let entity = NSEntityDescription.entity(forEntityName: "List",
+  // Сохранение добавленного города в КорДату
+  func saveToList(city: CityList) {
+    let entity = NSEntityDescription.entity(forEntityName: "MainInfo",
                                              in: managedContext)!
-    let list = List(entity: entity, insertInto: managedContext)
+    let list = MainInfo(entity: entity, insertInto: managedContext)
     list.id = city.id
-    list.addToInList(city)
+    list.name = city.name
+    list.lat = city.lat
+    list.lon = city.lon
+    list.country = city.country
     saveContext()
   }
   
   /// Конфигурация списка городов
   func configure(json: CitiList) {
-    let entity = NSEntityDescription.entity(forEntityName: "MainInfo",
+    let entity = NSEntityDescription.entity(forEntityName: "CityList",
                                             in: managedContext)!
-    let list = MainInfo(entity: entity, insertInto: managedContext)
+    let list = CityList(entity: entity, insertInto: managedContext)
     list.id = Int64(json.id)
     list.name = json.name
     list.lat = json.coord.lat
@@ -137,28 +140,27 @@ class CoreDataManager {
   }
   
   /// Конфигурация верхнего бара с текущими погодными данными
-  func configureTopView(from data: CurrentWeather, list: MainInfo?) {
+  func configureTopView(from data: WeatherModel, list: MainInfo?) {
     let entity = NSEntityDescription.entity(forEntityName: "TopBar",
                                              in: managedContext)!
     let weather = TopBar(entity: entity, insertInto: managedContext)
-    weather.temperature = data.main.temp
-    weather.date = Int64(data.dt)
-    weather.iconId = Int16(data.weather.first?.id ?? 0)
-    weather.desc = data.weather.first?.weatherDescription
+    weather.temperature = data.current.temp
+    weather.date = Int64(data.current.dt)
+    weather.iconId = Int16(data.current.weather.first?.id ?? 0)
+    weather.desc = data.current.weather.first?.weatherDescription
     weather.citiList = list
-    weather.citiList?.name = data.name
     saveContext()
   }
   
   /// Конфигурация collectionView бара с текущими погодными данными
-  func configureBottomView(from data: CurrentWeather, list: MainInfo?) {
+  func configureBottomView(from data: WeatherModel, list: MainInfo?) {
     let entity = NSEntityDescription.entity(forEntityName: "BottomBar",
                                              in: managedContext)!
     let weather = BottomBar(entity: entity, insertInto: managedContext)
-    weather.wind = data.wind.speed
-    weather.humidity = Int16(data.main.humidity)
-    weather.pressure = Int16(data.main.pressure)
-    weather.rain = Int16(data.clouds.all)
+    weather.wind = data.current.windSpeed
+    weather.humidity = Int16(data.current.humidity)
+    weather.pressure = Int16(data.current.pressure)
+    weather.rain = Int16(data.current.pop ?? 0 * 100)
     weather.weather = list
     saveContext()
   }

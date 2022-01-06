@@ -62,23 +62,24 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     ])
   }
   
-  func configure(with model: CurrentWeather, index: Int) {
+  func configure(with model: MainInfo, index: Int) {
+    guard let bottomBar = model.bottomWeather else { return }
     switch index {
     case 0:
       conditionImage.image = UIImage(systemName: "wind")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-      conditionStatusLabel.text = "\(model.wind.speed) km/h"
+      conditionStatusLabel.text = "\(bottomBar.wind) km/h"
       conditionNameLabel.text = "Ветер"
     case 1:
       conditionImage.image = UIImage(systemName: "cloud.drizzle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-      conditionStatusLabel.text = "\(model.clouds.all)%"
-      conditionNameLabel.text = "Дождь"
+      conditionStatusLabel.text = "\(bottomBar.rain)%"
+      conditionNameLabel.text = "Rain"
     case 2:
       conditionImage.image = UIImage(systemName: "thermometer")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-      conditionStatusLabel.text = "\(model.main.pressure) mBar"
+      conditionStatusLabel.text = "\(bottomBar.pressure) mBar"
       conditionNameLabel.text = "Давление"
     case 3:
       conditionImage.image = UIImage(systemName: "humidity")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-      conditionStatusLabel.text = "\(model.main.humidity) %"
+      conditionStatusLabel.text = "\(bottomBar.humidity) %"
       conditionNameLabel.text = "Влажность"
     default:
       break

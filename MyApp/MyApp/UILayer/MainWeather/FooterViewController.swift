@@ -9,15 +9,13 @@ import UIKit
 
 final class FooterViewController: UIViewController {
   
-  private let weatherView = HourlyWeatherView()
-  private let loadingVC = LoadingViewController()
+  let weatherView = HourlyWeatherView()
+  let loadingVC = LoadingViewController()
   private let networkManager = NetworkManager()
-  private var hourlyWeather: HourlyWeather?
-  private let cityId: Int
+  var hourlyWeather: [Current]?
   private let coreDataManager = CoreDataManager(modelName: "MyApp")
 
-  init(cityId: Int) {
-    self.cityId = cityId
+  init() {
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -38,8 +36,8 @@ final class FooterViewController: UIViewController {
     weatherView.collectionView.delegate = self
     weatherView.collectionView.register(HourlyCollectionViewCell.self, forCellWithReuseIdentifier: "HourlyCollectionViewCell")
     view.backgroundColor = UIColor(named: "backgroundColor")
-    getHourlyWeather(for: cityId)
-    print(cityId)
+   // getHourlyWeather(for: cityId)
+   // print(cityId)
     weatherView.dateLabel.text = Date().dateFormatter().capitalizedFirstLetter
   }
   
@@ -50,45 +48,46 @@ final class FooterViewController: UIViewController {
     loadingVC.view.frame = footerFrame
   }
   // MARK: - Private functions
-  private func getHourlyWeather(for city: Int) {
-    self.coreDataManager.cityListPredicate = NSPredicate(format: "id == %i", self.cityId)
-    self.coreDataManager.loadListData()
-    guard let city = self.coreDataManager.fetchedListController.fetchedObjects?.first,
-          let cityWeather = city.inList as? Set<MainInfo> else { return }
-    guard 
-      let correctedLon = Double(String(format: "%.2f", cityWeather.first!.lon)),
-      let correctedLat = Double(String(format: "%.2f", cityWeather.first!.lat))
-    else { return }
-
-    networkManager.getHourlyWeather(lon: correctedLon, lat: correctedLat) { result in
-      switch result {
-      case .success(let weather):
-        // print(weather)
-        DispatchQueue.main.async {
-          self.hourlyWeather = weather
-          self.weatherView.collectionView.reloadData()
-          self.loadingVC.remove()
-        }
-      case .failure(let error):
-        print(error.rawValue)
-      }
-    }
-  }
+//  private func getHourlyWeather(for city: Int) {
+//    self.coreDataManager.cityListPredicate = NSPredicate(format: "id == %i", self.cityId)
+//    self.coreDataManager.loadListData()
+//    guard let city = self.coreDataManager.fetchedListController.fetchedObjects?.first,
+//          let cityWeather = city.inList as? Set<MainInfo> else { return }
+//    guard
+//      let correctedLon = Double(String(format: "%.2f", cityWeather.first!.lon)),
+//      let correctedLat = Double(String(format: "%.2f", cityWeather.first!.lat))
+//    else { return }
+//
+//    networkManager.getHourlyWeather(lon: correctedLon, lat: correctedLat) { result in
+//      switch result {
+//      case .success(let weather):
+//        // print(weather)
+//        DispatchQueue.main.async {
+//          self.hourlyWeather = weather
+//          self.weatherView.collectionView.reloadData()
+//          self.loadingVC.remove()
+//        }
+//      case .failure(let error):
+//        print(error.rawValue)
+//      }
+//    }
+//  }
 }
 // MARK: - UIViewController delegates
 
 extension FooterViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    guard let hourly = hourlyWeather?.hourly else { return 0 }
+    guard let hourly = hourlyWeather else { return 0 }
     return hourly.isEmpty ? 0 : 24
   }
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyCollectionViewCell", for: indexPath) as? HourlyCollectionViewCell
+    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyCollectionViewCell", for: indexPath) as? HourlyCollectionViewCell, let model = hourlyWeather?[indexPath.row]
+            
     else { return UICollectionViewCell() }
-    if let model = hourlyWeather {
-      cell.configure(with: model, index: indexPath.row)
-    }
+    
+    cell.configure(with: model, index: indexPath.row)
+    
     return cell
   }
 }

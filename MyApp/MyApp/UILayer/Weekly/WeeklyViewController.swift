@@ -9,15 +9,15 @@ import UIKit
 
 class WeeklyViewController: UIViewController {
 
-  private let weeklyView = WeeklyWeatherView()
+  let weeklyView = WeeklyWeatherView()
   private let coreDataManager = CoreDataManager(modelName: "MyApp")
   private let networkManager = NetworkManager()
-  private let cityId: Int
-  private var weeklyCity: WeeklyWeatherModel?
+  //private let cityId: Int
+  private var weeklyCity: WeatherModel?
   
   
-  init(cityId: Int) {
-    self.cityId = cityId
+  init(model: WeatherModel?) {
+    weeklyCity = model
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -34,26 +34,26 @@ class WeeklyViewController: UIViewController {
         super.viewDidLoad()
       weeklyView.weeklyListTableView.delegate = self
       weeklyView.weeklyListTableView.dataSource = self
-      getWeeklyWeather(for: cityId)
+     // getWeeklyWeather(for: cityId)
     }
   func getWeeklyWeather(for city: Int) {
     
-    self.coreDataManager.cityListPredicate = NSPredicate(format: "id == %i", self.cityId)
-    self.coreDataManager.loadListData()
-    guard let city = self.coreDataManager.fetchedListController.fetchedObjects?.first,
-          let cityWeather = city.inList as? Set<MainInfo> else { return }
-    guard
-      let correctedLon = Double(String(format: "%.2f", cityWeather.first!.lon)),
-      let correctedLat = Double(String(format: "%.2f", cityWeather.first!.lat))
-    else { return }
-    
-  networkManager.getWeeklyWeather(lon: correctedLon, lat: correctedLat) { result in
-    switch result {
-    case .success(let weather):
-      DispatchQueue.main.async {
-      //  print(weather)
-        self.weeklyCity = weather
-        self.weeklyView.weeklyListTableView.reloadData()
+//    self.coreDataManager.cityListPredicate = NSPredicate(format: "id == %i", self.cityId)
+//    self.coreDataManager.loadListData()
+//    guard let city = self.coreDataManager.fetchedListController.fetchedObjects?.first
+//           else { return }
+//    guard
+//      let correctedLon = Double(String(format: "%.2f", city.lon)),
+//      let correctedLat = Double(String(format: "%.2f", city.lat))
+//    else { return }
+//
+//  networkManager.getWeeklyWeather(lon: correctedLon, lat: correctedLat) { result in
+//    switch result {
+//    case .success(let weather):
+//      DispatchQueue.main.async {
+//      //  print(weather)
+//        self.weeklyCity = weather
+//        self.weeklyView.weeklyListTableView.reloadData()
 //        self.coreDataManager.cityListPredicate = NSPredicate(format: "id == %i", self.cityId)
 //        self.coreDataManager.loadSavedData()
 //        let city = self.coreDataManager.fetchedResultsController.fetchedObjects?.first
@@ -65,12 +65,12 @@ class WeeklyViewController: UIViewController {
 //        self.currentWeather = weather
 //        self.weatherView.configure(with: weather)
 //        self.weatherView.collectionView.reloadData()
-      }
+  //    }
       
-    case .failure(let error):
-      print(error.rawValue)
-    }
-  }
+//    case .failure(let error):
+//      print(error.rawValue)
+//    }
+//  }
 }
 
 }
@@ -80,6 +80,7 @@ extension WeeklyViewController: UITableViewDataSource, UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return weeklyCity?.daily.count ?? 0
+   // return 0
   }
   
 //  func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -94,9 +95,12 @@ extension WeeklyViewController: UITableViewDataSource, UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
-    guard let cell = tableView.dequeueReusableCell(withIdentifier: "WeeklyTableViewCell", for: indexPath) as? WeeklyTableViewCell,
-          let model = weeklyCity?.daily[indexPath.row]
+    guard let cell = tableView.dequeueReusableCell(withIdentifier: "WeeklyTableViewCell", for: indexPath) as? WeeklyTableViewCell,   let model = weeklyCity?.daily[indexPath.row]
     else { return UITableViewCell() }
+            
+            
+  
+   
     //cell.dayLabel.text = "\(indexPath.row)"
    // cell.conditionImage.image = UIImage(systemName:"thermometer.sun")?.withTintColor(.white, renderingMode: .alwaysOriginal)
       cell.configure(with: model)

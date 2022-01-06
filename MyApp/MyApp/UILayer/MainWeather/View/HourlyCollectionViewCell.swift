@@ -75,21 +75,22 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     ])
   }
   
-  func configure(with model: HourlyWeather, index: Int) {
-    rainLabel.text = "\(model.hourly[index].clouds)% дождь"
+  func configure(with model: Current, index: Int) {
+  
+    rainLabel.text = "\(model.pop ?? 0 * 100)% rain"
     
-    var imageName =  IconHadler.iconDictionary.keyedValue(key: model.hourly[index].weather.first?.id ?? 0)
+    var imageName =  IconHadler.iconDictionary.keyedValue(key: model.weather.first?.id ?? 0)
     if ((imageName?.contains(".fill")) != nil) {
       let newImageName = imageName?.replacingOccurrences(of: ".fill", with: "")
       imageName = newImageName
     }
     conditionImage.image = UIImage(systemName: imageName ?? "thermometer.sun")?.withTintColor(.white, renderingMode: .alwaysOriginal)
     
-    temperatureLabel.text = "\(Int(model.hourly[index].feelsLike))°/\(Int(model.hourly[index].temp))°"
+    temperatureLabel.text = "\(Int(model.feelsLike))°/\(Int(model.temp))°"
     if index == 0 {
       timeLabel.text = "Сейчас"
     } else {
-      let date = Date(timeIntervalSince1970: TimeInterval(model.hourly[index].dt)).dateHourFormatter()
+      let date = Date(timeIntervalSince1970: TimeInterval(model.dt)).dateHourFormatter()
       timeLabel.text = "\(date)"
     }
   }

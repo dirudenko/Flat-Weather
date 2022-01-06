@@ -8,9 +8,9 @@
 import Foundation
 
 enum WeatherApi {
-  case getCurrentWeather(city: Int)
-  case getHourlyWeather(lon: Double, lat: Double)
-  case getWeeklyWeather(lon: Double, lat: Double)
+  case getCurrentWeather(lon: Double, lat: Double)
+ // case getHourlyWeather(lon: Double, lat: Double)
+ // case getWeeklyWeather(lon: Double, lat: Double)
 }
 
 extension WeatherApi: EndPointType {
@@ -22,12 +22,12 @@ extension WeatherApi: EndPointType {
   
   var path: String {
     switch self {
-    case .getCurrentWeather(_):
-      return "/data/2.5/weather"
-    case .getHourlyWeather(_,_):
+    case .getCurrentWeather(_,_):
       return "/data/2.5/onecall"
-    case .getWeeklyWeather(_,_):
-      return "/data/2.5/onecall"
+//    case .getHourlyWeather(_,_):
+//      return "/data/2.5/onecall"
+//    case .getWeeklyWeather(_,_):
+//      return "/data/2.5/onecall"
     }
   }
   
@@ -38,35 +38,40 @@ extension WeatherApi: EndPointType {
   
   var task: HTTPTask {
     switch self {
-    case .getCurrentWeather(let city):
-      return .requestParameters(bodyParameters: nil,
-                                bodyEncoding: .urlEncoding,
-                                urlParameters: ["id": city,
-                                                "appid": NetworkManager.weatherAPIKey,
-                                                "units": "metric",
-                                                "lang": "ru"])
-    case .getHourlyWeather(let lon, let lat):
+    case .getCurrentWeather(let lon, let lat):
       return .requestParameters(bodyParameters: nil,
                                 bodyEncoding: .urlEncoding,
                                 urlParameters: [
                                   "lat": lat,
                                   "lon": lon,
-                                  "exclude": "current,minutely,daily,alerts",
+                                  "exclude": "minutely,alerts",
                                   "appid": NetworkManager.weatherAPIKey,
                                   "units": "metric",
                                   "lang": "ru",
                                 ])
-    case .getWeeklyWeather(let lon, let lat):
-      return .requestParameters(bodyParameters: nil,
-                                bodyEncoding: .urlEncoding,
-                                urlParameters: [
-                                  "lat": lat,
-                                  "lon": lon,
-                                  "exclude": "current,minutely,hourly,alerts",
-                                  "appid": NetworkManager.weatherAPIKey,
-                                  "units": "metric",
-                                  "lang": "ru",
-                                ])
+   //                                            ])
+//    case .getHourlyWeather(let lon, let lat):
+//      return .requestParameters(bodyParameters: nil,
+//                                bodyEncoding: .urlEncoding,
+//                                urlParameters: [
+//                                  "lat": lat,
+//                                  "lon": lon,
+//                                  "exclude": "current,minutely,daily,alerts",
+//                                  "appid": NetworkManager.weatherAPIKey,
+//                                  "units": "metric",
+//                                  "lang": "ru",
+//                                ])
+//    case .getWeeklyWeather(let lon, let lat):
+//      return .requestParameters(bodyParameters: nil,
+//                                bodyEncoding: .urlEncoding,
+//                                urlParameters: [
+//                                  "lat": lat,
+//                                  "lon": lon,
+//                                  "exclude": "minutely,alerts",
+//                                  "appid": NetworkManager.weatherAPIKey,
+//                                  "units": "metric",
+//                                  "lang": "ru",
+//                                ])
     }
   }
   

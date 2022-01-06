@@ -255,20 +255,22 @@ extension HeaderWeatherView {
   }
   
   
-  func configure(with model: CurrentWeather) {
-    
-    let date = Date(timeIntervalSince1970: TimeInterval(model.dt)).dateFormatter()
-    dateLabel.text = "\(date)".capitalizedFirstLetter
+  func configure(with model: MainInfo) {
     
     cityNameLabel.text = model.name
+    guard  let topBar = model.topWeather else { return }
     
-    conditionLabel.text = model.weather.first?.weatherDescription.capitalizedFirstLetter
+    let date = Date(timeIntervalSince1970: TimeInterval(topBar.date)).dateFormatter()
+    dateLabel.text = "\(date)".capitalizedFirstLetter
+    
+    
+    conditionLabel.text = topBar.desc
     
     let config =  UIImage.SymbolConfiguration.preferringMulticolor()
-    let imageName =  IconHadler.iconDictionary.keyedValue(key: model.weather.first?.id ?? 0)
+    let imageName =  IconHadler.iconDictionary.keyedValue(key: Int(topBar.iconId))
     weatherImage.image = UIImage(systemName: imageName ?? "thermometer.sun.fill", withConfiguration: config)
     
-    temperatureLabel.text = "\(Int(model.main.temp))°"
+    temperatureLabel.text = "\(Int(topBar.temperature))°"
   }
 }
 

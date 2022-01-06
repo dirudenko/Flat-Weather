@@ -9,28 +9,28 @@ import UIKit
 
 final class MainWeatherViewController: UIViewController {
   
-  private(set) var headerWeaherViewController: HeaderWeatherViewController
+  private(set) var headerWeaherViewController = HeaderWeatherViewController()
   private var headerWeatherViewHeightSmall: NSLayoutConstraint?
   private var headerWeatherViewHeightBig: NSLayoutConstraint?
   
-  private var footerWeaherViewController: FooterViewController
+  private var footerWeaherViewController = FooterViewController()
   private let forcatsButton = Button()
   
-  private var weeklyWeatherViewController: WeeklyViewController
+  private var weeklyWeatherView = WeeklyWeatherView()
   private var weeklyWeatherViewTopSmall: NSLayoutConstraint?
   private var weeklyWeatherViewTopBig: NSLayoutConstraint?
   
-  private var fetchedCityList: List
+  private var fetchedCityList: MainInfo
   private let coreDataManager = CoreDataManager(modelName: "MyApp")
   private var isPressed = false
+  private let id: Int
   
-  init(for list: List) {
+  private let networkManager = NetworkManager()
+
+  
+  init(for list: MainInfo) {
     self.fetchedCityList = list
-    let id = Int(fetchedCityList.id)
-//    print(id)
-    headerWeaherViewController = HeaderWeatherViewController(cityId: id)
-    footerWeaherViewController = FooterViewController(cityId: id)
-    weeklyWeatherViewController = WeeklyViewController(cityId: id)
+    id = Int(fetchedCityList.id)
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -50,22 +50,23 @@ final class MainWeatherViewController: UIViewController {
     //add(footerWeaherViewController)
     view.addSubview(headerWeaherViewController.view)
     view.addSubview(footerWeaherViewController.view)
-    view.addSubview(weeklyWeatherViewController.view)
+    view.addSubview(weeklyWeatherView)
     setupConstraints()
     
     let swipeGestureRecognizerDown = UISwipeGestureRecognizer(target: self, action: #selector(didSwipe(_:)))
     let swipeGestureRecognizerUp = UISwipeGestureRecognizer(target: self, action: #selector(didSwipe(_:)))
-
+    
     swipeGestureRecognizerDown.direction = .down
     swipeGestureRecognizerUp.direction = .up
     view.addGestureRecognizer(swipeGestureRecognizerDown)
     view.addGestureRecognizer(swipeGestureRecognizerUp)
-    
+    fetchDataFromCoreData()
+    getCityWeather()
   }
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-
+    
   }
   
   override func viewDidLayoutSubviews() {
@@ -76,12 +77,71 @@ final class MainWeatherViewController: UIViewController {
     
   }
   
+  private func fetchDataFromCoreData() {
+    self.coreDataManager.cityResultsPredicate = NSPredicate(format: "id == %i", self.id)
+    self.coreDataManager.loadSavedData()
+    guard let data = coreDataManager.fetchedResultsController.fetchedObjects?.first else { return }
+    self.headerWeaherViewController.weatherView.configure(with: data)
+    self.headerWeaherViewController.currentWeather = data
+    self.headerWeaherViewController.weatherView.collectionView.reloadData()
+    }
+  
+  private func getCityWeather() {
+    let lon = fetchedCityList.lon
+    let lat = fetchedCityList.lat
+        guard
+          let correctedLon = Double(String(format: "%.2f", lon)),
+          let correctedLat = Double(String(format: "%.2f", lat))
+        else { return }
+    networkManager.getWeather(lon: correctedLon, lat: correctedLat) {[weak self] result in
+      guard let self = self else { return }
+      switch result {
+      case .success(let weather):
+        DispatchQueue.main.async {
+        //  print(weather)
+         
+          self.coreDataManager.cityResultsPredicate = NSPredicate(format: "id == %i", self.id)
+          self.coreDataManager.loadSavedData()
+          let city = self.coreDataManager.fetchedResultsController.fetchedObjects?.first
+          self.coreDataManager.configureTopView(from: weather, list: city)
+          self.coreDataManager.configureBottomView(from: weather, list: city)
+          self.headerWeaherViewController.weatherView.configure(with: city!)
+          self.headerWeaherViewController.currentWeather = city
+          self.headerWeaherViewController.weatherView.collectionView.reloadData()
+          
+          self.footerWeaherViewController.hourlyWeather = weather.hourly
+          self.footerWeaherViewController.weatherView.collectionView.reloadData()
+          self.weeklyWeatherView.model = weather
+          self.weeklyWeatherView.weeklyListTableView.reloadData()
+          self.headerWeaherViewController.loadingVC.remove()
+          self.footerWeaherViewController.loadingVC.remove()
+  //        self.coreDataManager.cityListPredicate = NSPredicate(format: "id == %i", self.cityId)
+  //        self.coreDataManager.loadSavedData()
+  //        let city = self.coreDataManager.fetchedResultsController.fetchedObjects?.first
+  //        self.coreDataManager.configureTopView(from: weather, list: city)
+  //        self.coreDataManager.configureBottomView(from: weather, list: city)
+  //        self.coreDataManager.saveContext()
+  //
+  //        self.loadingVC.remove()
+  //        self.currentWeather = weather
+  //        self.weatherView.configure(with: weather)
+  //        self.weatherView.collectionView.reloadData()
+        }
+        
+      case .failure(let error):
+        print(error.rawValue)
+      }
+    }
+  }
+
+  
+  
   @objc private func didSwipe(_ sender: UISwipeGestureRecognizer) {
     
     switch sender.direction {
     case .up:
       headerWeaherViewController.weatherView.changeConstraints(isPressed: true)
-
+      
       headerWeatherViewHeightBig?.isActive = false
       headerWeatherViewHeightSmall?.isActive = true
       
@@ -91,16 +151,16 @@ final class MainWeatherViewController: UIViewController {
         self.view.layoutIfNeeded()
       }
     case .down:
-    headerWeaherViewController.weatherView.changeConstraints(isPressed: false)
-
-    headerWeatherViewHeightSmall?.isActive = false
-    headerWeatherViewHeightBig?.isActive = true
-    
-    weeklyWeatherViewTopSmall?.isActive = false
-    weeklyWeatherViewTopBig?.isActive = true
-    UIView.animate(withDuration: 0.3) {
-      self.view.layoutIfNeeded()
-    }
+      headerWeaherViewController.weatherView.changeConstraints(isPressed: false)
+      
+      headerWeatherViewHeightSmall?.isActive = false
+      headerWeatherViewHeightBig?.isActive = true
+      
+      weeklyWeatherViewTopSmall?.isActive = false
+      weeklyWeatherViewTopBig?.isActive = true
+      UIView.animate(withDuration: 0.3) {
+        self.view.layoutIfNeeded()
+      }
     default: break
     }
   }
@@ -112,14 +172,14 @@ extension MainWeatherViewController {
   private func setupConstraints() {
     headerWeaherViewController.view.translatesAutoresizingMaskIntoConstraints = false
     footerWeaherViewController.view.translatesAutoresizingMaskIntoConstraints = false
-    weeklyWeatherViewController.view.translatesAutoresizingMaskIntoConstraints = false
+    weeklyWeatherView.translatesAutoresizingMaskIntoConstraints = false
     
     NSLayoutConstraint.activate([
       
       
-      weeklyWeatherViewController.view.leftAnchor.constraint(equalTo: view.leftAnchor),
-      weeklyWeatherViewController.view.rightAnchor.constraint(equalTo: view.rightAnchor),
-      weeklyWeatherViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+      weeklyWeatherView.leftAnchor.constraint(equalTo: view.leftAnchor),
+      weeklyWeatherView.rightAnchor.constraint(equalTo: view.rightAnchor),
+      weeklyWeatherView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
       
       headerWeaherViewController.view.topAnchor.constraint(equalTo: view.topAnchor, constant: adapted(dimensionSize: 62, to: .height)),
       headerWeaherViewController.view.leftAnchor.constraint(equalTo: view.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
@@ -131,10 +191,10 @@ extension MainWeatherViewController {
       footerWeaherViewController.view.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 140, to: .height))
     ])
     
-    weeklyWeatherViewTopBig = weeklyWeatherViewController.view.topAnchor.constraint(equalTo: view.bottomAnchor)
+    weeklyWeatherViewTopBig = weeklyWeatherView.topAnchor.constraint(equalTo: view.bottomAnchor)
     weeklyWeatherViewTopBig?.isActive = true
-    weeklyWeatherViewTopSmall = weeklyWeatherViewController.view.topAnchor.constraint(equalTo: view.topAnchor, constant: adapted(dimensionSize: 587, to: .height))
-
+    weeklyWeatherViewTopSmall = weeklyWeatherView.topAnchor.constraint(equalTo: view.topAnchor, constant: adapted(dimensionSize: 587, to: .height))
+    
     headerWeatherViewHeightBig = headerWeaherViewController.view.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 565, to: .height))
     headerWeatherViewHeightBig?.isActive = true
     headerWeatherViewHeightSmall = headerWeaherViewController.view.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 353, to: .height))

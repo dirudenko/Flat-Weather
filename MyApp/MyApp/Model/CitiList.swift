@@ -13,3 +13,7 @@ struct CitiList: Codable {
     let coord: Coord
 }
 
+  // MARK: - Coord
+  struct Coord: Codable {
+      let lon, lat: Double
+  }

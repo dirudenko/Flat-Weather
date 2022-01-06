@@ -12,14 +12,14 @@ class CityListPageViewController: UIPageViewController {
   private let pageControl = UIPageControl()
   private let coreDataManager = CoreDataManager(modelName: "MyApp")
   /// Список городов, сохраненных в БД
-  private let list: [List]
+  private let list: [MainInfo]
   /// Индекс города, показанного на экране
   private var currentIndex: Int
   /// Массив контроллеров с городами из list с прогрнозами погоды
   private var cityPage = [MainWeatherViewController]()
   private var searchViewController = SearchViewController()
 
-  init(for list: [List], index: Int) {
+  init(for list: [MainInfo], index: Int) {
     self.list = list
     self.currentIndex = index
     super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
@@ -88,9 +88,9 @@ extension CityListPageViewController: UIPageViewControllerDataSource, UIPageView
   func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
     guard let currentIndex = cityPage.firstIndex(of: viewController as! MainWeatherViewController) else { return nil }
     if currentIndex == 0 {
-      return cityPage.last
+      return nil
     } else {
-      return self.cityPage[currentIndex - 1]
+      return cityPage[currentIndex - 1]
     }
   }
   

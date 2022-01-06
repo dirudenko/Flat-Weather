@@ -57,7 +57,7 @@ class SearchViewController: UIViewController {
               self.coreDataManager.configure(json: item)
             }
             self.coreDataManager.saveContext()
-            self.coreDataManager.loadSavedData()
+            self.coreDataManager.loadListData()
             self.searchView.animation.removeFromSuperview()
             self.searchView.searchBar.isHidden = false
             self.searchView.searchBar.becomeFirstResponder()
@@ -68,7 +68,7 @@ class SearchViewController: UIViewController {
         }
       }
     } else {
-      self.coreDataManager.loadSavedData()
+      self.coreDataManager.loadListData()
       self.searchView.animation.removeFromSuperview()
       self.searchView.searchBar.isHidden = false
     }
@@ -94,9 +94,9 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
   func numberOfSections(in tableView: UITableView) -> Int {
     switch tableView {
     case searchView.searchTableView:
-      return coreDataManager.fetchedResultsController.sections?.count ?? 0
+      return coreDataManager.fetchedListController.sections?.count ?? 0
     case searchView.cityListTableView:
-      return coreDataManager.fetchedListController.fetchedObjects?.count ?? 0
+      return coreDataManager.fetchedResultsController.fetchedObjects?.count ?? 0
     default: return 0
     }
   }
@@ -104,7 +104,7 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     switch tableView {
     case searchView.searchTableView:
-      let sectionInfo = coreDataManager.fetchedResultsController.sections![section]
+      let sectionInfo = coreDataManager.fetchedListController.sections![section]
       return sectionInfo.numberOfObjects
     case searchView.cityListTableView:
       // let sectionInfo = coreDataManager.fetchedListController.sections![section]
@@ -129,16 +129,16 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     case searchView.searchTableView:
       let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
       var content = cell.defaultContentConfiguration()
-      content.text = "\(coreDataManager.fetchedResultsController.object(at: indexPath).name) \(coreDataManager.fetchedResultsController.object(at: indexPath).country)"
+      content.text = "\(coreDataManager.fetchedListController.object(at: indexPath).name) \(coreDataManager.fetchedListController.object(at: indexPath).country)"
       cell.backgroundColor = UIColor(named: "backgroundColor")
       cell.contentConfiguration = content
       return cell
       
     case searchView.cityListTableView:
       guard let cell = tableView.dequeueReusableCell(withIdentifier: "CityListTableViewCell", for: indexPath) as? CityListTableViewCell,
-            let model = coreDataManager.fetchedListController.fetchedObjects?[indexPath.section]
+            let model = coreDataManager.fetchedResultsController.fetchedObjects?[indexPath.section]
       else { return UITableViewCell() }
-      cell.configure(with: model)
+  //    cell.configure(with: model)
       return cell
       
     default : return UITableViewCell()
@@ -151,10 +151,10 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     case searchView.searchTableView:
       //navigationController?.dismiss(animated: false, completion: nil)
       /// сохранение выбранного города в список в КорДате
-      let city = coreDataManager.fetchedResultsController.object(at: indexPath)
+      let city = coreDataManager.fetchedListController.object(at: indexPath)
       coreDataManager.saveToList(city: city)
-      coreDataManager.loadListData()
-      let list = coreDataManager.fetchedListController.fetchedObjects ?? []
+      coreDataManager.loadSavedData()
+      let list = coreDataManager.fetchedResultsController.fetchedObjects ?? []
       let vc  = CityListPageViewController(for: list, index: list.count - 1)
       navigationController?.setViewControllers([vc], animated: true)
 
@@ -163,7 +163,7 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
 //      present(navigationController, animated: false)
     case searchView.cityListTableView:
 //      navigationController?.dismiss(animated: false, completion: nil)
-      let list = coreDataManager.fetchedListController.fetchedObjects ?? []
+      let list = coreDataManager.fetchedResultsController.fetchedObjects ?? []
       let vc  = CityListPageViewController(for: list, index: indexPath.section)
 //      let navigationController = UINavigationController(rootViewController: vc)
 //      navigationController.modalPresentationStyle = .fullScreen
@@ -187,8 +187,8 @@ extension SearchViewController: UISearchBarDelegate {
   
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     /// Передеча текста в качестве предиката для фетчРеквеста
-    coreDataManager.cityResultsPredicate = NSPredicate(format: "name CONTAINS %@", searchText)
-    coreDataManager.loadSavedData()
+    coreDataManager.cityListPredicate = NSPredicate(format: "name CONTAINS %@", searchText)
+    coreDataManager.loadListData()
     // print(coreDataManager.fetchedResultsController.fetchedObjects?.count)
     searchView.searchTableView.isHidden = false
     searchView.cityListTableView.isHidden = true

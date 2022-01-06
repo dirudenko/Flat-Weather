@@ -81,26 +81,27 @@ class CityListTableViewCell: UITableViewCell {
     ])
   }
   
-  func configure(with model: List) {
-    guard let cityModel = model.inList as? Set<MainInfo>,
-          let city = cityModel.first?.topWeather else { return }
-    descriptionLabel.text = city.desc
-    temperatureLabel.text = "\(city.temperature)°"
-    nameLabel.text = cityModel.first?.name
-
-    var imageName =  IconHadler.iconDictionary.keyedValue(key: Int(city.iconId))
-    if ((imageName?.contains(".fill")) != nil) {
-      let newImageName = imageName?.replacingOccurrences(of: ".fill", with: "")
-      imageName = newImageName
-    }
-    conditionImage.image = UIImage(systemName: imageName ?? "thermometer.sun")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+//  func configure(with model: List) {
 //
-//    temperatureLabel.text = "\(Int(model.hourly[index].feelsLike))°/\(Int(model.hourly[index].temp))°"
-//    if index == 0 {
-//      timeLabel.text = "Сейчас"
-//    } else {
-//      let date = Date(timeIntervalSince1970: TimeInterval(model.hourly[index].dt)).dateHourFormatter()
-//      timeLabel.text = "\(date)"
+//    guard let cityWeather = model.inList as? Set<MainInfo> else { return }
+//  
+//    descriptionLabel.text = cityWeather.topWeather?.desc
+//    temperatureLabel.text = "\(Int(cityWeather.topWeather?.temperature ?? 0))°"
+//    nameLabel.text = cityWeather.name
+//
+//    var imageName =  IconHadler.iconDictionary.keyedValue(key: Int(cityWeather.topWeather?.iconId ?? 0))
+//    if ((imageName?.contains(".fill")) != nil) {
+//      let newImageName = imageName?.replacingOccurrences(of: ".fill", with: "")
+//      imageName = newImageName
 //    }
-  }
+//    conditionImage.image = UIImage(systemName: imageName ?? "thermometer.sun")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+////
+////    temperatureLabel.text = "\(Int(model.hourly[index].feelsLike))°/\(Int(model.hourly[index].temp))°"
+////    if index == 0 {
+////      timeLabel.text = "Сейчас"
+////    } else {
+////      let date = Date(timeIntervalSince1970: TimeInterval(model.hourly[index].dt)).dateHourFormatter()
+////      timeLabel.text = "\(date)"
+////    }
+//  }
 }

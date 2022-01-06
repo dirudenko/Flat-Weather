@@ -22,13 +22,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     let window = UIWindow(windowScene: windowScene)
     var viewController = UIViewController()
     var navigationController = UINavigationController()
-    coreDataManager.loadListData()
-    let list = coreDataManager.fetchedListController.fetchedObjects ?? []
+    coreDataManager.loadSavedData()
+    let list = coreDataManager.fetchedResultsController.fetchedObjects ?? []
     if list.isEmpty {
       viewController = SearchViewController()
       viewController.view.backgroundColor = UIColor(named: "backgroundColor")
       navigationController = UINavigationController(rootViewController: viewController)
     } else {
+     // guard let mainInfo = list.first?.inList as? Set<MainInfo> else { return }
+      
       viewController = CityListPageViewController(for: list, index: 0)
       navigationController = UINavigationController(rootViewController: viewController)
       

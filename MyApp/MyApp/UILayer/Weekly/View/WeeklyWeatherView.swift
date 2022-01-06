@@ -22,7 +22,7 @@ class WeeklyWeatherView: UIView {
   
   private(set) var dateLabel = TitleLabel(textAlignment: .center)
   private let coreDataManager = CoreDataManager(modelName: "MyApp")
-
+  var model: WeatherModel?
   
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -69,7 +69,7 @@ class WeeklyWeatherView: UIView {
 extension WeeklyWeatherView: UITableViewDataSource, UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 7
+    return model?.daily.count ?? 0
   }
   
 //  func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -84,11 +84,12 @@ extension WeeklyWeatherView: UITableViewDataSource, UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
-    guard let cell = tableView.dequeueReusableCell(withIdentifier: "WeeklyTableViewCell", for: indexPath) as? WeeklyTableViewCell else { return UITableViewCell() }
-    // let model = coreDataManager.fetchedListController.fetchedObjects?[indexPath.section]
-    cell.dayLabel.text = "\(indexPath.row)"
-    cell.conditionImage.image = UIImage(systemName:"thermometer.sun")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-    //  cell.configure(with: model)
+    guard let cell = tableView.dequeueReusableCell(withIdentifier: "WeeklyTableViewCell", for: indexPath) as? WeeklyTableViewCell,
+          let dailyModel = model?.daily[indexPath.row] else { return UITableViewCell() }
+   
+    //cell.dayLabel.text = "\(indexPath.row)"
+    //cell.conditionImage.image = UIImage(systemName:"thermometer.sun")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+      cell.configure(with: dailyModel)
     return cell
     
     

@@ -43,7 +43,7 @@ final class MainWeatherViewController: UIViewController {
     setupLayouts()
     let data = fetchDataFromCoreData()
     configureCurrentWeather(with: data)
-    getCityWeather()
+   // getCityWeather()
   }
   
   override func viewDidAppear(_ animated: Bool) {
@@ -192,7 +192,8 @@ extension MainWeatherViewController {
 
 extension MainWeatherViewController: HeaderButtonsProtocol {
   func optionsButtonTapped() {
-    print("Options")
+    let settingsViewController = SettingsViewController()
+    navigationController?.pushViewController(settingsViewController, animated: true)
   }
   
   func plusButtonTapped() {

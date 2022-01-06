@@ -12,7 +12,6 @@ class WeeklyWeatherView: UIView {
   private(set) var weeklyListTableView: UITableView = {
     let tableView = UITableView()
     tableView.translatesAutoresizingMaskIntoConstraints = false
-    //tableView.contentInset = UIEdgeInsets(top: 144, left: 16, bottom: 542, right: 16)
     tableView.register(WeeklyTableViewCell.self, forCellReuseIdentifier: "WeeklyTableViewCell")
     tableView.backgroundColor = UIColor(named: "backgroundColor")
     tableView.separatorStyle = .none
@@ -21,12 +20,11 @@ class WeeklyWeatherView: UIView {
   }()
   
   private(set) var dateLabel = TitleLabel(textAlignment: .center)
-  private let coreDataManager = CoreDataManager(modelName: "MyApp")
-  var model: WeatherModel?
+  private var model: WeatherModel?
   
   override init(frame: CGRect) {
     super.init(frame: frame)
-
+    
     setupLayouts()
     addConstraints()
     setupFonts()
@@ -62,8 +60,10 @@ class WeeklyWeatherView: UIView {
       weeklyListTableView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
       weeklyListTableView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
     ])
-    
-    
+  }
+  
+  func setWeatherModel(with model: WeatherModel) {
+    self.model = model
   }
 }
 extension WeeklyWeatherView: UITableViewDataSource, UITableViewDelegate {
@@ -72,32 +72,14 @@ extension WeeklyWeatherView: UITableViewDataSource, UITableViewDelegate {
     return model?.daily.count ?? 0
   }
   
-//  func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//    return adapted(dimensionSize: 0, to: .height)
-//  }
-  
-  func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-    let headerView = UIView(frame: .zero)
-    headerView.backgroundColor = UIColor(named: "backgroundColor")
-    return headerView
-  }
-  
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    
     guard let cell = tableView.dequeueReusableCell(withIdentifier: "WeeklyTableViewCell", for: indexPath) as? WeeklyTableViewCell,
           let dailyModel = model?.daily[indexPath.row] else { return UITableViewCell() }
-   
-    //cell.dayLabel.text = "\(indexPath.row)"
-    //cell.conditionImage.image = UIImage(systemName:"thermometer.sun")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-      cell.configure(with: dailyModel)
+    cell.configure(with: dailyModel)
     return cell
-    
-    
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
-    
   }
-  
 }

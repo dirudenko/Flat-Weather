@@ -27,12 +27,13 @@ class CityListTableViewCell: UITableViewCell {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-    
+  
   private func setupLayouts() {
     addSubview(conditionImage)
     addSubview(temperatureLabel)
     addSubview(nameLabel)
     addSubview(descriptionLabel)
+    backgroundColor = .white
   }
   
   private func setupFonts() {
@@ -58,12 +59,12 @@ class CityListTableViewCell: UITableViewCell {
       nameLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
       nameLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 80, to: .width)),
       nameLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 19, to: .height)),
-     // nameLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: adapted(dimensionSize: 42, to: .height)),
+      // nameLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: adapted(dimensionSize: 42, to: .height)),
       
       conditionImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 19, to: .height)),
       conditionImage.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 263, to: .width)),
       //conditionImage.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: adapted(dimensionSize: 32, to: .height)),
-     // conditionImage.rightAnchor.constraint(equalTo: self.rightAnchor, constant: adapted(dimensionSize: 31, to: .width)),
+      // conditionImage.rightAnchor.constraint(equalTo: self.rightAnchor, constant: adapted(dimensionSize: 31, to: .width)),
       conditionImage.widthAnchor.constraint(equalToConstant: imageSize),
       conditionImage.heightAnchor.constraint(equalToConstant: imageSize),
       
@@ -75,33 +76,22 @@ class CityListTableViewCell: UITableViewCell {
       
       descriptionLabel.topAnchor.constraint(equalTo: conditionImage.bottomAnchor, constant: adapted(dimensionSize: 2, to: .height)),
       descriptionLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 248, to: .width)),
-     // descriptionLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: adapted(dimensionSize: 16, to: .width)),
+      // descriptionLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: adapted(dimensionSize: 16, to: .width)),
       descriptionLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 62, to: .width)),
       descriptionLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 14, to: .height))
     ])
   }
   
-//  func configure(with model: List) {
-//
-//    guard let cityWeather = model.inList as? Set<MainInfo> else { return }
-//  
-//    descriptionLabel.text = cityWeather.topWeather?.desc
-//    temperatureLabel.text = "\(Int(cityWeather.topWeather?.temperature ?? 0))°"
-//    nameLabel.text = cityWeather.name
-//
-//    var imageName =  IconHadler.iconDictionary.keyedValue(key: Int(cityWeather.topWeather?.iconId ?? 0))
-//    if ((imageName?.contains(".fill")) != nil) {
-//      let newImageName = imageName?.replacingOccurrences(of: ".fill", with: "")
-//      imageName = newImageName
-//    }
-//    conditionImage.image = UIImage(systemName: imageName ?? "thermometer.sun")?.withTintColor(.black, renderingMode: .alwaysOriginal)
-////
-////    temperatureLabel.text = "\(Int(model.hourly[index].feelsLike))°/\(Int(model.hourly[index].temp))°"
-////    if index == 0 {
-////      timeLabel.text = "Сейчас"
-////    } else {
-////      let date = Date(timeIntervalSince1970: TimeInterval(model.hourly[index].dt)).dateHourFormatter()
-////      timeLabel.text = "\(date)"
-////    }
-//  }
+  func configure(with model: MainInfo) {
+    descriptionLabel.text = model.topWeather?.desc
+    temperatureLabel.text = "\(Int(model.topWeather?.temperature ?? 0))°"
+    nameLabel.text = model.name
+    
+    var imageName =  IconHadler.iconDictionary.keyedValue(key: Int(model.topWeather?.iconId ?? 0))
+    if ((imageName?.contains(".fill")) != nil) {
+      let newImageName = imageName?.replacingOccurrences(of: ".fill", with: "")
+      imageName = newImageName
+    }
+    conditionImage.image = UIImage(systemName: imageName ?? "thermometer.sun")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+  }
 }

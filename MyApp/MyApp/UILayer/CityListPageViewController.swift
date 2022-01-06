@@ -17,7 +17,6 @@ class CityListPageViewController: UIPageViewController {
   private var currentIndex: Int
   /// Массив контроллеров с городами из list с прогрнозами погоды
   private var cityPage = [MainWeatherViewController]()
-  private var searchViewController = SearchViewController()
 
   init(for list: [MainInfo], index: Int) {
     self.list = list
@@ -34,8 +33,6 @@ class CityListPageViewController: UIPageViewController {
     super.viewDidLoad()
     setupPageController()
     configurePageControl()
-    pageControl.addTarget(self, action: #selector(pageControlTapped(_:)), for: .valueChanged)
-
   }
   
   override func viewDidAppear(_ animated: Bool) {
@@ -56,13 +53,13 @@ class CityListPageViewController: UIPageViewController {
   private func configurePageControl() {
     pageControl.numberOfPages = list.count
     pageControl.currentPage = currentIndex
-    pageControl.tintColor = .green
     pageControl.pageIndicatorTintColor = .black
     pageControl.currentPageIndicatorTintColor = .white
     pageControl.hidesForSinglePage = true
     pageControl.backgroundStyle = .automatic
     pageControl.translatesAutoresizingMaskIntoConstraints = false
     view.addSubview(pageControl)
+    pageControl.addTarget(self, action: #selector(pageControlTapped(_:)), for: .valueChanged)
   }
   
   @objc private func pageControlTapped(_ sender: UIPageControl) {
@@ -74,7 +71,6 @@ class CityListPageViewController: UIPageViewController {
     self.delegate = self
     list.forEach {
       let vc = MainWeatherViewController(for: $0)
-      vc.headerWeaherViewController.weatherView.delegate = self
       cityPage.append(vc)
     }
     setViewControllers([cityPage[currentIndex]], direction: .forward, animated: true, completion: nil)
@@ -114,37 +110,3 @@ extension CityListPageViewController: UIPageViewControllerDataSource, UIPageView
     pageControl.isHidden = true
   }
 }
-
-extension CityListPageViewController: HeaderButtonsProtocol {
-  func plusButtonTapped() {
-//    isPressed = !isPressed
-//    headerWeaherViewController.weatherView.changeConstraints(isPressed: isPressed)
-//    if isPressed {
-//      headerWeatherViewHeightBig?.isActive = false
-//      headerWeatherViewHeightSmall?.isActive = true
-//
-//      weeklyWeatherViewTopBig?.isActive = false
-//      weeklyWeatherViewTopSmall?.isActive = true
-//      UIView.animate(withDuration: 0.3) {
-//        self.view.layoutIfNeeded()
-//      }
-//    } else {
-//      headerWeatherViewHeightSmall?.isActive = false
-//      headerWeatherViewHeightBig?.isActive = true
-//
-//      weeklyWeatherViewTopSmall?.isActive = false
-//      weeklyWeatherViewTopBig?.isActive = true
-//      UIView.animate(withDuration: 0.3) {
-//        self.view.layoutIfNeeded()
-//      }
-//    }
-//  }
-//}
-//    headerWeaherViewController.remove()
-//    footerWeaherViewController.remove()
-//    searchViewController = SearchViewController()
-//    add(searchViewController!)
-    navigationController?.pushViewController(searchViewController, animated: true)
- }
-}
-

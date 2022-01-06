@@ -47,7 +47,7 @@ extension WeatherApi: EndPointType {
                                   "exclude": "minutely,alerts",
                                   "appid": NetworkManager.weatherAPIKey,
                                   "units": "metric",
-                                  "lang": "ru",
+                                  "lang": "en",
                                 ])
    //                                            ])
 //    case .getHourlyWeather(let lon, let lat):

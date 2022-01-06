@@ -9,20 +9,21 @@ import UIKit
 
 protocol HeaderButtonsProtocol: AnyObject {
   func plusButtonTapped()
+  func optionsButtonTapped()
 }
 
-class HeaderWeatherView: UIView {
-  var delegate: HeaderButtonsProtocol?
-  
+class CurrentWeatherView: UIView {
+
   private(set) lazy var collectionView: UICollectionView = {
     let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
     layout.sectionInset = UIEdgeInsets(top: adapted(dimensionSize: 17, to: .height), left: adapted(dimensionSize: 22, to: .width), bottom: adapted(dimensionSize: 17, to: .height), right: adapted(dimensionSize: 22, to: .width))
     layout.itemSize = CGSize(width: adapted(dimensionSize: 122, to: .width), height: adapted(dimensionSize: 32, to: .height))
-  //  let frame = CGRect(x: adapted(dimensionSize: 16, to: .width), y: adapted(dimensionSize: 444, to: .height), width: adapted(dimensionSize: 326, to: .width), height: adapted(dimensionSize: 105, to: .height))
     let myCollectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
     myCollectionView.isScrollEnabled = false
     myCollectionView.translatesAutoresizingMaskIntoConstraints = false
-
+    myCollectionView.dataSource = self
+    myCollectionView.delegate = self
+    myCollectionView.register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "WeatherCollectionViewCell")
     myCollectionView.backgroundColor = UIColor(named: "backgroundColor")
     return myCollectionView
   }()
@@ -60,8 +61,12 @@ class HeaderWeatherView: UIView {
   private(set) var conditionLabelLeftSmall: NSLayoutConstraint?
   
   private(set) var addButton = Button(backgroundColor: UIColor(named: "backgroundColor")!, systemImage: "plus")
-  
+  private(set) var optionsButton = Button(backgroundColor: UIColor(named: "backgroundColor")!, systemImage: "line.3.horizontal")
   private var topPadding = adapted(dimensionSize: 444, to: .height)
+
+  let loadingVC = LoadingView()
+  var delegate: HeaderButtonsProtocol?
+  private var currentWeather: MainInfo?
 
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -71,6 +76,7 @@ class HeaderWeatherView: UIView {
     setupConstraints()
     setupFonts()
     addButton.addTarget(self, action: #selector(didTapAdd), for: .touchDown)
+    optionsButton.addTarget(self, action: #selector(didTapOptions), for: .touchDown)
   }
   
   private func setupLayouts() {
@@ -81,6 +87,9 @@ class HeaderWeatherView: UIView {
     addSubview(conditionLabel)
     addSubview(collectionView)
     addSubview(addButton)
+    addSubview(loadingVC)
+    addSubview(optionsButton)
+    bringSubviewToFront(loadingVC)
   }
   
   private func setupFonts() {
@@ -89,6 +98,10 @@ class HeaderWeatherView: UIView {
     temperatureLabel.font = AppFont.bold(size: 72)
     conditionLabel.font =  AppFont.regular(size: 16)
     conditionLabel.textAlignment = .center
+  }
+  
+  @objc func didTapOptions() {
+    delegate?.optionsButtonTapped()
   }
   
   @objc func didTapAdd() {
@@ -114,13 +127,18 @@ class HeaderWeatherView: UIView {
     
     let imageSizeBig: CGFloat = adapted(dimensionSize: 240, to: .height)
     let imageSizeSmall: CGFloat = adapted(dimensionSize: 160, to: .height)
-    
+    loadingVC.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
       
       addButton.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 16, to: .height)),
       addButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
       addButton.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 32, to: .width)),
       addButton.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 32, to: .height)),
+      
+      optionsButton.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 16, to: .height)),
+      optionsButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 310, to: .width)),
+      optionsButton.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 32, to: .width)),
+      optionsButton.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 32, to: .height)),
       
       
       cityNameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 16, to: .height)),
@@ -139,6 +157,9 @@ class HeaderWeatherView: UIView {
       collectionView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
       collectionView.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 326, to: .width)),
       collectionView.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 105, to: .height)),
+      
+      loadingVC.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+      loadingVC.centerYAnchor.constraint(equalTo: self.centerYAnchor),
       
     ])
     collectionViewTopBig = collectionView.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 444, to: .height))
@@ -180,7 +201,7 @@ class HeaderWeatherView: UIView {
   
 }
 
-extension HeaderWeatherView {
+extension CurrentWeatherView {
   func changeConstraints(isPressed: Bool) {
     if isPressed {
       
@@ -272,6 +293,24 @@ extension HeaderWeatherView {
     
     temperatureLabel.text = "\(Int(topBar.temperature))°"
   }
+  
+  func setCurrentWeather(_ data: MainInfo?) {
+    guard let data = data else { return }
+    self.currentWeather = data
+  }
 }
 
+extension CurrentWeatherView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    return currentWeather != nil ? 4 : 0
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCollectionViewCell", for: indexPath) as? WeatherCollectionViewCell,
+          let model = currentWeather
+    else { return UICollectionViewCell() }
+    cell.configure(with: model, index: indexPath.row)
+    return cell
+  }
+}
 

@@ -37,7 +37,7 @@ class Button: UIButton {
     //  titleLabel?.font        = UIFont.preferredFont(forTextStyle: .headline)
     imageView?.contentMode = .scaleToFill
 
-    backgroundColor = .black
+   // backgroundColor = .black
       translatesAutoresizingMaskIntoConstraints = false
   }
 }

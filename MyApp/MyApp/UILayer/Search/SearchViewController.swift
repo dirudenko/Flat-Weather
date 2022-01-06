@@ -13,24 +13,12 @@ class SearchViewController: UIViewController {
   private let coreDataManager = CoreDataManager(modelName: "MyApp")
   
   // MARK: - UIViewController lifecycle methods
-//  override func loadView() {
-//    super.loadView()
-//    self.view = searchView
-//  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    view.addSubview(searchView)
+    setupViews()
     setupConstraints()
-    searchView.searchBar.delegate = self
-    searchView.searchTableView.delegate = self
-    searchView.searchTableView.dataSource = self
-    searchView.cityListTableView.delegate = self
-    searchView.cityListTableView.dataSource = self
-    searchView.backgroundColor = UIColor(named: "backgroundColor")
     fetchDataFromCoreData()
-    
-    view.backgroundColor = .systemBackground
   }
   
   deinit {
@@ -45,6 +33,16 @@ class SearchViewController: UIViewController {
   }
 
   // MARK: - Private functions
+  private func setupViews() {
+    view.addSubview(searchView)
+    searchView.searchBar.delegate = self
+    searchView.searchTableView.delegate = self
+    searchView.searchTableView.dataSource = self
+    searchView.cityListTableView.delegate = self
+    searchView.cityListTableView.dataSource = self
+    searchView.backgroundColor = UIColor(named: "backgroundColor")
+    view.backgroundColor = .systemBackground
+  }
   /// Получение данных из CoreData
   private func fetchDataFromCoreData() {
     if coreDataManager.entityIsEmpty() {
@@ -114,7 +112,14 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
   }
   
   func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-    return adapted(dimensionSize: 16, to: .height)
+    switch tableView {
+    case searchView.searchTableView:
+      return 0
+    case searchView.cityListTableView:
+      return adapted(dimensionSize: 16, to: .height)
+    default: return 0
+    }
+   
   }
   
   func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -138,7 +143,7 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
       guard let cell = tableView.dequeueReusableCell(withIdentifier: "CityListTableViewCell", for: indexPath) as? CityListTableViewCell,
             let model = coreDataManager.fetchedResultsController.fetchedObjects?[indexPath.section]
       else { return UITableViewCell() }
-  //    cell.configure(with: model)
+      cell.configure(with: model)
       return cell
       
     default : return UITableViewCell()

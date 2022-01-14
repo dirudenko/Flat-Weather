@@ -27,7 +27,16 @@ class HourlyWeatherView: UIView {
   private(set) var dateLabel = TitleLabel(textAlignment: .center)
   let loadingVC = LoadingView()
   
-  private var hourlyWeather: [Current]?
+  private var hourlyWeather: [Current]?{
+    didSet {
+      collectionView.reloadData()
+    }
+  }
+  var viewData: ViewData = .initial {
+    didSet {
+      setNeedsLayout()
+    }
+  }
   
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -41,6 +50,21 @@ class HourlyWeatherView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
   
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    switch viewData {
+    case .initial:
+      break
+    case .loading(_):
+      break
+    case .success(let weatherModel, _):
+      loadingVC.makeInvisible()
+      hourlyWeather = weatherModel?.hourly
+    case .failure:
+      // TODO: Show Error
+      break
+    }
+  }
   // MARK: - Private functions
   private func setupFonts() {
     dateLabel.font = AppFont.bold(size: 14)
@@ -67,10 +91,6 @@ class HourlyWeatherView: UIView {
       loadingVC.centerXAnchor.constraint(equalTo: self.centerXAnchor),
       loadingVC.centerYAnchor.constraint(equalTo: self.centerYAnchor)
     ])
-  }
-  
-  func setHourlyWeatherModel(with data: [Current]?) {
-    self.hourlyWeather = data
   }
 }
 // MARK: - UIView delegates

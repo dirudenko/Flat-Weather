@@ -133,10 +133,8 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     switch tableView {
     case searchView.searchTableView:
       let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
-      var content = cell.defaultContentConfiguration()
-      content.text = "\(coreDataManager.fetchedListController.object(at: indexPath).name) \(coreDataManager.fetchedListController.object(at: indexPath).country)"
+      cell.textLabel?.text = "\(coreDataManager.fetchedListController.object(at: indexPath).name) \(coreDataManager.fetchedListController.object(at: indexPath).country)"
       cell.backgroundColor = UIColor(named: "backgroundColor")
-      cell.contentConfiguration = content
       return cell
       
     case searchView.cityListTableView:

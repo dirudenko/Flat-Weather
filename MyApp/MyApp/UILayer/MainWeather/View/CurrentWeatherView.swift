@@ -64,19 +64,22 @@ class CurrentWeatherView: UIView {
   private(set) var optionsButton = Button(backgroundColor: UIColor(named: "backgroundColor")!, systemImage: "line.3.horizontal")
   private var topPadding = adapted(dimensionSize: 444, to: .height)
 
-  let loadingVC = LoadingView()
+  private(set) var loadingVC = LoadingView()
   var delegate: HeaderButtonsProtocol?
   private var currentWeather: MainInfo?
-
+  
+  var viewData: ViewData = .initial {
+    didSet {
+      setNeedsLayout()
+      collectionView.reloadData()
+    }
+  }
+  
   override init(frame: CGRect) {
     super.init(frame: frame)
-    
-    backgroundColor = UIColor(named: "backgroundColor")
     setupLayouts()
     setupConstraints()
     setupFonts()
-    addButton.addTarget(self, action: #selector(didTapAdd), for: .touchDown)
-    optionsButton.addTarget(self, action: #selector(didTapOptions), for: .touchDown)
   }
   
   private func setupLayouts() {
@@ -90,6 +93,11 @@ class CurrentWeatherView: UIView {
     addSubview(loadingVC)
     addSubview(optionsButton)
     bringSubviewToFront(loadingVC)
+    addButton.addTarget(self, action: #selector(didTapAdd), for: .touchDown)
+    optionsButton.addTarget(self, action: #selector(didTapOptions), for: .touchDown)
+    backgroundColor = UIColor(named: "backgroundColor")
+    layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
+    layer.masksToBounds = true
   }
   
   private func setupFonts() {
@@ -121,6 +129,27 @@ class CurrentWeatherView: UIView {
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
     fatalError("init(coder:) has not been implemented")
+  }
+  
+ /// Data Driven состояние для вьюшки
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    switch viewData {
+    case .initial:
+      break
+    case .loading(let mainInfo):
+      currentWeather = mainInfo
+      configure(with: mainInfo)
+    case .success( _, let weatherModel):
+      loadingVC.makeInvisible()
+      currentWeather = weatherModel
+      configure(with: weatherModel)
+    case .failure:
+      // TODO: Show Error
+      break
+    }
+    
+    
   }
   
   private func setupConstraints() {
@@ -236,8 +265,6 @@ extension CurrentWeatherView {
       UIView.animate(withDuration: 0.3) {
         self.layoutIfNeeded()
       }
-      
-      
     } else {
       
       topPadding = adapted(dimensionSize: 444, to: .height)
@@ -271,33 +298,32 @@ extension CurrentWeatherView {
       UIView.animate(withDuration: 0.3) {
         self.layoutIfNeeded()
       }
-      
     }
   }
   
-  
-  func configure(with model: MainInfo) {
-    
+  func configure(with model: MainInfo?) {
+    guard let model = model ,
+          let topBar = model.topWeather else { return }
     cityNameLabel.text = model.name
-    guard  let topBar = model.topWeather else { return }
+    
     
     let date = Date(timeIntervalSince1970: TimeInterval(topBar.date)).dateFormatter()
     dateLabel.text = "\(date)".capitalizedFirstLetter
     
-    
-    conditionLabel.text = topBar.desc
-    
-    let config =  UIImage.SymbolConfiguration.preferringMulticolor()
+    conditionLabel.text = topBar.desc?.capitalizedFirstLetter
     let imageName =  IconHadler.iconDictionary.keyedValue(key: Int(topBar.iconId))
-    weatherImage.image = UIImage(systemName: imageName ?? "thermometer.sun.fill", withConfiguration: config)
+
+    if #available(iOS 15.0, *) {
+      let config =  UIImage.SymbolConfiguration.preferringMulticolor()
+      weatherImage.image = UIImage(systemName: imageName ?? "thermometer.sun.fill", withConfiguration: config)
+
+    } else {
+      weatherImage.image = UIImage(systemName: imageName ?? "thermometer.sun.fill")
+    }
     
     temperatureLabel.text = "\(Int(topBar.temperature))°"
   }
   
-  func setCurrentWeather(_ data: MainInfo?) {
-    guard let data = data else { return }
-    self.currentWeather = data
-  }
 }
 
 extension CurrentWeatherView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {

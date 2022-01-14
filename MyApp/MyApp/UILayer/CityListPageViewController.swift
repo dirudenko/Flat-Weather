@@ -56,7 +56,7 @@ class CityListPageViewController: UIPageViewController {
     pageControl.pageIndicatorTintColor = .black
     pageControl.currentPageIndicatorTintColor = .white
     pageControl.hidesForSinglePage = true
-    pageControl.backgroundStyle = .automatic
+   // pageControl.backgroundStyle = .automatic
     pageControl.translatesAutoresizingMaskIntoConstraints = false
     view.addSubview(pageControl)
     pageControl.addTarget(self, action: #selector(pageControlTapped(_:)), for: .valueChanged)

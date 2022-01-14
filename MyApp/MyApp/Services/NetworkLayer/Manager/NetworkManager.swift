@@ -7,8 +7,15 @@
 
 import Foundation
 
-struct NetworkManager {
-  
+protocol NetworkManagerProtocol {
+  var weatherAPIKey: String { get }
+  var router: Router<WeatherApi> { get }
+  func getWeather(lon: Double, lat: Double, completion: @escaping (Result<WeatherModel, NetworkErrors>) -> Void)
+}
+
+struct NetworkManager: NetworkManagerProtocol {
+  var weatherAPIKey = "4151621f5318e81115ce7581adb25359"
+
   static let weatherAPIKey = "4151621f5318e81115ce7581adb25359"
   let router = Router<WeatherApi>()
   
@@ -112,7 +119,7 @@ struct NetworkManager {
 //  }
   
   
-  fileprivate func handleNetworkResponse(_ response: HTTPURLResponse) -> ResponseErrors<NetworkErrors>{
+  private func handleNetworkResponse(_ response: HTTPURLResponse) -> ResponseErrors<NetworkErrors>{
     switch response.statusCode {
     case 200...299: return .success
     case 401...500: return .failure(NetworkErrors.authenticationError)

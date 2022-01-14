@@ -7,8 +7,16 @@
 
 import Foundation
 
-enum WindSpeed: String {
-  case kmh = "km/h"
-  case milh = "mil/h"
-  case ms = "m/s"
+enum WindSpeed: Int, CustomStringConvertible, Codable, CaseIterable {
+  case kmh
+  case milh
+  case ms
+  
+  var description: String {
+    switch self {
+    case .kmh: return "km/h"
+    case .milh: return "mil/h"
+    case .ms: return "m/s"
+    }
+  }
 }

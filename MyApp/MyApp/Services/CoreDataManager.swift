@@ -114,7 +114,7 @@ class CoreDataManager {
     }
   }
   
-  // Сохранение добавленного города в КорДату
+  /// Сохранение добавленного города в КорДату
   func saveToList(city: CityList) {
     let entity = NSEntityDescription.entity(forEntityName: "MainInfo",
                                              in: managedContext)!
@@ -124,6 +124,7 @@ class CoreDataManager {
     list.lat = city.lat
     list.lon = city.lon
     list.country = city.country
+    list.date = Date()
     saveContext()
   }
   

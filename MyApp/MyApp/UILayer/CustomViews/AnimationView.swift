@@ -22,6 +22,8 @@ class AnimationView: UIView {
   
   
   
+  
+  
   func animateLogo() {
      bringSubviewToFront(self)
       

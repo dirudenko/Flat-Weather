@@ -20,7 +20,16 @@ class WeeklyWeatherView: UIView {
   }()
   
   private(set) var dateLabel = TitleLabel(textAlignment: .center)
-  private var model: WeatherModel?
+  private var model: WeatherModel? {
+    didSet {
+      weeklyListTableView.reloadData()
+    }
+  }
+  var viewData: ViewData = .initial {
+    didSet {
+      setNeedsLayout()
+    }
+  }
   
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -32,6 +41,21 @@ class WeeklyWeatherView: UIView {
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+  
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    switch viewData {
+    case .initial:
+      break
+    case .loading(_):
+      break
+    case .success(let weatherModel, _):
+      model = weatherModel
+    case .failure:
+      // TODO: Show Error
+      break
+    }
   }
   
   private func setupLayouts() {
@@ -60,10 +84,6 @@ class WeeklyWeatherView: UIView {
       weeklyListTableView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
       weeklyListTableView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
     ])
-  }
-  
-  func setWeatherModel(with model: WeatherModel) {
-    self.model = model
   }
 }
 extension WeeklyWeatherView: UITableViewDataSource, UITableViewDelegate {

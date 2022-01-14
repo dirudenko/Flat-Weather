@@ -38,10 +38,6 @@ class WeeklyTableViewCell: UITableViewCell {
       temperatureLabel.font = AppFont.regular(size: 12)
       dayLabel.font = AppFont.regular(size: 16)
       rainLabel.font = AppFont.regular(size: 12)
-      
-      //temperatureLabel.textColor = .systemGray
-      //rainLabel.textColor = .black
-      //dayLabel.textColor = .black
     }
     
     
@@ -55,14 +51,9 @@ class WeeklyTableViewCell: UITableViewCell {
         
         dayLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 15, to: .height)),
         dayLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 24, to: .width)),
-        //dayLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 80, to: .width)),
-       // dayLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 19, to: .height)),
-       // nameLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: adapted(dimensionSize: 42, to: .height)),
         
         conditionImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 12, to: .height)),
         conditionImage.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 155, to: .width)),
-        //conditionImage.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: adapted(dimensionSize: 32, to: .height)),
-       // conditionImage.rightAnchor.constraint(equalTo: self.rightAnchor, constant: adapted(dimensionSize: 31, to: .width)),
         conditionImage.widthAnchor.constraint(equalToConstant: imageSize),
         conditionImage.heightAnchor.constraint(equalToConstant: imageSize),
         
@@ -70,11 +61,9 @@ class WeeklyTableViewCell: UITableViewCell {
         temperatureLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 302, to: .width)),
         temperatureLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: adapted(dimensionSize: 24, to: .height)),
         temperatureLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
-       // temperatureLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 14, to: .height)),
         
         rainLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 17, to: .height)),
         rainLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 187, to: .width)),
-       // descriptionLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: adapted(dimensionSize: 16, to: .width)),
         rainLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 62, to: .width)),
         rainLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 14, to: .height))
       ])
@@ -82,7 +71,6 @@ class WeeklyTableViewCell: UITableViewCell {
     
     func configure(with model: Daily) {
      
-
       var imageName =  IconHadler.iconDictionary.keyedValue(key: model.weather.first?.id ?? 0)
       if ((imageName?.contains(".fill")) != nil) {
         let newImageName = imageName?.replacingOccurrences(of: ".fill", with: "")
@@ -94,7 +82,7 @@ class WeeklyTableViewCell: UITableViewCell {
       rainLabel.text = "\(model.rain ??  0)"
     
         let date = Date(timeIntervalSince1970: TimeInterval(model.dt)).dateDayFormatter()
-        dayLabel.text = "\(date)"
+      dayLabel.text = "\(date)".capitalizedFirstLetter
       
     }
   }

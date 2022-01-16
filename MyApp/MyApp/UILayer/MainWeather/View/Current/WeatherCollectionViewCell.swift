@@ -8,11 +8,11 @@
 import UIKit
 
 class WeatherCollectionViewCell: UICollectionViewCell {
-  
+  // MARK: - Private types
   private(set)  var conditionImage = MainImage(frame: .zero)
   private(set)  var conditionStatusLabel = DescriptionLabel()
   private(set)  var conditionNameLabel = DescriptionLabel()
-
+  // MARK: - Initialization
   override init(frame: CGRect) {
     super.init(frame: frame)
     backgroundColor = UIColor(named: "backgroundColor")
@@ -24,7 +24,7 @@ class WeatherCollectionViewCell: UICollectionViewCell {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
+  // MARK: - Private functions
   private func setupLayouts() {
     contentView.addSubview(conditionImage)
     contentView.addSubview(conditionNameLabel)
@@ -38,7 +38,6 @@ class WeatherCollectionViewCell: UICollectionViewCell {
   
   
   private func addConstraints() {
-    
     var imageSize: CGFloat {
       adapted(dimensionSize: 32, to: .height)
     }
@@ -61,14 +60,14 @@ class WeatherCollectionViewCell: UICollectionViewCell {
       conditionNameLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 14, to: .height))
     ])
   }
-  
-  func configure(with model: MainInfo, index: Int) {
+  // MARK: - Public functions
+   func configure(with model: MainInfo, index: Int) {
     guard let bottomBar = model.bottomWeather else { return }
     switch index {
     case 0:
       conditionImage.image = UIImage(systemName: "wind")?.withTintColor(.white, renderingMode: .alwaysOriginal)
       conditionStatusLabel.text = "\(bottomBar.wind) km/h"
-      conditionNameLabel.text = "Ветер"
+      conditionNameLabel.text = "Wind"
     case 1:
       conditionImage.image = UIImage(systemName: "cloud.drizzle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
       conditionStatusLabel.text = "\(bottomBar.rain)%"
@@ -76,11 +75,11 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     case 2:
       conditionImage.image = UIImage(systemName: "thermometer")?.withTintColor(.white, renderingMode: .alwaysOriginal)
       conditionStatusLabel.text = "\(bottomBar.pressure) mBar"
-      conditionNameLabel.text = "Давление"
+      conditionNameLabel.text = "Pressure"
     case 3:
       conditionImage.image = UIImage(systemName: "humidity")?.withTintColor(.white, renderingMode: .alwaysOriginal)
       conditionStatusLabel.text = "\(bottomBar.humidity) %"
-      conditionNameLabel.text = "Влажность"
+      conditionNameLabel.text = "Humidity"
     default:
       break
     }

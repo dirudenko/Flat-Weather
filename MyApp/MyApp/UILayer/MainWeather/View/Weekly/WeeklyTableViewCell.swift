@@ -8,13 +8,12 @@
 import UIKit
 
 class WeeklyTableViewCell: UITableViewCell {
-  
+  // MARK: - Private types
     private(set) var conditionImage = MainImage(frame: .zero)
     private(set) var dayLabel = DescriptionLabel()
     private(set) var temperatureLabel = DescriptionLabel()
     private(set) var rainLabel = DescriptionLabel()
-    
-    
+  // MARK: - Initialization
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
       super.init(style: style, reuseIdentifier: reuseIdentifier)
       setupLayouts()
@@ -25,7 +24,7 @@ class WeeklyTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
       fatalError("init(coder:) has not been implemented")
     }
-      
+  // MARK: - Private functions
     private func setupLayouts() {
       backgroundColor = UIColor(named: "backgroundColor")
       addSubview(conditionImage)
@@ -42,7 +41,6 @@ class WeeklyTableViewCell: UITableViewCell {
     
     
     private func addConstraints() {
-      
       var imageSize: CGFloat {
         adapted(dimensionSize: 24, to: .height)
       }
@@ -68,9 +66,8 @@ class WeeklyTableViewCell: UITableViewCell {
         rainLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 14, to: .height))
       ])
     }
-    
+  // MARK: - Public functions
     func configure(with model: Daily) {
-     
       var imageName =  IconHadler.iconDictionary.keyedValue(key: model.weather.first?.id ?? 0)
       if ((imageName?.contains(".fill")) != nil) {
         let newImageName = imageName?.replacingOccurrences(of: ".fill", with: "")

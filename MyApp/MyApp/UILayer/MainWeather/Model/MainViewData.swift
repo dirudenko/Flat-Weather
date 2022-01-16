@@ -6,8 +6,8 @@
 //
 
 import Foundation
-
-enum ViewData {
+/// Состояния для Data Driven UI
+enum MainViewData {
   case initial
   case loading(MainInfo)
   case success(WeatherModel?, MainInfo?)

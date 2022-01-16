@@ -8,28 +8,22 @@
 import UIKit
 
 final class MainWeatherViewController: UIViewController {
-  
-  private(set) var currentWeatherView = CurrentWeatherView()
-  private var headerWeatherViewHeightSmall: NSLayoutConstraint?
-  private var headerWeatherViewHeightBig: NSLayoutConstraint?
-  
+  // MARK: - Private types
+  private var currentWeatherView = CurrentWeatherView()
   private var hourlyWeatherView = HourlyWeatherView()
   private let forcatsButton = Button()
-  
   private var weeklyWeatherView = WeeklyWeatherView()
+  private var viewModel: MainWeatherViewModelProtocol
+
+  // MARK: - Private variables
+  private var isPressed = false
   private var weeklyWeatherViewTopSmall: NSLayoutConstraint?
   private var weeklyWeatherViewTopBig: NSLayoutConstraint?
-  
-  private var fetchedCity: MainInfo
- // private let coreDataManager = CoreDataManager(modelName: "MyApp")
-  private var isPressed = false
-  
-  private let networkManager = NetworkManager()
-
-  private var viewModel: MainWeatherViewModelProtocol!
-  
-  init(for list: MainInfo) {
-    self.fetchedCity = list
+  private var headerWeatherViewHeightSmall: NSLayoutConstraint?
+  private var headerWeatherViewHeightBig: NSLayoutConstraint?
+  // MARK: - Initialization
+  init(viewModel: MainWeatherViewModelProtocol) {
+    self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -38,18 +32,22 @@ final class MainWeatherViewController: UIViewController {
   }
   
   // MARK: - UIViewController lifecycle methods
-  
   override func viewDidLoad() {
-    viewModel = MainWeatherViewModel(for: fetchedCity, networkManager: networkManager)
     super.viewDidLoad()
     setupLayouts()
     updateView()
     checkSettings()
     viewModel.startFetch()
     viewModel.loadWeather()
-
   }
   
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    //TODO: сделать проверку времени раз в час для повторного запроса в сеть
+  }
+  
+  // MARK: - Private functions
+  /// подписывание на изменение состояний View
   private func updateView() {
     viewModel.updateViewData = { [weak self] viewData in
       self?.currentWeatherView.viewData = viewData
@@ -58,20 +56,12 @@ final class MainWeatherViewController: UIViewController {
     }
   }
   
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
-    //TODO: сделать проверку времени раз в час для повторного запроса в сеть
-  }
-  
-  
-  
   private func setupLayouts() {
     view.backgroundColor = .systemBackground
     view.addSubview(currentWeatherView)
     view.addSubview(hourlyWeatherView)
     view.addSubview(weeklyWeatherView)
     setupConstraints()
-    currentWeatherView.delegate = self
     let swipeGestureRecognizerDown = UISwipeGestureRecognizer(target: self, action: #selector(didSwipe(_:)))
     let swipeGestureRecognizerUp = UISwipeGestureRecognizer(target: self, action: #selector(didSwipe(_:)))
     
@@ -79,66 +69,27 @@ final class MainWeatherViewController: UIViewController {
     swipeGestureRecognizerUp.direction = .up
     view.addGestureRecognizer(swipeGestureRecognizerDown)
     view.addGestureRecognizer(swipeGestureRecognizerUp)
+    currentWeatherView.delegate = self
+
+  }
+}
+// MARK: - Delegates
+extension MainWeatherViewController: HeaderButtonsProtocol {
+  func optionsButtonTapped() {
+    let settingsViewController = SettingsViewController()
+    navigationController?.pushViewController(settingsViewController, animated: true)
   }
   
- /// Получение последних сохраненных данных из кордаты и их вывод на экран
-//  private func fetchDataFromCoreData() -> MainInfo? {
-//    let id = Int(fetchedCity.id)
-//    self.coreDataManager.cityResultsPredicate = NSPredicate(format: "id == %i", id)
-//    self.coreDataManager.loadSavedData()
-//    guard let data = coreDataManager.fetchedResultsController.fetchedObjects?.first else { return nil }
-//    return data
-//
-//    }
-  /// запрос в сеть для получения всех актуальных погодных данных
-//  private func getCityWeather() {
-//    let lon = fetchedCity.lon
-//    let lat = fetchedCity.lat
-//        guard
-//          let correctedLon = Double(String(format: "%.2f", lon)),
-//          let correctedLat = Double(String(format: "%.2f", lat))
-//        else { return }
-//    networkManager.getWeather(lon: correctedLon, lat: correctedLat) { [weak self] result in
-//      guard let self = self else { return }
-//      switch result {
-//      case .success(let weather):
-//        DispatchQueue.main.async {
-//          
-//          let city = self.fetchDataFromCoreData()
-//          self.coreDataManager.configureTopView(from: weather, list: city)
-//          self.coreDataManager.configureBottomView(from: weather, list: city)
-//          
-//          self.configureCurrentWeather(with: city)
-//          self.configureHourlyWeather(with: weather)
-//          
-//         
-//        }
-//        
-//      case .failure(let error):
-//        print(error.rawValue)
-//      }
-//    }
-//  }
-
-//  private func configureCurrentWeather(with data: MainInfo?) {
-//    guard let data = data else { return }
-//    self.currentWeatherView.configure(with: data)
-//    self.currentWeatherView.setCurrentWeather(data)
-//    self.currentWeatherView.loadingVC.makeInvisible()
-//    self.currentWeatherView.collectionView.reloadData()
-//  }
-//
-//  private func configureHourlyWeather(with data: WeatherModel) {
-//    self.hourlyWeatherView.setHourlyWeatherModel(with: data.hourly)
-//    self.hourlyWeatherView.collectionView.reloadData()
-//    self.weeklyWeatherView.setWeatherModel(with: data)
-//    self.weeklyWeatherView.weeklyListTableView.reloadData()
-//
-//    self.hourlyWeatherView.loadingVC.makeInvisible()
-//  }
+  func plusButtonTapped() {
+    print("Plus button tapped")
+    let searchViewController = BuilderService.buildSearchViewController()
+    navigationController?.pushViewController(searchViewController, animated: true)
+ }
+}
+// MARK: - Constraints
+extension MainWeatherViewController {
   
   @objc private func didSwipe(_ sender: UISwipeGestureRecognizer) {
-    
     switch sender.direction {
     case .up:
       currentWeatherView.changeConstraints(isPressed: true)
@@ -165,9 +116,7 @@ final class MainWeatherViewController: UIViewController {
     default: break
     }
   }
-}
-
-extension MainWeatherViewController {
+  
   private func setupConstraints() {
     currentWeatherView.translatesAutoresizingMaskIntoConstraints = false
     hourlyWeatherView.translatesAutoresizingMaskIntoConstraints = false
@@ -198,15 +147,5 @@ extension MainWeatherViewController {
   }
 }
 
-extension MainWeatherViewController: HeaderButtonsProtocol {
-  func optionsButtonTapped() {
-    let settingsViewController = SettingsViewController()
-    navigationController?.pushViewController(settingsViewController, animated: true)
-  }
-  
-  func plusButtonTapped() {
-  let searchViewController = SearchViewController()
-  navigationController?.pushViewController(searchViewController, animated: true)
- }
-}
+
 

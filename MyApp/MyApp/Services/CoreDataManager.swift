@@ -8,20 +8,49 @@
 import Foundation
 import CoreData
 
-
-class CoreDataManager {
+protocol CoreDataManagerProtocol {
+  var modelName: String { get }
+  var cityResultsPredicate: NSPredicate? { get set }
+  var cityListPredicate: NSPredicate? { get set }
+  func saveContext()
   
-  fileprivate let modelName: String
-  var cityResultsPredicate: NSPredicate?
-  var cityListPredicate: NSPredicate?
+}
 
+//protocol CoreDataManagerListProtocol: CoreDataManagerProtocol {
+//  func loadListData()
+//  func entityIsEmpty() -> Bool
+//  func saveToList(city: CityList)
+//  func configure(json: CitiList)
+//  var fetchedListController: NSFetchedResultsController<CityList> { get }
+//}
+
+protocol CoreDataManagerResultProtocol: CoreDataManagerProtocol {
+  func loadSavedData()
+  func configureTopView(from data: WeatherModel, list: MainInfo?)
+  func configureBottomView(from data: WeatherModel, list: MainInfo?)
+  var fetchedResultsController: NSFetchedResultsController<MainInfo> { get }
+  
+  func loadListData()
+  func entityIsEmpty() -> Bool
+  func saveToList(city: CityList)
+  func configure(json: CitiList)
+  var fetchedListController: NSFetchedResultsController<CityList> { get }
+}
+
+
+class CoreDataManager: CoreDataManagerResultProtocol {
+  
+   var modelName: String
+  /// предикат для пользовательских городов
+  var cityResultsPredicate: NSPredicate?
+  /// предикат для всех городов
+  var cityListPredicate: NSPredicate?
   
   init(modelName: String) {
     self.modelName = modelName
   }
   
   fileprivate lazy var storeContainer: NSPersistentContainer = {
-    
     let container = NSPersistentContainer(name: self.modelName)
     container.loadPersistentStores { _, error in
       if let error = error as NSError? {
@@ -34,7 +63,7 @@ class CoreDataManager {
     return container
   }()
   
-  
+  /// список добавленных пользователем городов
   lazy var fetchedResultsController: NSFetchedResultsController<MainInfo> = {
     let request = MainInfo.createFetchRequest()
     request.fetchBatchSize = 20
@@ -50,11 +79,11 @@ class CoreDataManager {
     
     return controller
   }()
-  
+  /// список всех городов из JSON
   lazy var fetchedListController: NSFetchedResultsController<CityList> = {
     let request = CityList.createFetchRequest()
     request.fetchBatchSize = 20
-    request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
+    request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
     let controller = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedContext, sectionNameKeyPath: nil, cacheName: nil)
     
    // controller.fetchRequest.predicate = cityListPredicate
@@ -80,7 +109,7 @@ class CoreDataManager {
       fatalError("Unresolved error \(error), \(error.userInfo)")
     }
   }
-  
+  /// загрузка пользовательских городов
   func loadSavedData() {
     fetchedResultsController.fetchRequest.predicate = cityResultsPredicate
     do {
@@ -89,7 +118,7 @@ class CoreDataManager {
       print(error.localizedDescription)
     }
   }
-  
+  /// загрузка всех городов
   func loadListData() {
     fetchedListController.fetchRequest.predicate = cityListPredicate
     do {
@@ -128,7 +157,7 @@ class CoreDataManager {
     saveContext()
   }
   
-  /// Конфигурация списка городов
+  /// добавление всех городов в кордату
   func configure(json: CitiList) {
     let entity = NSEntityDescription.entity(forEntityName: "CityList",
                                             in: managedContext)!

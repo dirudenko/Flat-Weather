@@ -13,25 +13,22 @@ protocol HeaderButtonsProtocol: AnyObject {
 }
 
 class CurrentWeatherView: UIView {
-
-  private(set) lazy var collectionView: UICollectionView = {
-    let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-    layout.sectionInset = UIEdgeInsets(top: adapted(dimensionSize: 17, to: .height), left: adapted(dimensionSize: 22, to: .width), bottom: adapted(dimensionSize: 17, to: .height), right: adapted(dimensionSize: 22, to: .width))
-    layout.itemSize = CGSize(width: adapted(dimensionSize: 122, to: .width), height: adapted(dimensionSize: 32, to: .height))
-    let myCollectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-    myCollectionView.isScrollEnabled = false
-    myCollectionView.translatesAutoresizingMaskIntoConstraints = false
-    myCollectionView.dataSource = self
-    myCollectionView.delegate = self
-    myCollectionView.register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "WeatherCollectionViewCell")
-    myCollectionView.backgroundColor = UIColor(named: "backgroundColor")
-    return myCollectionView
-  }()
-  
+  // MARK: - Private types
+  private(set) lazy var collectionView = CurrentWeatherCollectionView(cellType: .WeatherCollectionViewCell)
+  private(set) var weatherImage = MainImage(frame: .zero)
+  private(set) var dateLabel = TitleLabel(textAlignment: .center)
+  private(set) var cityNameLabel = TitleLabel(textAlignment: .center)
+  private(set) var temperatureLabel = TitleLabel(textAlignment: .center)
+  private(set) var conditionLabel = DescriptionLabel()
+  private(set) var loadingVC = LoadingView()
+  private var currentWeather: MainInfo?
+  private(set) var addButton = Button(backgroundColor: UIColor(named: "backgroundColor")!, systemImage: "plus")
+  private(set) var optionsButton = Button(backgroundColor: UIColor(named: "backgroundColor")!, systemImage: "line.3.horizontal")
+ 
+  // MARK: - Private variables
   private(set) var collectionViewTopSmall: NSLayoutConstraint?
   private(set) var collectionViewTopBig: NSLayoutConstraint?
   
-  private(set) var weatherImage = MainImage(frame: .zero)
   private(set) var weatherImageTop: NSLayoutConstraint?
   private(set) var weatherImageLeftBig: NSLayoutConstraint?
   private(set) var weatherImageLeftSmall: NSLayoutConstraint?
@@ -40,98 +37,41 @@ class CurrentWeatherView: UIView {
   private(set) var weatherImageHeightSmall: NSLayoutConstraint?
   private(set) var weatherImageHeightBig: NSLayoutConstraint?
   
-  private(set) var dateLabel = TitleLabel(textAlignment: .center)
   private(set) var dateLabelTopSmall: NSLayoutConstraint?
   private(set) var dateLabelTopBig: NSLayoutConstraint?
   private(set) var dateLabelLeftBig: NSLayoutConstraint?
   private(set) var dateLabelLeftSmall: NSLayoutConstraint?
   
-  private(set) var cityNameLabel = TitleLabel(textAlignment: .center)
-  
-  private(set) var temperatureLabel = TitleLabel(textAlignment: .center)
   private(set) var temperatureLabelTopSmall: NSLayoutConstraint?
   private(set) var temperatureLabelTopBig: NSLayoutConstraint?
   private(set) var temperatureLabelLeftBig: NSLayoutConstraint?
   private(set) var temperatureLabelLeftSmall: NSLayoutConstraint?
   
-  private(set) var conditionLabel = DescriptionLabel()
   private(set) var conditionLabelTopSmall: NSLayoutConstraint?
   private(set) var conditionLabelTopBig: NSLayoutConstraint?
   private(set) var conditionLabelLeftBig: NSLayoutConstraint?
   private(set) var conditionLabelLeftSmall: NSLayoutConstraint?
-  
-  private(set) var addButton = Button(backgroundColor: UIColor(named: "backgroundColor")!, systemImage: "plus")
-  private(set) var optionsButton = Button(backgroundColor: UIColor(named: "backgroundColor")!, systemImage: "line.3.horizontal")
   private var topPadding = adapted(dimensionSize: 444, to: .height)
-
-  private(set) var loadingVC = LoadingView()
-  var delegate: HeaderButtonsProtocol?
-  private var currentWeather: MainInfo?
-  
-  var viewData: ViewData = .initial {
+  // MARK: - Public variables
+  var viewData: MainViewData = .initial {
     didSet {
       setNeedsLayout()
       collectionView.reloadData()
     }
   }
-  
+  var delegate: HeaderButtonsProtocol?
+  // MARK: - Initialization
   override init(frame: CGRect) {
     super.init(frame: frame)
     setupLayouts()
     setupConstraints()
     setupFonts()
   }
-  
-  private func setupLayouts() {
-    addSubview(weatherImage)
-    addSubview(dateLabel)
-    addSubview(cityNameLabel)
-    addSubview(temperatureLabel)
-    addSubview(conditionLabel)
-    addSubview(collectionView)
-    addSubview(addButton)
-    addSubview(loadingVC)
-    addSubview(optionsButton)
-    bringSubviewToFront(loadingVC)
-    addButton.addTarget(self, action: #selector(didTapAdd), for: .touchDown)
-    optionsButton.addTarget(self, action: #selector(didTapOptions), for: .touchDown)
-    backgroundColor = UIColor(named: "backgroundColor")
-    layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
-    layer.masksToBounds = true
-  }
-  
-  private func setupFonts() {
-    dateLabel.font = AppFont.regular(size: 16)
-    cityNameLabel.font = AppFont.bold(size: 16)
-    temperatureLabel.font = AppFont.bold(size: 72)
-    conditionLabel.font =  AppFont.regular(size: 16)
-    conditionLabel.textAlignment = .center
-  }
-  
-  @objc func didTapOptions() {
-    delegate?.optionsButtonTapped()
-  }
-  
-  @objc func didTapAdd() {
-    delegate?.plusButtonTapped()
-  }
-  
-  override func draw(_ rect: CGRect) {
-    let contextBig = UIGraphicsGetCurrentContext()
-    contextBig?.setLineWidth(2.0)
-    contextBig?.setStrokeColor(UIColor.white.cgColor)
-    contextBig?.move(to: CGPoint(x:adapted(dimensionSize: 16, to: .width), y: topPadding))
-    contextBig?.addLine(to: CGPoint(x: adapted(dimensionSize: 342, to: .width) , y: topPadding))
-    contextBig?.strokePath()
-  }
-  
-  
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
     fatalError("init(coder:) has not been implemented")
   }
-  
- /// Data Driven состояние для вьюшки
+  /// Data Driven состояние для вьюшки
   override func layoutSubviews() {
     super.layoutSubviews()
     switch viewData {
@@ -148,8 +88,92 @@ class CurrentWeatherView: UIView {
       // TODO: Show Error
       break
     }
+  }
+  // MARK: - Private functions
+  private func setupLayouts() {
+    addSubview(weatherImage)
+    addSubview(dateLabel)
+    addSubview(cityNameLabel)
+    addSubview(temperatureLabel)
+    addSubview(conditionLabel)
+    addSubview(collectionView)
+    addSubview(addButton)
+    addSubview(loadingVC)
+    addSubview(optionsButton)
+    bringSubviewToFront(loadingVC)
+    addButton.addTarget(self, action: #selector(didTapAdd), for: .touchDown)
+    optionsButton.addTarget(self, action: #selector(didTapOptions), for: .touchDown)
+    backgroundColor = UIColor(named: "backgroundColor")
+    layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
+    layer.masksToBounds = true
+    collectionView.delegate = self
+    collectionView.dataSource = self
+  }
+  
+  private func setupFonts() {
+    dateLabel.font = AppFont.regular(size: 16)
+    cityNameLabel.font = AppFont.bold(size: 16)
+    temperatureLabel.font = AppFont.bold(size: 72)
+    conditionLabel.font =  AppFont.regular(size: 16)
+    conditionLabel.textAlignment = .center
+  }
+  
+  @objc private func didTapOptions() {
+    delegate?.optionsButtonTapped()
+  }
+  
+  @objc private func didTapAdd() {
+    delegate?.plusButtonTapped()
+  }
+  
+  private func configure(with model: MainInfo?) {
+    guard let model = model ,
+          let topBar = model.topWeather else { return }
+    cityNameLabel.text = model.name
     
+    let date = Date(timeIntervalSince1970: TimeInterval(topBar.date)).dateFormatter()
+    dateLabel.text = "\(date)".capitalizedFirstLetter
     
+    conditionLabel.text = topBar.desc?.capitalizedFirstLetter
+    let imageName =  IconHadler.iconDictionary.keyedValue(key: Int(topBar.iconId))
+    
+    if #available(iOS 15.0, *) {
+      let config =  UIImage.SymbolConfiguration.preferringMulticolor()
+      weatherImage.image = UIImage(systemName: imageName ?? "thermometer.sun.fill", withConfiguration: config)
+      
+    } else {
+      weatherImage.image = UIImage(systemName: imageName ?? "thermometer.sun.fill")
+    }
+    
+    temperatureLabel.text = "\(Int(topBar.temperature))°"
+  }
+  
+}
+// MARK: - UIView delegates
+extension CurrentWeatherView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    return currentWeather != nil ? 4 : 0
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCollectionViewCell", for: indexPath) as? WeatherCollectionViewCell,
+          let model = currentWeather
+    else { return UICollectionViewCell() }
+    cell.configure(with: model, index: indexPath.row)
+    return cell
+  }
+}
+
+// MARK: - Constraints
+extension CurrentWeatherView {
+  
+  override func draw(_ rect: CGRect) {
+    let contextBig = UIGraphicsGetCurrentContext()
+    contextBig?.setLineWidth(2.0)
+    contextBig?.setStrokeColor(UIColor.white.cgColor)
+    contextBig?.move(to: CGPoint(x:adapted(dimensionSize: 16, to: .width), y: topPadding))
+    contextBig?.addLine(to: CGPoint(x: adapted(dimensionSize: 342, to: .width) , y: topPadding))
+    contextBig?.strokePath()
   }
   
   private func setupConstraints() {
@@ -169,20 +193,14 @@ class CurrentWeatherView: UIView {
       optionsButton.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 32, to: .width)),
       optionsButton.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 32, to: .height)),
       
-      
       cityNameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 16, to: .height)),
       cityNameLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-     // cityNameLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 120, to: .width)),
       cityNameLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 32, to: .height)),
       
       weatherImage.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 48, to: .height)),
-      //dateLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 19, to: .height)),
-     // temperatureLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 86, to: .height)),
       conditionLabel.rightAnchor.constraint(lessThanOrEqualTo: self.rightAnchor ,constant: adapted(dimensionSize: -16, to: .width)),
       dateLabel.rightAnchor.constraint(equalTo: self.rightAnchor ,constant: adapted(dimensionSize: -16, to: .width)),
-     // temperatureLabel.rightAnchor.constraint(lessThanOrEqualTo: self.rightAnchor ,constant: adapted(dimensionSize: -16, to: .width)),
       
-     
       collectionView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
       collectionView.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 326, to: .width)),
       collectionView.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 105, to: .height)),
@@ -191,6 +209,7 @@ class CurrentWeatherView: UIView {
       loadingVC.centerYAnchor.constraint(equalTo: self.centerYAnchor),
       
     ])
+    
     collectionViewTopBig = collectionView.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 444, to: .height))
     collectionViewTopBig?.isActive = true
     collectionViewTopSmall = collectionView.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 232, to: .height))
@@ -227,10 +246,6 @@ class CurrentWeatherView: UIView {
     conditionLabelLeftSmall = conditionLabel.centerXAnchor.constraint(equalTo: temperatureLabel.centerXAnchor)
   }
   
-  
-}
-
-extension CurrentWeatherView {
   func changeConstraints(isPressed: Bool) {
     if isPressed {
       
@@ -261,7 +276,7 @@ extension CurrentWeatherView {
       
       collectionViewTopBig?.isActive = false
       collectionViewTopSmall?.isActive = true
-    
+      
       UIView.animate(withDuration: 0.3) {
         self.layoutIfNeeded()
       }
@@ -300,43 +315,4 @@ extension CurrentWeatherView {
       }
     }
   }
-  
-  func configure(with model: MainInfo?) {
-    guard let model = model ,
-          let topBar = model.topWeather else { return }
-    cityNameLabel.text = model.name
-    
-    
-    let date = Date(timeIntervalSince1970: TimeInterval(topBar.date)).dateFormatter()
-    dateLabel.text = "\(date)".capitalizedFirstLetter
-    
-    conditionLabel.text = topBar.desc?.capitalizedFirstLetter
-    let imageName =  IconHadler.iconDictionary.keyedValue(key: Int(topBar.iconId))
-
-    if #available(iOS 15.0, *) {
-      let config =  UIImage.SymbolConfiguration.preferringMulticolor()
-      weatherImage.image = UIImage(systemName: imageName ?? "thermometer.sun.fill", withConfiguration: config)
-
-    } else {
-      weatherImage.image = UIImage(systemName: imageName ?? "thermometer.sun.fill")
-    }
-    
-    temperatureLabel.text = "\(Int(topBar.temperature))°"
-  }
-  
 }
-
-extension CurrentWeatherView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return currentWeather != nil ? 4 : 0
-  }
-  
-  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCollectionViewCell", for: indexPath) as? WeatherCollectionViewCell,
-          let model = currentWeather
-    else { return UICollectionViewCell() }
-    cell.configure(with: model, index: indexPath.row)
-    return cell
-  }
-}
-

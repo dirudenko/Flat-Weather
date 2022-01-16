@@ -8,36 +8,23 @@
 import UIKit
 
 class HourlyWeatherView: UIView {
+  // MARK: - Private types
+  private var collectionView = CurrentWeatherCollectionView(cellType: .HourlyCollectionViewCell)
+  private var dateLabel = TitleLabel(textAlignment: .center)
+  private let loadingVC = LoadingView()
   
-  private(set) lazy var collectionView: UICollectionView = {
-    let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-    layout.sectionInset = UIEdgeInsets(top: 0, left: adapted(dimensionSize: 16, to: .width), bottom: 0, right: 0)
-    layout.itemSize = CGSize(width: adapted(dimensionSize: 72, to: .width), height: adapted(dimensionSize: 104, to: .height))
-    layout.scrollDirection = .horizontal
-    let frame = CGRect(x: adapted(dimensionSize: 0, to: .width), y: adapted(dimensionSize: 36, to: .height), width: adapted(dimensionSize: 390, to: .width), height: adapted(dimensionSize: 104, to: .height))
-    let myCollectionView: UICollectionView = UICollectionView(frame: frame, collectionViewLayout: layout)
-    myCollectionView.isScrollEnabled = true
-    myCollectionView.backgroundColor = UIColor(named: "backgroundColor")
-    myCollectionView.dataSource = self
-    myCollectionView.delegate = self
-    myCollectionView.register(HourlyCollectionViewCell.self, forCellWithReuseIdentifier: "HourlyCollectionViewCell")
-    return myCollectionView
-  }()
-  
-  private(set) var dateLabel = TitleLabel(textAlignment: .center)
-  let loadingVC = LoadingView()
-  
-  private var hourlyWeather: [Current]?{
+  private var hourlyWeather: [Current]? {
     didSet {
       collectionView.reloadData()
     }
   }
-  var viewData: ViewData = .initial {
+  // MARK: - Public variables
+  var viewData: MainViewData = .initial {
     didSet {
       setNeedsLayout()
     }
   }
-  
+  // MARK: - Initialization
   override init(frame: CGRect) {
     super.init(frame: frame)
     setupLayouts()
@@ -75,10 +62,11 @@ class HourlyWeatherView: UIView {
     addSubview(dateLabel)
     addSubview(collectionView)
     bringSubviewToFront(loadingVC)
+    collectionView.delegate = self
+    collectionView.dataSource = self
   }
   
   private func addConstraints() {
-    
     loadingVC.translatesAutoresizingMaskIntoConstraints = false
     
     NSLayoutConstraint.activate([

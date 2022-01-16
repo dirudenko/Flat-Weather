@@ -7,9 +7,14 @@
 
 import UIKit
 
-class SearchView: UIView {
+protocol SearchViewProtocol {
+  func setViewFromSearch(fot city: [MainInfo], at index: Int)
+  func setViewFromCityList(fot city: [MainInfo], at index: Int)
+}
 
-  let searchBar: UISearchBar = {
+class SearchView: UIView {
+  
+  private let searchBar: UISearchBar = {
     let searchBar = UISearchBar()
     searchBar.translatesAutoresizingMaskIntoConstraints = false
     searchBar.placeholder = "Найти город..."
@@ -21,44 +26,43 @@ class SearchView: UIView {
     return searchBar
   }()
   
-  let searchTableView: UITableView = {
-    let tableView = UITableView()
-    tableView.isHidden = true
-    tableView.translatesAutoresizingMaskIntoConstraints = false
-    tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-    tableView.backgroundColor = UIColor(named: "backgroundColor")
-    return tableView
-  }()
+  private let cityListTableView = TableView(celltype: .CityListTableViewCell)
+  private let searchTableView = TableView(celltype: .StandartTableViewCell)
+  private let animation = AnimationView()
+  private var searchViewCellModel: SearchViewCellModelProtocol
   
-  let cityListTableView: UITableView = {
-    let tableView = UITableView()
-    tableView.isHidden = false
-    tableView.translatesAutoresizingMaskIntoConstraints = false
-    //tableView.contentInset = UIEdgeInsets(top: 144, left: 16, bottom: 542, right: 16)
-    tableView.register(CityListTableViewCell.self, forCellReuseIdentifier: "CityListTableViewCell")
-    tableView.backgroundColor = UIColor(named: "backgroundColor")
-    tableView.rowHeight = adapted(dimensionSize: 80, to: .height)
-    return tableView
-  }()
+  var delegate: SearchViewProtocol?
   
+  var viewData: SearchViewData = .initial {
+    didSet {
+      setNeedsLayout()
+    }
+  }
   
-  
-  let animation: AnimationView = {
-    let animation = AnimationView()
-    animation.translatesAutoresizingMaskIntoConstraints = false
-    return animation
-  }()
-
-  override init(frame: CGRect) {
+  init(frame: CGRect, searchViewCellModel: SearchViewCellModelProtocol) {
+    self.searchViewCellModel = searchViewCellModel
+    
     super.init(frame: frame)
     setupLayouts()
-   // backgroundColor = UIColor(named: "backgroundColor")
     addConstraints()
   }
   
-  required init?(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder)
+  required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+  
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    switch viewData {
+    case .initial:
+      break
+    case .success:
+      animation.removeFromSuperview()
+      searchBar.isHidden = false
+      searchBar.becomeFirstResponder()
+    case .failure:
+      break
+    }
   }
   
   private func setupLayouts() {
@@ -66,13 +70,111 @@ class SearchView: UIView {
     addSubview(searchTableView)
     addSubview(cityListTableView)
     addSubview(animation)
+    searchBar.delegate = self
+    searchTableView.delegate = self
+    searchTableView.dataSource = self
+    cityListTableView.delegate = self
+    cityListTableView.dataSource = self
+  }
+}
+
+
+// MARK: - UIViewController delegates
+extension SearchView: UITableViewDataSource, UITableViewDelegate {
+  
+  func numberOfSections(in tableView: UITableView) -> Int {
+    switch tableView {
+    case searchTableView:
+      return searchViewCellModel.setSections(at: .StandartTableViewCell)
+    case cityListTableView:
+      return searchViewCellModel.setSections(at: .CityListTableViewCell)
+    default: return 0
+    }
   }
   
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    switch tableView {
+    case searchTableView:
+      return searchViewCellModel.setRows(at: section)
+    case cityListTableView:
+      return 1
+    default: return 0
+    }
+  }
+  
+  func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    switch tableView {
+    case searchTableView:
+      return 0
+    case cityListTableView:
+      return adapted(dimensionSize: 16, to: .height)
+    default: return 0
+    }
+  }
+  
+  func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    let headerView = UIView(frame: .zero)
+    headerView.backgroundColor = UIColor(named: "backgroundColor")
+    return headerView
+  }
+  
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    switch tableView {
+    case searchTableView:
+      let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
+      cell.textLabel?.text = searchViewCellModel.setText(at: indexPath)
+      cell.backgroundColor = UIColor(named: "backgroundColor")
+      return cell
+      
+    case cityListTableView:
+      guard let cell = tableView.dequeueReusableCell(withIdentifier: "CityListTableViewCell", for: indexPath) as? CityListTableViewCell,
+            let model = searchViewCellModel.getObjects(at: indexPath.section)
+      else { return UITableViewCell() }
+      cell.configure(with: model)
+      return cell
+    default : return UITableViewCell()
+    }
+  }
+  
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    tableView.deselectRow(at: indexPath, animated: true)
+    switch tableView {
+    case searchTableView:
+      let model = searchViewCellModel.setCity(at: indexPath, for: .StandartTableViewCell)
+      delegate?.setViewFromCityList(fot: model, at: model.count - 1)
+    case cityListTableView:
+      let model = searchViewCellModel.setCity(at: indexPath, for: .CityListTableViewCell)
+      delegate?.setViewFromCityList(fot: model, at: indexPath.section)
+    default: return
+    }
+  }
+  
+}
+
+extension SearchView: UISearchBarDelegate {
+  func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    searchTableView.isHidden = true
+    cityListTableView.isHidden = false
+  }
+  
+  func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    searchViewCellModel.searchText(text: searchText)
+    searchTableView.isHidden = false
+    cityListTableView.isHidden = true
+    searchTableView.reloadData()
+    if searchText.isEmpty {
+      searchTableView.isHidden = true
+      cityListTableView.isHidden = false
+    }
+  }
+}
+
+extension SearchView {
   private func addConstraints() {
     let safeArea = self.safeAreaLayoutGuide
-
+    
     NSLayoutConstraint.activate([
-          
+      
       searchBar.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: adapted(dimensionSize: 9, to: .height)),
       searchBar.leftAnchor.constraint(equalTo: safeArea.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
       searchBar.rightAnchor.constraint(equalTo: safeArea.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
@@ -96,3 +198,4 @@ class SearchView: UIView {
     ])
   }
 }
+

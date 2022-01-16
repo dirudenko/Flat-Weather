@@ -9,15 +9,17 @@ import UIKit
 
 class CityListPageViewController: UIPageViewController {
   
+  // MARK: - Private types
   private let pageControl = UIPageControl()
-  private let coreDataManager = CoreDataManager(modelName: "MyApp")
   /// Список городов, сохраненных в БД
   private let list: [MainInfo]
+  /// Массив контроллеров с городами из list с прогнозами погоды
+  private var cityPage = [MainWeatherViewController]()
+  // MARK: - Private variables
   /// Индекс города, показанного на экране
   private var currentIndex: Int
-  /// Массив контроллеров с городами из list с прогрнозами погоды
-  private var cityPage = [MainWeatherViewController]()
-
+  
+  // MARK: - Initialization
   init(for list: [MainInfo], index: Int) {
     self.list = list
     self.currentIndex = index
@@ -56,7 +58,6 @@ class CityListPageViewController: UIPageViewController {
     pageControl.pageIndicatorTintColor = .black
     pageControl.currentPageIndicatorTintColor = .white
     pageControl.hidesForSinglePage = true
-   // pageControl.backgroundStyle = .automatic
     pageControl.translatesAutoresizingMaskIntoConstraints = false
     view.addSubview(pageControl)
     pageControl.addTarget(self, action: #selector(pageControlTapped(_:)), for: .valueChanged)
@@ -70,7 +71,7 @@ class CityListPageViewController: UIPageViewController {
     self.dataSource = self
     self.delegate = self
     list.forEach {
-      let vc = MainWeatherViewController(for: $0)
+      let vc = BuilderService.buildMainWeatherViewController(city: $0)
       cityPage.append(vc)
     }
     setViewControllers([cityPage[currentIndex]], direction: .forward, animated: true, completion: nil)

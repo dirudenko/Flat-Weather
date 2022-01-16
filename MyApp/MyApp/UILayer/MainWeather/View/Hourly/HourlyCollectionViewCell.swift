@@ -8,15 +8,12 @@
 import UIKit
 
 class HourlyCollectionViewCell: UICollectionViewCell {
-  
+  // MARK: - Private types
   private(set) var conditionImage = MainImage(frame: .zero)
-  
   private(set) var timeLabel = DescriptionLabel()
-  
   private(set) var temperatureLabel = DescriptionLabel()
-  
   private(set) var rainLabel = DescriptionLabel()
-  
+  // MARK: - Initialization
   override init(frame: CGRect) {
     super.init(frame: frame)
     backgroundColor = UIColor(named: "backgroundColor")
@@ -28,13 +25,12 @@ class HourlyCollectionViewCell: UICollectionViewCell {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
+  // MARK: - Private functions
   private func setupLayouts() {
     contentView.addSubview(conditionImage)
     contentView.addSubview(temperatureLabel)
     contentView.addSubview(timeLabel)
     contentView.addSubview(rainLabel)
-    
     temperatureLabel.textAlignment = .center
   }
   
@@ -46,7 +42,6 @@ class HourlyCollectionViewCell: UICollectionViewCell {
   
   
   private func addConstraints() {
-    
     var imageSize: CGFloat {
       adapted(dimensionSize: 24, to: .height)
     }
@@ -74,7 +69,7 @@ class HourlyCollectionViewCell: UICollectionViewCell {
       rainLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 15, to: .height))
     ])
   }
-  
+  // MARK: - Public functions
   func configure(with model: Current, index: Int) {
   
     rainLabel.text = "\(model.pop ?? 0 * 100)% rain"
@@ -88,7 +83,7 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     
     temperatureLabel.text = "\(Int(model.feelsLike))°/\(Int(model.temp))°"
     if index == 0 {
-      timeLabel.text = "Сейчас"
+      timeLabel.text = "Now"
     } else {
       let date = Date(timeIntervalSince1970: TimeInterval(model.dt)).dateHourFormatter()
       timeLabel.text = "\(date)"

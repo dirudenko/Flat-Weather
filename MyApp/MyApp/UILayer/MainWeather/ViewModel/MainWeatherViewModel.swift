@@ -8,8 +8,9 @@
 import Foundation
 
 protocol MainWeatherViewModelProtocol {
-  var updateViewData: ((ViewData) ->())? { get set }
+  var updateViewData: ((MainViewData) ->())? { get set }
   var networkManager: NetworkManagerProtocol { get }
+  var coreDataManager: CoreDataManagerResultProtocol { get }
   func startFetch()
   func loadWeather()
 }
@@ -17,12 +18,13 @@ protocol MainWeatherViewModelProtocol {
 final class MainWeatherViewModel: MainWeatherViewModelProtocol {
   
   var networkManager: NetworkManagerProtocol
-  var updateViewData: ((ViewData) -> ())?
-  private let coreDataManager = CoreDataManager(modelName: "MyApp")
+  var updateViewData: ((MainViewData) -> ())?
+  var coreDataManager: CoreDataManagerResultProtocol
   private var fetchedCity: MainInfo
   
-  init(for list: MainInfo, networkManager: NetworkManagerProtocol) {
+  init(for list: MainInfo, networkManager: NetworkManagerProtocol, coreDataManager: CoreDataManagerResultProtocol) {
     updateViewData?(.initial)
+    self.coreDataManager = coreDataManager
     self.networkManager = networkManager
     self.fetchedCity = list
   }
@@ -52,7 +54,7 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
         DispatchQueue.main.async {
           self.updateCoreData(model: weather)
           let city = self.fetchDataFromCoreData()
-          self.updateViewData?(.success(weather,city))
+          self.updateViewData?(.success(weather, city))
         }
         
       case .failure(let error):

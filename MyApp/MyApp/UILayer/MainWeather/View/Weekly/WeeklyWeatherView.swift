@@ -9,15 +9,7 @@ import UIKit
 
 class WeeklyWeatherView: UIView {
   
-  private(set) var weeklyListTableView: UITableView = {
-    let tableView = UITableView()
-    tableView.translatesAutoresizingMaskIntoConstraints = false
-    tableView.register(WeeklyTableViewCell.self, forCellReuseIdentifier: "WeeklyTableViewCell")
-    tableView.backgroundColor = UIColor(named: "backgroundColor")
-    tableView.separatorStyle = .none
-    tableView.rowHeight = adapted(dimensionSize: 48, to: .height)
-    return tableView
-  }()
+  private let weeklyListTableView = TableView(celltype: .WeeklyTableViewCell)
   
   private(set) var dateLabel = TitleLabel(textAlignment: .center)
   private var model: WeatherModel? {
@@ -25,7 +17,7 @@ class WeeklyWeatherView: UIView {
       weeklyListTableView.reloadData()
     }
   }
-  var viewData: ViewData = .initial {
+  var viewData: MainViewData = .initial {
     didSet {
       setNeedsLayout()
     }
@@ -76,7 +68,6 @@ class WeeklyWeatherView: UIView {
     NSLayoutConstraint.activate([
       dateLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 16, to: .height)),
       dateLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
-      //dateLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
       dateLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 19, to: .height)),
       
       weeklyListTableView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor),
@@ -103,3 +94,5 @@ extension WeeklyWeatherView: UITableViewDataSource, UITableViewDelegate {
     tableView.deselectRow(at: indexPath, animated: true)
   }
 }
+
+

@@ -10,36 +10,32 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   
   var window: UIWindow?
-  let coreDataManager = CoreDataManager(modelName: "MyApp")
-  
-  
-  
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
     // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
     // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
     // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
     guard let windowScene = (scene as? UIWindowScene) else { return }
     let window = UIWindow(windowScene: windowScene)
-    var viewController = UIViewController()
-    var navigationController = UINavigationController()
-    coreDataManager.loadSavedData()
-    let list = coreDataManager.fetchedResultsController.fetchedObjects ?? []
-    if list.isEmpty {
-      viewController = SearchViewController()
-      viewController.view.backgroundColor = UIColor(named: "backgroundColor")
-      navigationController = UINavigationController(rootViewController: viewController)
-    } else {
-     // guard let mainInfo = list.first?.inList as? Set<MainInfo> else { return }
-      
-      viewController = CityListPageViewController(for: list, index: 0)
-      navigationController = UINavigationController(rootViewController: viewController)
-      
-    }
-    //let viewController = InitiateViewController(for: list, index: 0)
-    navigationController.setToolbarHidden(true, animated: false)
+//    var viewController = UIViewController()
+//    var navigationController = UINavigationController()
+//    coreDataManager.loadSavedData()
+//    let list = coreDataManager.fetchedResultsController.fetchedObjects ?? []
+//    if list.isEmpty {
+//      viewController = SearchViewController()
+//      viewController.view.backgroundColor = UIColor(named: "backgroundColor")
+//      navigationController = UINavigationController(rootViewController: viewController)
+//    } else {
+//     // guard let mainInfo = list.first?.inList as? Set<MainInfo> else { return }
+//
+//      viewController = CityListPageViewController(for: list, index: 0)
+//      navigationController = UINavigationController(rootViewController: viewController)
+//
+//    }
+//    //let viewController = InitiateViewController(for: list, index: 0)
+//    navigationController.setToolbarHidden(true, animated: false)
     
     
-    window.rootViewController = navigationController
+    window.rootViewController = BuilderService.buildRootViewController()
     self.window = window
     window.makeKeyAndVisible()
   }

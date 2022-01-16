@@ -7,14 +7,6 @@
 
 import Foundation
 
-//enum Pressure: String, Codable {
-//  case mbar = "mbar"
-//  case atm = "atm"
-//  case mmHg = "mmHg"
-//  case inHg = "inHg"
-//  case hPa = "hPa"
-//}
-
 enum Pressure: Int, CustomStringConvertible, Codable, CaseIterable {
   case mbar
   case atm

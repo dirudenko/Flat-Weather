@@ -9,6 +9,7 @@ import Foundation
 
 enum SearchViewData {
   case initial
-  case success
+  case load
+  case success([SearchModel])
   case failure
 }

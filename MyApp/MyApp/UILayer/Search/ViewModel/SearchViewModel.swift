@@ -39,7 +39,7 @@ final class SearchViewModel: SearchViewModelProtocol {
             }
             self.coreDataManager.saveContext()
             self.coreDataManager.loadListData()
-            self.updateViewData?(.success)
+          //  self.updateViewData?(.success)
           }
         case .failure(let error):
           print(error.rawValue)
@@ -51,7 +51,7 @@ final class SearchViewModel: SearchViewModelProtocol {
     } else {
       DispatchQueue.main.async {
         self.coreDataManager.loadListData()
-        self.updateViewData?(.success)
+      //  self.updateViewData?(.success)
       }
       
     }

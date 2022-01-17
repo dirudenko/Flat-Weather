@@ -38,7 +38,7 @@ final class BuilderService {
   
   static func buildSearchViewController() -> UIViewController {
     let viewModel = SearchViewModel(networkManager: networkManager, coreDataManager: coreDataManager)
-    let searchViewCellModel = SearchViewCellModel()
+    let searchViewCellModel = SearchViewCellModel(networkManager: networkManager)
     let viewController = SearchViewController(viewModel: viewModel, searchViewCellModel: searchViewCellModel)
     return viewController
   }

@@ -76,7 +76,6 @@ class CityListPageViewController: UIPageViewController {
     }
     setViewControllers([cityPage[currentIndex]], direction: .forward, animated: true, completion: nil)
   }
-  
 }
 
 // MARK: - UIViewController delegates

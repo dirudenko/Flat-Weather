@@ -9,7 +9,7 @@ import Foundation
 
 enum WeatherApi {
   case getCurrentWeather(lon: Double, lat: Double)
- // case getHourlyWeather(lon: Double, lat: Double)
+  case getCityName(name: String)
  // case getWeeklyWeather(lon: Double, lat: Double)
 }
 
@@ -24,8 +24,8 @@ extension WeatherApi: EndPointType {
     switch self {
     case .getCurrentWeather(_,_):
       return "/data/2.5/onecall"
-//    case .getHourlyWeather(_,_):
-//      return "/data/2.5/onecall"
+    case .getCityName(_):
+      return "/geo/1.0/direct"
 //    case .getWeeklyWeather(_,_):
 //      return "/data/2.5/onecall"
     }
@@ -48,6 +48,14 @@ extension WeatherApi: EndPointType {
                                   "appid": NetworkManager.weatherAPIKey,
                                   "units": "metric",
                                   "lang": "en",
+                                ])
+    case .getCityName(let name):
+      return .requestParameters(bodyParameters: nil,
+                                bodyEncoding: .urlEncoding,
+                                urlParameters: [
+                                  "q": name,
+                                  "limit": 5,
+                                  "appid": NetworkManager.weatherAPIKey
                                 ])
    //                                            ])
 //    case .getHourlyWeather(let lon, let lat):

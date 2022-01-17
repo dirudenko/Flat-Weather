@@ -11,6 +11,7 @@ protocol NetworkManagerProtocol {
   var weatherAPIKey: String { get }
   var router: Router<WeatherApi> { get }
   func getWeather(lon: Double, lat: Double, completion: @escaping (Result<WeatherModel, NetworkErrors>) -> Void)
+  func getCityName(name: String, completion: @escaping (Result<[SearchModel], NetworkErrors>) -> Void)
 }
 
 struct NetworkManager: NetworkManagerProtocol {
@@ -52,72 +53,38 @@ struct NetworkManager: NetworkManagerProtocol {
     }
   }
   
-//  func getHourlyWeather(lon: Double, lat: Double, completion: @escaping (Result<HourlyWeather, NetworkErrors>) -> Void) {
-//    router.request(.getHourlyWeather(lon: lon, lat: lat)) { data, response, error in
-//      
-//      if let _ = error {
-//        completion(.failure(.badRequest))
-//        return
-//      }
-//      
-//      if let response = response as? HTTPURLResponse {
-//        let result = self.handleNetworkResponse(response)
-//        switch result {
-//        case .success:
-//          guard let responseData = data else {
-//            completion(.failure(.noData))
-//            return
-//          }
-//          do {
-//            // print(responseData)
-//            // let jsonData = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
-//            // print(jsonData)
-//            let apiResponse = try JSONDecoder().decode(HourlyWeather.self, from: responseData)
-//            completion(.success(apiResponse))
-//          } catch {
-//            print(error)
-//            completion(.failure(.unableToDecode))
-//          }
-//        case .failure(let networkFailureError):
-//          completion(.failure(networkFailureError))
-//        }
-//      }
-//    }
-//  }
-//  
-//  func getWeeklyWeather(lon: Double, lat: Double, completion: @escaping (Result<WeeklyWeatherModel, NetworkErrors>) -> Void) {
-//    router.request(.getWeeklyWeather(lon: lon, lat: lat)) { data, response, error in
-//      
-//      if let _ = error {
-//        completion(.failure(.badRequest))
-//        return
-//      }
-//      
-//      if let response = response as? HTTPURLResponse {
-//        let result = self.handleNetworkResponse(response)
-//        switch result {
-//        case .success:
-//          guard let responseData = data else {
-//            completion(.failure(.noData))
-//            return
-//          }
-//          do {
-//            // print(responseData)
-//            // let jsonData = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
-//            // print(jsonData)
-//            let apiResponse = try JSONDecoder().decode(WeeklyWeatherModel.self, from: responseData)
-//            completion(.success(apiResponse))
-//          } catch {
-//            print(error)
-//            completion(.failure(.unableToDecode))
-//          }
-//        case .failure(let networkFailureError):
-//          completion(.failure(networkFailureError))
-//        }
-//      }
-//    }
-//  }
-  
+  func getCityName(name: String, completion: @escaping (Result<[SearchModel], NetworkErrors>) -> Void) {
+    router.request(.getCityName(name: name)) { data, response, error in
+      
+      if let _ = error {
+        completion(.failure(.badRequest))
+        return
+      }
+      
+      if let response = response as? HTTPURLResponse {
+        let result = self.handleNetworkResponse(response)
+        switch result {
+        case .success:
+          guard let responseData = data else {
+            completion(.failure(.noData))
+            return
+          }
+          do {
+            print(responseData)
+            //let jsonData = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
+            //print(jsonData)
+            let apiResponse = try JSONDecoder().decode([SearchModel].self, from: responseData)
+            completion(.success(apiResponse))
+          } catch {
+            print(error)
+            completion(.failure(.unableToDecode))
+          }
+        case .failure(let networkFailureError):
+          completion(.failure(networkFailureError))
+        }
+      }
+    }
+  }
   
   private func handleNetworkResponse(_ response: HTTPURLResponse) -> ResponseErrors<NetworkErrors>{
     switch response.statusCode {

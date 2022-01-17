@@ -10,8 +10,10 @@ import XCTest
 
 class CoreDataTests: XCTestCase {
   
-  var coreDataManager: TestCoreDataManager!
-  let mockCity = CitiList(id: 1, name: "Mock", state: "Mock", country: "Mock", coord: MockData.coord)
+  var coreDataManager: CoreDataManagerResultProtocol!
+  let mockCityList = CitiList(id: 1, name: "Mock", state: "Mock", country: "Mock", coord: Coord(lon: 1, lat: 1))
+  
+  let mockCityResult = MainInfo()
 
     override func setUpWithError() throws {
         coreDataManager = TestCoreDataManager(modelName: "MyApp")
@@ -22,27 +24,27 @@ class CoreDataTests: XCTestCase {
     }
 
     func testAddMockCity() throws {
-      coreDataManager.configure(json: mockCity)
+      coreDataManager.configure(json: mockCityList)
       coreDataManager.saveContext()
-      coreDataManager.loadSavedData()
-      XCTAssertNotNil(coreDataManager.fetchedResultsController.fetchedObjects?.first?.lat)
-      XCTAssertTrue(coreDataManager.fetchedResultsController.fetchedObjects?.first?.name == "Mock")
+      coreDataManager.loadListData()
+      XCTAssertNotNil(coreDataManager.fetchedListController.fetchedObjects?.first?.lat)
+      XCTAssertTrue(coreDataManager.fetchedListController.fetchedObjects?.first?.name == "Mock")
     }
   
   func testPredicate() throws {
-    coreDataManager.configure(json: mockCity)
+    coreDataManager.configure(json: mockCityList)
     coreDataManager.saveContext()
-    coreDataManager.cityResultsPredicate = NSPredicate(format: "name CONTAINS %@", "M")
-    coreDataManager.loadSavedData()
-    XCTAssertTrue(coreDataManager.fetchedResultsController.fetchedObjects?.first?.name == "Mock")
+    coreDataManager.cityListPredicate = NSPredicate(format: "name CONTAINS %@", "M")
+    coreDataManager.loadListData()
+    XCTAssertTrue(coreDataManager.fetchedListController.fetchedObjects?.first?.name == "Mock")
   }
   
   func testPredicateWithFail() throws {
-    coreDataManager.configure(json: mockCity)
+    coreDataManager.configure(json: mockCityList)
     coreDataManager.saveContext()
-    coreDataManager.cityResultsPredicate = NSPredicate(format: "name CONTAINS %@", "s")
-    coreDataManager.loadSavedData()
-    XCTAssertNil(coreDataManager.fetchedResultsController.fetchedObjects?.first?.name)
+    coreDataManager.cityListPredicate = NSPredicate(format: "name CONTAINS %@", "s")
+    coreDataManager.loadListData()
+    XCTAssertNil(coreDataManager.fetchedListController.fetchedObjects?.first?.name)
   }
 
 //    func testPerformanceFetchFromJSON() throws {
@@ -57,7 +59,7 @@ class CoreDataTests: XCTestCase {
 //            self.coreDataManager.configure(json: item)
 //          }
 //          coreDataManager.saveContext()
-//          coreDataManager.loadSavedData()
+//          coreDataManager.loadListData()
 //        }
 //    }
 

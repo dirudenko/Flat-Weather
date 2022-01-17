@@ -10,12 +10,11 @@ import XCTest
 
 class MyAppTests: XCTestCase {
   
-  var networkManager: NetworkManager!
-  var headerWeatherViewController: HeaderWeatherViewController!
+  var networkManager: NetworkManagerProtocol!
+  let mockCityList = CitiList(id: 1, name: "Mock", state: "Mock", country: "Mock", coord: Coord(lon: 1, lat: 1))
   
   override func setUpWithError() throws {
     networkManager = NetworkManager()
-    headerWeatherViewController = HeaderWeatherViewController(cityId: 0)
   }
   
   override func tearDownWithError() throws {
@@ -24,10 +23,8 @@ class MyAppTests: XCTestCase {
   
   func testCityMoscow() throws {
     let expectation = expectation(description: "Expectation in " + #function)
-    var validateResult: CurrentWeather?
-    let expectedResult = 524901
-    
-    networkManager.getWeather(city: 524901) { result in
+    var validateResult: WeatherModel?
+    networkManager.getWeather(lon: 37.606667, lat: 55.761665) { result in
       switch result {
       case .success(let city):
         validateResult = city
@@ -40,28 +37,28 @@ class MyAppTests: XCTestCase {
       if error != nil {
         XCTFail()
       }
-      XCTAssertEqual(validateResult?.id, expectedResult)
+      XCTAssert(validateResult != nil)
     }
   }
   
  
-//  func testCityError() throws {
-//    let expectation = expectation(description: "Expectation in " + #function)
-//    
-//    networkManager.getWeaher(city: "MockCity") { result in
-//      switch result {
-//      case .success(_):
-//        break
-//      case .failure(_): break
-//      }
-//      expectation.fulfill()
-//    }
-//    waitForExpectations(timeout: 10) { error in
-//      if error != nil {
-//        XCTFail()
-//      }
-//    }
-//  }
+  func testCityError() throws {
+    let expectation = expectation(description: "Expectation in " + #function)
+    networkManager.getWeather(lon: 800, lat: 800) { result in
+      switch result {
+      case .success(_):
+        XCTFail()
+      case .failure(_):
+        break
+      }
+      expectation.fulfill()
+    }
+    waitForExpectations(timeout: 10) { error in
+      if error != nil {
+        XCTFail()
+      }
+    }
+  }
   
   //    func testPerformanceExample() throws {
   //        // This is an example of a performance test case.

@@ -20,7 +20,6 @@ class SearchView: UIView {
     searchBar.placeholder = "Найти город..."
     searchBar.searchTextField.layer.cornerRadius = 16
     searchBar.searchTextField.borderStyle = .roundedRect
-    searchBar.isHidden = true
     searchBar.barTintColor = UIColor(named: "backgroundColor")
     searchBar.searchTextField.backgroundColor = .systemGray6
     return searchBar
@@ -28,13 +27,20 @@ class SearchView: UIView {
   
   private let cityListTableView = TableView(celltype: .CityListTableViewCell)
   private let searchTableView = TableView(celltype: .StandartTableViewCell)
-  private let animation = AnimationView()
+ // private let animation = AnimationView()
   private var searchViewCellModel: SearchViewCellModelProtocol
-  
+  private(set) var loadingVC = LoadingView()
   var delegate: SearchViewProtocol?
-  
+  var city = [SearchModel](){
+    didSet {
+     // print(city)
+      searchTableView.reloadData()      
+    }
+  }
+
   var viewData: SearchViewData = .initial {
     didSet {
+    //  searchTableView.reloadData()
       setNeedsLayout()
     }
   }
@@ -43,6 +49,7 @@ class SearchView: UIView {
     self.searchViewCellModel = searchViewCellModel
     
     super.init(frame: frame)
+    updateView()
     setupLayouts()
     addConstraints()
   }
@@ -55,11 +62,23 @@ class SearchView: UIView {
     super.layoutSubviews()
     switch viewData {
     case .initial:
-      break
-    case .success:
-      animation.removeFromSuperview()
-      searchBar.isHidden = false
-      searchBar.becomeFirstResponder()
+     // animation.removeFromSuperview()
+      searchBar.resignFirstResponder()
+      loadingVC.isHidden = true
+      cityListTableView.isHidden = false
+      searchTableView.isHidden = true
+    case .load:
+      loadingVC.isHidden = false
+      cityListTableView.isHidden = true
+      searchTableView.isHidden = false
+    case .success(let model):
+      city = model
+      loadingVC.makeInvisible()
+      searchTableView.isHidden = false
+      cityListTableView.isHidden = true
+//      animation.removeFromSuperview()
+//      searchBar.isHidden = false
+//      searchBar.becomeFirstResponder()
     case .failure:
       break
     }
@@ -69,12 +88,21 @@ class SearchView: UIView {
     addSubview(searchBar)
     addSubview(searchTableView)
     addSubview(cityListTableView)
-    addSubview(animation)
+   // addSubview(animation)
+    addSubview(loadingVC)
+    bringSubviewToFront(loadingVC)
+    loadingVC.makeInvisible()
     searchBar.delegate = self
     searchTableView.delegate = self
     searchTableView.dataSource = self
     cityListTableView.delegate = self
     cityListTableView.dataSource = self
+  }
+  
+  private func updateView() {
+    searchViewCellModel.updateViewData = { [weak self] viewData in
+      self?.viewData = viewData
+    }
   }
 }
 
@@ -85,7 +113,7 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
   func numberOfSections(in tableView: UITableView) -> Int {
     switch tableView {
     case searchTableView:
-      return searchViewCellModel.setSections(at: .StandartTableViewCell)
+      return 1
     case cityListTableView:
       return searchViewCellModel.setSections(at: .CityListTableViewCell)
     default: return 0
@@ -95,7 +123,7 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     switch tableView {
     case searchTableView:
-      return searchViewCellModel.setRows(at: section)
+      return city.count
     case cityListTableView:
       return 1
     default: return 0
@@ -122,7 +150,9 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
     switch tableView {
     case searchTableView:
       let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
-      cell.textLabel?.text = searchViewCellModel.setText(at: indexPath)
+      let cityName = "\(city[indexPath.row].name)"
+      let cityCountry = "\(city[indexPath.row].country)"
+      cell.textLabel?.text = cityName + " " + cityCountry
       cell.backgroundColor = UIColor(named: "backgroundColor")
       return cell
       
@@ -159,20 +189,20 @@ extension SearchView: UISearchBarDelegate {
   
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     searchViewCellModel.searchText(text: searchText)
-    searchTableView.isHidden = false
-    cityListTableView.isHidden = true
-    searchTableView.reloadData()
-    if searchText.isEmpty {
-      searchTableView.isHidden = true
-      cityListTableView.isHidden = false
-    }
+    //searchTableView.isHidden = false
+    //cityListTableView.isHidden = true
+   // searchTableView.reloadData()
+//    if searchText.isEmpty {
+//      viewData(.initial)
+//    }
   }
 }
 
 extension SearchView {
   private func addConstraints() {
     let safeArea = self.safeAreaLayoutGuide
-    
+    loadingVC.translatesAutoresizingMaskIntoConstraints = false
+
     NSLayoutConstraint.activate([
       
       searchBar.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: adapted(dimensionSize: 9, to: .height)),
@@ -190,10 +220,13 @@ extension SearchView {
       cityListTableView.rightAnchor.constraint(equalTo: safeArea.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
       cityListTableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
       
-      animation.topAnchor.constraint(equalTo: self.centerYAnchor, constant: adapted(dimensionSize: -50, to: .height)),
-      animation.leftAnchor.constraint(equalTo: self.centerXAnchor, constant: adapted(dimensionSize: -50, to: .width)),
-      animation.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 200, to: .width)),
-      animation.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 200, to: .height))
+//      animation.topAnchor.constraint(equalTo: self.centerYAnchor, constant: adapted(dimensionSize: -50, to: .height)),
+//      animation.leftAnchor.constraint(equalTo: self.centerXAnchor, constant: adapted(dimensionSize: -50, to: .width)),
+//      animation.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 200, to: .width)),
+//      animation.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 200, to: .height)),
+      
+      loadingVC.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+      loadingVC.centerYAnchor.constraint(equalTo: self.centerYAnchor),
       
     ])
   }

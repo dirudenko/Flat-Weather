@@ -185,13 +185,13 @@ extension CurrentWeatherView {
       
       addButton.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 16, to: .height)),
       addButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
-      addButton.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 32, to: .width)),
-      addButton.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 32, to: .height)),
+      addButton.widthAnchor.constraint(equalToConstant: 32),
+      addButton.heightAnchor.constraint(equalToConstant: 32),
       
       optionsButton.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 16, to: .height)),
       optionsButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 310, to: .width)),
-      optionsButton.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 32, to: .width)),
-      optionsButton.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 32, to: .height)),
+      optionsButton.widthAnchor.constraint(equalToConstant: 32),
+      optionsButton.heightAnchor.constraint(equalToConstant: 32),
       
       cityNameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 16, to: .height)),
       cityNameLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),

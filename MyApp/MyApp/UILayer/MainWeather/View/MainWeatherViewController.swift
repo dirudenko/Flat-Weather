@@ -43,10 +43,10 @@ final class MainWeatherViewController: UIViewController {
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     /// проверка времени для повторного запроса в сеть
-    if viewModel.checkDate() {
-
-      viewModel.loadWeather()
-    }
+//    if viewModel.checkDate() {
+//
+//      viewModel.loadWeather()
+//    }
   }
   
   // MARK: - Private functions

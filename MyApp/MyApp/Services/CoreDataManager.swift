@@ -31,6 +31,7 @@ protocol CoreDataManagerResultProtocol: CoreDataManagerProtocol {
   func configureHourly(from data: WeatherModel, list: MainInfo?)
   func configureWeekly(from data: WeatherModel, list: MainInfo?)
   func saveToList(city: SearchModel)
+  func removeDataFromMainWeather(object: MainInfo)
 }
 
 
@@ -98,6 +99,11 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     } catch {
       print(error.localizedDescription)
     }
+  }
+  
+  func removeDataFromMainWeather(object: MainInfo) {
+    fetchedResultsController.managedObjectContext.delete(object)
+    saveContext()
   }
   
   

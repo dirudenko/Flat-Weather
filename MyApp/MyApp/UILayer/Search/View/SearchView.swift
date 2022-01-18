@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 protocol SearchViewProtocol {
   func setViewFromSearch(fot city: [MainInfo], at index: Int)
@@ -27,27 +28,26 @@ class SearchView: UIView {
   
   private let cityListTableView = TableView(celltype: .CityListTableViewCell)
   private let searchTableView = TableView(celltype: .StandartTableViewCell)
- // private let animation = AnimationView()
+  // private let animation = AnimationView()
   private var searchViewCellModel: SearchViewCellModelProtocol
   private(set) var loadingVC = LoadingView()
   var delegate: SearchViewProtocol?
   var city = [SearchModel](){
     didSet {
-     // print(city)
-      searchTableView.reloadData()      
+      // print(city)
+      searchTableView.reloadData()
     }
   }
-
+  
   var viewData: SearchViewData = .initial {
     didSet {
-    //  searchTableView.reloadData()
+      //  searchTableView.reloadData()
       setNeedsLayout()
     }
   }
   
   init(frame: CGRect, searchViewCellModel: SearchViewCellModelProtocol) {
     self.searchViewCellModel = searchViewCellModel
-    
     super.init(frame: frame)
     updateView()
     setupLayouts()
@@ -62,7 +62,7 @@ class SearchView: UIView {
     super.layoutSubviews()
     switch viewData {
     case .initial:
-     // animation.removeFromSuperview()
+      // animation.removeFromSuperview()
       searchBar.resignFirstResponder()
       loadingVC.isHidden = true
       cityListTableView.isHidden = false
@@ -76,9 +76,9 @@ class SearchView: UIView {
       loadingVC.makeInvisible()
       searchTableView.isHidden = false
       cityListTableView.isHidden = true
-//      animation.removeFromSuperview()
-//      searchBar.isHidden = false
-//      searchBar.becomeFirstResponder()
+      //      animation.removeFromSuperview()
+      //      searchBar.isHidden = false
+      //      searchBar.becomeFirstResponder()
     case .failure:
       break
     }
@@ -88,7 +88,7 @@ class SearchView: UIView {
     addSubview(searchBar)
     addSubview(searchTableView)
     addSubview(cityListTableView)
-   // addSubview(animation)
+    // addSubview(animation)
     addSubview(loadingVC)
     bringSubviewToFront(loadingVC)
     loadingVC.makeInvisible()
@@ -97,6 +97,7 @@ class SearchView: UIView {
     searchTableView.dataSource = self
     cityListTableView.delegate = self
     cityListTableView.dataSource = self
+    searchViewCellModel.coreDataManager.fetchedResultsController.delegate = self
   }
   
   private func updateView() {
@@ -179,6 +180,31 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
     }
   }
   
+  
+  func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    switch tableView {
+    case searchTableView:
+      return false
+    case cityListTableView:
+      return true
+    default:
+      return false
+    }
+  }
+  
+  
+  func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    switch tableView {
+    case searchTableView:
+      return
+    case cityListTableView:
+      if editingStyle == .delete
+      {
+        searchViewCellModel.removeObject(at: indexPath.section)
+      }
+    default: return
+    }
+  }
 }
 
 extension SearchView: UISearchBarDelegate {
@@ -191,10 +217,60 @@ extension SearchView: UISearchBarDelegate {
     searchViewCellModel.searchText(text: searchText)
     //searchTableView.isHidden = false
     //cityListTableView.isHidden = true
-   // searchTableView.reloadData()
-//    if searchText.isEmpty {
-//      viewData(.initial)
-//    }
+    // searchTableView.reloadData()
+    //    if searchText.isEmpty {
+    //      viewData(.initial)
+    //    }
+  }
+}
+
+extension SearchView: NSFetchedResultsControllerDelegate {
+  func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    cityListTableView.beginUpdates()
+  }
+  
+  func controller(_ controller:
+                  NSFetchedResultsController<NSFetchRequestResult>,
+                  didChange anObject: Any,
+                  at indexPath: IndexPath?,
+                  for type: NSFetchedResultsChangeType,
+                  newIndexPath: IndexPath?) {
+    
+    switch type {
+    case .delete:
+      if let indexPath = indexPath {
+        let section = indexPath.row
+        cityListTableView.deleteSections([section], with: .fade)
+        
+      }
+    case .insert:
+      if let indexPath = newIndexPath {
+        let section = IndexSet(integer: indexPath.section)
+        
+        cityListTableView.insertSections(section, with: .fade)
+      }
+    case .update:
+      let cell = cityListTableView.cellForRow(at: indexPath!) as! CityListTableViewCell
+      let model = (searchViewCellModel.getObjects(at: indexPath!.section))!
+      cell.configure(with: model)
+    case .move:
+      if let indexPath = indexPath {
+        let section = indexPath.row
+        cityListTableView.deleteSections([section], with: .fade)
+      }
+      
+      if let newIndexPath = newIndexPath {
+        let section = IndexSet(integer: newIndexPath.section)
+        
+        cityListTableView.insertSections(section, with: .fade)
+      }
+    default:
+      print("Unexpected NSFetchedResultsChangeType")
+    }
+  }
+  
+  func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    cityListTableView.endUpdates()
   }
 }
 
@@ -202,7 +278,7 @@ extension SearchView {
   private func addConstraints() {
     let safeArea = self.safeAreaLayoutGuide
     loadingVC.translatesAutoresizingMaskIntoConstraints = false
-
+    
     NSLayoutConstraint.activate([
       
       searchBar.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: adapted(dimensionSize: 9, to: .height)),
@@ -220,10 +296,10 @@ extension SearchView {
       cityListTableView.rightAnchor.constraint(equalTo: safeArea.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
       cityListTableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
       
-//      animation.topAnchor.constraint(equalTo: self.centerYAnchor, constant: adapted(dimensionSize: -50, to: .height)),
-//      animation.leftAnchor.constraint(equalTo: self.centerXAnchor, constant: adapted(dimensionSize: -50, to: .width)),
-//      animation.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 200, to: .width)),
-//      animation.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 200, to: .height)),
+      //      animation.topAnchor.constraint(equalTo: self.centerYAnchor, constant: adapted(dimensionSize: -50, to: .height)),
+      //      animation.leftAnchor.constraint(equalTo: self.centerXAnchor, constant: adapted(dimensionSize: -50, to: .width)),
+      //      animation.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 200, to: .width)),
+      //      animation.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 200, to: .height)),
       
       loadingVC.centerXAnchor.constraint(equalTo: self.centerXAnchor),
       loadingVC.centerYAnchor.constraint(equalTo: self.centerYAnchor),
@@ -231,4 +307,5 @@ extension SearchView {
     ])
   }
 }
+
 

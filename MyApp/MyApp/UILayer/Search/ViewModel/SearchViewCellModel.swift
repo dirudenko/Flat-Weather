@@ -6,16 +6,18 @@
 //
 
 import Foundation
-
+import CoreData
 
 protocol SearchViewCellModelProtocol {
   var updateViewData: ((SearchViewData) ->())? { get set }
   var networkManager: NetworkManagerProtocol { get }
+  var coreDataManager: CoreDataManager { get }
   func setSections(at tableView: TableViewCellTypes) -> Int
   func getObjects(at section: Int) -> MainInfo?
   func searchText(text: String)
-  func setText(at index: IndexPath) -> String
   func setCity(model: SearchModel?, for tableView: TableViewCellTypes) -> [MainInfo]
+  func removeObject(at index: Int)
+  
 }
 
 final class SearchViewCellModel: SearchViewCellModelProtocol {
@@ -29,6 +31,7 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
     updateViewData?(.initial)
     //self.coreDataManager = coreDataManager
     self.networkManager = networkManager
+    
   }
   // MARK: - Public functions
   /// получение количества секций для таблиц
@@ -47,6 +50,13 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
   /// получениие объектов из списка сохраненных городов
   func getObjects(at section: Int) -> MainInfo? {
     return coreDataManager.fetchedResultsController.fetchedObjects?[section]
+  }
+  
+  func removeObject(at index: Int) {
+    guard let object = getObjects(at: index) else { print("ERROR")
+      return }
+    coreDataManager.removeDataFromMainWeather(object: object)
+    //updateViewData?(.initial)
   }
   
   /// Передеча текста в качестве предиката для фетчРеквеста списка всех городов
@@ -73,10 +83,6 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
       self.updateViewData?(.load)
     }
   }
-  /// получениие объектов из списка всех городов
-  func setText(at index: IndexPath) -> String {
-    return ""
-  }
   
   /// получение выбранного города в зависимости от таблицы для передачи в контроллер
   func setCity(model: SearchModel?, for tableView: TableViewCellTypes) -> [MainInfo] {
@@ -93,3 +99,6 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
     }
   }
 }
+
+
+

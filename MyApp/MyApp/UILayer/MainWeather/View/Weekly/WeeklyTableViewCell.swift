@@ -67,18 +67,18 @@ class WeeklyTableViewCell: UITableViewCell {
       ])
     }
   // MARK: - Public functions
-    func configure(with model: Daily) {
-      var imageName =  IconHadler.iconDictionary.keyedValue(key: model.weather.first?.id ?? 0)
+    func configure(with model: Weekly) {
+      var imageName =  IconHadler.iconDictionary.keyedValue(key: Int(model.iconId ))
       if ((imageName?.contains(".fill")) != nil) {
         let newImageName = imageName?.replacingOccurrences(of: ".fill", with: "")
         imageName = newImageName
       }
       conditionImage.image = UIImage(systemName: imageName ?? "thermometer.sun")?.withTintColor(.white, renderingMode: .alwaysOriginal)
   
-      temperatureLabel.text = "\(Int(model.temp.night))°/\(Int(model.temp.day))°"
-      rainLabel.text = "\(model.rain ??  0)"
+      temperatureLabel.text = "\(Int(model.tempNight))°/\(Int(model.tempDay))°"
+      rainLabel.text = "\(model.rain )"
     
-        let date = Date(timeIntervalSince1970: TimeInterval(model.dt)).dateDayFormatter()
+        let date = Date(timeIntervalSince1970: TimeInterval(model.date)).dateDayFormatter()
       dayLabel.text = "\(date)".capitalizedFirstLetter
       
     }

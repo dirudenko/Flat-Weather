@@ -30,7 +30,7 @@ final class SearchViewController: UIViewController {
     updateView()
     setupViews()
     setupConstraints()
-    viewModel.startFetch()
+   // viewModel.startFetch()
   }
   
   deinit {

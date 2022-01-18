@@ -12,7 +12,7 @@ extension Date {
   func dateFormatter() -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "EEEE | d MMM"
-    formatter.locale = Locale(identifier: "ru")
+    formatter.locale = Locale(identifier: "en")
     let stringDate = formatter.string(from: self)
     return stringDate
   }
@@ -20,6 +20,7 @@ extension Date {
   func dateHourFormatter() -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "HH:mm"
+    formatter.locale = Locale(identifier: "en")
     let stringDate = formatter.string(from: self)
     return stringDate
   }
@@ -27,6 +28,7 @@ extension Date {
   func dateDayFormatter() -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "EEEE"
+    formatter.locale = Locale(identifier: "en")
     let stringDate = formatter.string(from: self)
     return stringDate
   }

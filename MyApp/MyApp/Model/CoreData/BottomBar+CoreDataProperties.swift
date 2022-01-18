@@ -2,7 +2,7 @@
 //  BottomBar+CoreDataProperties.swift
 //  MyApp
 //
-//  Created by Dmitry on 21.12.2021.
+//  Created by Dmitry on 18.01.2022.
 //
 //
 

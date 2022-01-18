@@ -13,12 +13,12 @@ class HourlyWeatherView: UIView {
   private var dateLabel = TitleLabel(textAlignment: .center)
   private let loadingVC = LoadingView()
   
-  private var hourlyWeather: [Current]? {
+  private var model: MainInfo? {
     didSet {
       collectionView.reloadData()
     }
   }
-  // MARK: - Public variables
+  // MARK: - Public types
   var viewData: MainViewData = .initial {
     didSet {
       setNeedsLayout()
@@ -42,11 +42,14 @@ class HourlyWeatherView: UIView {
     switch viewData {
     case .initial:
       break
-    case .loading(_):
-      break
-    case .success(let weatherModel, _):
+    case .loading:
+      loadingVC.isHidden = false
+    case .fetching(let weatherModel):
+      model = weatherModel
       loadingVC.makeInvisible()
-      hourlyWeather = weatherModel?.hourly
+    case .success(let weatherModel):
+      loadingVC.makeInvisible()
+      model = weatherModel
     case .failure:
       // TODO: Show Error
       break
@@ -84,13 +87,14 @@ class HourlyWeatherView: UIView {
 // MARK: - UIView delegates
 extension HourlyWeatherView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    guard let hourly = hourlyWeather else { return 0 }
-    return hourly.isEmpty ? 0 : 24
+    let items = model?.hourlyWeather?.count
+    return items ?? 0
   }
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyCollectionViewCell", for: indexPath) as? HourlyCollectionViewCell, let model = hourlyWeather?[indexPath.row]
-            
+    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyCollectionViewCell", for: indexPath) as? HourlyCollectionViewCell,
+         // let model = hourlyWeather?.hourlyWeather as? [Hourly]
+          let model: [Hourly] =  model?.hourlyWeather?.toArray()
     else { return UICollectionViewCell() }
     
     cell.configure(with: model, index: indexPath.row)

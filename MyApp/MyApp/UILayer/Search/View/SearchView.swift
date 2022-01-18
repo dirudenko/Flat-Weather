@@ -170,10 +170,10 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
     tableView.deselectRow(at: indexPath, animated: true)
     switch tableView {
     case searchTableView:
-      let model = searchViewCellModel.setCity(at: indexPath, for: .StandartTableViewCell)
+      let model = searchViewCellModel.setCity(model: city[indexPath.row], for: .StandartTableViewCell)
       delegate?.setViewFromCityList(fot: model, at: model.count - 1)
     case cityListTableView:
-      let model = searchViewCellModel.setCity(at: indexPath, for: .CityListTableViewCell)
+      let model = searchViewCellModel.setCity(model: nil, for: .CityListTableViewCell)
       delegate?.setViewFromCityList(fot: model, at: indexPath.section)
     default: return
     }

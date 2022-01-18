@@ -9,8 +9,9 @@ import Foundation
 /// Состояния для Data Driven UI
 enum MainViewData {
   case initial
-  case loading(MainInfo)
-  case success(WeatherModel?, MainInfo?)
+  case fetching(MainInfo)
+  case loading
+  case success(MainInfo)
   case failure
   
 }

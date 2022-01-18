@@ -10,7 +10,6 @@ import Foundation
 enum WeatherApi {
   case getCurrentWeather(lon: Double, lat: Double)
   case getCityName(name: String)
- // case getWeeklyWeather(lon: Double, lat: Double)
 }
 
 extension WeatherApi: EndPointType {
@@ -26,8 +25,6 @@ extension WeatherApi: EndPointType {
       return "/data/2.5/onecall"
     case .getCityName(_):
       return "/geo/1.0/direct"
-//    case .getWeeklyWeather(_,_):
-//      return "/data/2.5/onecall"
     }
   }
   
@@ -54,32 +51,9 @@ extension WeatherApi: EndPointType {
                                 bodyEncoding: .urlEncoding,
                                 urlParameters: [
                                   "q": name,
-                                  "limit": 5,
+                                  "limit": 20,
                                   "appid": NetworkManager.weatherAPIKey
                                 ])
-   //                                            ])
-//    case .getHourlyWeather(let lon, let lat):
-//      return .requestParameters(bodyParameters: nil,
-//                                bodyEncoding: .urlEncoding,
-//                                urlParameters: [
-//                                  "lat": lat,
-//                                  "lon": lon,
-//                                  "exclude": "current,minutely,daily,alerts",
-//                                  "appid": NetworkManager.weatherAPIKey,
-//                                  "units": "metric",
-//                                  "lang": "ru",
-//                                ])
-//    case .getWeeklyWeather(let lon, let lat):
-//      return .requestParameters(bodyParameters: nil,
-//                                bodyEncoding: .urlEncoding,
-//                                urlParameters: [
-//                                  "lat": lat,
-//                                  "lon": lon,
-//                                  "exclude": "minutely,alerts",
-//                                  "appid": NetworkManager.weatherAPIKey,
-//                                  "units": "metric",
-//                                  "lang": "ru",
-//                                ])
     }
   }
   

@@ -28,33 +28,33 @@ final class SearchViewModel: SearchViewModelProtocol {
   }
   // MARK: - Public functions
   func startFetch() {
-    if coreDataManager.entityIsEmpty() {
-      decodeList { result in
-        switch result {
-        case .success(let list):
-          DispatchQueue.main.async {
-            
-            for item in list {
-              self.coreDataManager.configure(json: item)
-            }
-            self.coreDataManager.saveContext()
-            self.coreDataManager.loadListData()
-          //  self.updateViewData?(.success)
-          }
-        case .failure(let error):
-          print(error.rawValue)
-          DispatchQueue.main.async {
-            self.updateViewData?(.failure)
-          }
-        }
-      }
-    } else {
-      DispatchQueue.main.async {
-        self.coreDataManager.loadListData()
-      //  self.updateViewData?(.success)
-      }
-      
-    }
+//    if coreDataManager.entityIsEmpty() {
+//      decodeList { result in
+//        switch result {
+//        case .success(let list):
+//          DispatchQueue.main.async {
+//
+//            for item in list {
+//              self.coreDataManager.configure(json: item)
+//            }
+//            self.coreDataManager.saveContext()
+//            self.coreDataManager.loadListData()
+//          //  self.updateViewData?(.success)
+//          }
+//        case .failure(let error):
+//          print(error.rawValue)
+//          DispatchQueue.main.async {
+//            self.updateViewData?(.failure)
+//          }
+//        }
+//      }
+//    } else {
+//      DispatchQueue.main.async {
+//        self.coreDataManager.loadListData()
+//      //  self.updateViewData?(.success)
+//      }
+//
+  //  }
   }
   // MARK: - Private functions
   /// Декодирование JSON файла с городами из Ассетов

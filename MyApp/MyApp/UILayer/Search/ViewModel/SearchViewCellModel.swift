@@ -15,7 +15,7 @@ protocol SearchViewCellModelProtocol {
   func getObjects(at section: Int) -> MainInfo?
   func searchText(text: String)
   func setText(at index: IndexPath) -> String
-  func setCity(at indexPath: IndexPath, for tableView: TableViewCellTypes) -> [MainInfo]
+  func setCity(model: SearchModel?, for tableView: TableViewCellTypes) -> [MainInfo]
 }
 
 final class SearchViewCellModel: SearchViewCellModelProtocol {
@@ -79,13 +79,13 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
   }
   
   /// получение выбранного города в зависимости от таблицы для передачи в контроллер
-  func setCity(at indexPath: IndexPath, for tableView: TableViewCellTypes) -> [MainInfo] {
+  func setCity(model: SearchModel?, for tableView: TableViewCellTypes) -> [MainInfo] {
     switch tableView {
     case .CityListTableViewCell:
       return coreDataManager.fetchedResultsController.fetchedObjects ?? []
     case .StandartTableViewCell:
-      let city = coreDataManager.fetchedListController.object(at: indexPath)
-      coreDataManager.saveToList(city: city)
+      guard let model = model else { return []}
+      coreDataManager.saveToList(city: model)
       coreDataManager.loadSavedData()
       return coreDataManager.fetchedResultsController.fetchedObjects ?? []
     default:

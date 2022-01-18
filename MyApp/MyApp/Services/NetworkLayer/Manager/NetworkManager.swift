@@ -16,7 +16,7 @@ protocol NetworkManagerProtocol {
 
 struct NetworkManager: NetworkManagerProtocol {
   var weatherAPIKey = "4151621f5318e81115ce7581adb25359"
-
+  
   static let weatherAPIKey = "4151621f5318e81115ce7581adb25359"
   let router = Router<WeatherApi>()
   

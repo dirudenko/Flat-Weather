@@ -94,7 +94,8 @@ struct Daily: Codable {
     let windGust: Double?
     let weather: [Weather]
     let clouds: Int
-    let pop, uvi: Double
+    let pop: Double?
+    let uvi: Double
     let rain: Double?
     let snow: Double?
 

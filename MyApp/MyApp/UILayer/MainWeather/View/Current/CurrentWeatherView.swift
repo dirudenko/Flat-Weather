@@ -77,10 +77,13 @@ class CurrentWeatherView: UIView {
     switch viewData {
     case .initial:
       break
-    case .loading(let mainInfo):
+    case .fetching(let mainInfo):
       currentWeather = mainInfo
       configure(with: mainInfo)
-    case .success( _, let weatherModel):
+      loadingVC.makeInvisible()
+    case .loading:
+      loadingVC.isHidden = false
+    case .success(let weatherModel):
       loadingVC.makeInvisible()
       currentWeather = weatherModel
       configure(with: weatherModel)

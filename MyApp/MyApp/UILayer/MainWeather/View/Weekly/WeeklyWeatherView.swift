@@ -8,21 +8,21 @@
 import UIKit
 
 class WeeklyWeatherView: UIView {
-  
+  // MARK: - Private types
   private let weeklyListTableView = TableView(celltype: .WeeklyTableViewCell)
-  
   private(set) var dateLabel = TitleLabel(textAlignment: .center)
-  private var model: WeatherModel? {
+  private var model: MainInfo? {
     didSet {
       weeklyListTableView.reloadData()
     }
   }
+  // MARK: - Public types
   var viewData: MainViewData = .initial {
     didSet {
       setNeedsLayout()
     }
   }
-  
+  // MARK: - Initialization
   override init(frame: CGRect) {
     super.init(frame: frame)
     
@@ -40,16 +40,18 @@ class WeeklyWeatherView: UIView {
     switch viewData {
     case .initial:
       break
-    case .loading(_):
+    case .loading:
       break
-    case .success(let weatherModel, _):
+    case .fetching(let weatherModel):
+      model = weatherModel
+    case .success(let weatherModel):
       model = weatherModel
     case .failure:
       // TODO: Show Error
       break
     }
   }
-  
+  // MARK: - Private functions
   private func setupLayouts() {
     addSubview(weeklyListTableView)
     addSubview(dateLabel)
@@ -80,13 +82,13 @@ class WeeklyWeatherView: UIView {
 extension WeeklyWeatherView: UITableViewDataSource, UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return model?.daily.count ?? 0
+    return model?.weeklyWeather?.count ?? 0
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     guard let cell = tableView.dequeueReusableCell(withIdentifier: "WeeklyTableViewCell", for: indexPath) as? WeeklyTableViewCell,
-          let dailyModel = model?.daily[indexPath.row] else { return UITableViewCell() }
-    cell.configure(with: dailyModel)
+          let model: [Weekly] =  model?.weeklyWeather?.toArray() else { return UITableViewCell() }
+    cell.configure(with: model[indexPath.row])
     return cell
   }
   

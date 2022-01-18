@@ -34,16 +34,19 @@ final class MainWeatherViewController: UIViewController {
   // MARK: - UIViewController lifecycle methods
   override func viewDidLoad() {
     super.viewDidLoad()
-    setupLayouts()
     updateView()
+    setupLayouts()
     checkSettings()
     viewModel.startFetch()
-    viewModel.loadWeather()
   }
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    //TODO: сделать проверку времени раз в час для повторного запроса в сеть
+    /// проверка времени для повторного запроса в сеть
+    if viewModel.checkDate() {
+
+      viewModel.loadWeather()
+    }
   }
   
   // MARK: - Private functions

@@ -12,7 +12,7 @@ protocol CoreDataManagerProtocol {
   var modelName: String { get }
   var cityResultsPredicate: NSPredicate? { get set }
   func saveContext()
-  
+  func entityIsEmpty() -> Bool
 }
 
 //protocol CoreDataManagerListProtocol: CoreDataManagerProtocol {
@@ -108,19 +108,19 @@ class CoreDataManager: CoreDataManagerResultProtocol {
   
   
   /// Проверка наналичие данных в БД
-  //  func entityIsEmpty() -> Bool {
-  //    let request = CityList.createFetchRequest()
-  //    do {
-  //      let results = try managedContext.fetch(request)
-  //      if results.isEmpty {
-  //        return true
-  //      } else {
-  //        return false
-  //      }
-  //    } catch {
-  //      return false
-  //    }
-  //  }
+    func entityIsEmpty() -> Bool {
+      let request = MainInfo.createFetchRequest()
+      do {
+        let results = try managedContext.fetch(request)
+        if results.isEmpty {
+          return true
+        } else {
+          return false
+        }
+      } catch {
+        return false
+      }
+    }
   
   /// Сохранение добавленного города в КорДату
   func saveToList(city: SearchModel) {
@@ -164,6 +164,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
       weather.date = Int64(item.dt)
       weather.iconId = Int16(item.weather.first?.id ?? 0)
       weather.rain = Int16((item.pop ?? 0) * 100)
+      weather.name = list?.name ?? ""
       list?.insertIntoHourlyWeather(weather, at: index)
       weather.weather = list
     }

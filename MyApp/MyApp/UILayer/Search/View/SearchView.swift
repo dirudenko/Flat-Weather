@@ -68,6 +68,11 @@ class SearchView: UIView {
       loadingVC.isHidden = true
       cityListTableView.isHidden = false
       searchTableView.isHidden = true
+      if searchViewCellModel.coreDataManager.entityIsEmpty() {
+        backButton.isHidden = true
+      } else {
+        backButton.isHidden = false
+      }
     case .load:
       loadingVC.isHidden = false
       cityListTableView.isHidden = true
@@ -205,6 +210,9 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
       if editingStyle == .delete
       {
         searchViewCellModel.removeObject(at: indexPath.section)
+        if searchViewCellModel.coreDataManager.entityIsEmpty() {
+          backButton.isHidden = true
+        }
       }
     default: return
     }

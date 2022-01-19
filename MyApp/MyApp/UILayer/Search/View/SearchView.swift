@@ -11,10 +11,11 @@ import CoreData
 protocol SearchViewProtocol {
   func setViewFromSearch(fot city: [MainInfo], at index: Int)
   func setViewFromCityList(fot city: [MainInfo], at index: Int)
+  func backButtonTapped()
 }
 
 class SearchView: UIView {
-  
+  // MARK: - Private types
   private let searchBar: UISearchBar = {
     let searchBar = UISearchBar()
     searchBar.translatesAutoresizingMaskIntoConstraints = false
@@ -31,21 +32,21 @@ class SearchView: UIView {
   // private let animation = AnimationView()
   private var searchViewCellModel: SearchViewCellModelProtocol
   private(set) var loadingVC = LoadingView()
+  private(set) var backButton = Button(backgroundColor: UIColor(named: "backgroundColor")!, systemImage: "arrow.backward")
+  // MARK: - Public types
   var delegate: SearchViewProtocol?
   var city = [SearchModel](){
     didSet {
-      // print(city)
       searchTableView.reloadData()
     }
   }
-  
   var viewData: SearchViewData = .initial {
     didSet {
-      //  searchTableView.reloadData()
       setNeedsLayout()
     }
   }
-  
+  // MARK: - Initialization
+
   init(frame: CGRect, searchViewCellModel: SearchViewCellModelProtocol) {
     self.searchViewCellModel = searchViewCellModel
     super.init(frame: frame)
@@ -83,14 +84,17 @@ class SearchView: UIView {
       break
     }
   }
-  
+  // MARK: - Private functions
+
   private func setupLayouts() {
     addSubview(searchBar)
     addSubview(searchTableView)
     addSubview(cityListTableView)
     // addSubview(animation)
     addSubview(loadingVC)
+    addSubview(backButton)
     bringSubviewToFront(loadingVC)
+    backButton.addTarget(self, action: #selector(didTapBack), for: .touchDown)
     loadingVC.makeInvisible()
     searchBar.delegate = self
     searchTableView.delegate = self
@@ -105,10 +109,12 @@ class SearchView: UIView {
       self?.viewData = viewData
     }
   }
+  
+  @objc private func didTapBack() {
+    delegate?.backButtonTapped()
+  }
 }
-
-
-// MARK: - UIViewController delegates
+// MARK: - UITableView delegates
 extension SearchView: UITableViewDataSource, UITableViewDelegate {
   
   func numberOfSections(in tableView: UITableView) -> Int {
@@ -180,7 +186,6 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
     }
   }
   
-  
   func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
     switch tableView {
     case searchTableView:
@@ -191,7 +196,6 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
       return false
     }
   }
-  
   
   func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
     switch tableView {
@@ -206,6 +210,7 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
     }
   }
 }
+// MARK: - UITableView delegates
 
 extension SearchView: UISearchBarDelegate {
   func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -215,12 +220,6 @@ extension SearchView: UISearchBarDelegate {
   
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     searchViewCellModel.searchText(text: searchText)
-    //searchTableView.isHidden = false
-    //cityListTableView.isHidden = true
-    // searchTableView.reloadData()
-    //    if searchText.isEmpty {
-    //      viewData(.initial)
-    //    }
   }
 }
 
@@ -250,18 +249,19 @@ extension SearchView: NSFetchedResultsControllerDelegate {
         cityListTableView.insertSections(section, with: .fade)
       }
     case .update:
-      let cell = cityListTableView.cellForRow(at: indexPath!) as! CityListTableViewCell
-      let model = (searchViewCellModel.getObjects(at: indexPath!.section))!
-      cell.configure(with: model)
+      if let indexPath = indexPath {
+        guard let cell = cityListTableView.cellForRow(at: indexPath) as? CityListTableViewCell,
+              let model = (searchViewCellModel.getObjects(at: indexPath.section)) else { break }
+        cell.configure(with: model)
+      }
+      
     case .move:
       if let indexPath = indexPath {
         let section = indexPath.row
         cityListTableView.deleteSections([section], with: .fade)
       }
-      
       if let newIndexPath = newIndexPath {
         let section = IndexSet(integer: newIndexPath.section)
-        
         cityListTableView.insertSections(section, with: .fade)
       }
     default:
@@ -273,6 +273,7 @@ extension SearchView: NSFetchedResultsControllerDelegate {
     cityListTableView.endUpdates()
   }
 }
+// MARK: - Constraints
 
 extension SearchView {
   private func addConstraints() {
@@ -281,7 +282,7 @@ extension SearchView {
     
     NSLayoutConstraint.activate([
       
-      searchBar.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: adapted(dimensionSize: 9, to: .height)),
+      searchBar.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: adapted(dimensionSize: 9, to: .height)),
       searchBar.leftAnchor.constraint(equalTo: safeArea.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
       searchBar.rightAnchor.constraint(equalTo: safeArea.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
       searchBar.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 50, to: .height)),
@@ -296,6 +297,11 @@ extension SearchView {
       cityListTableView.rightAnchor.constraint(equalTo: safeArea.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
       cityListTableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
       
+      
+      backButton.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 16, to: .height)),
+      backButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
+      backButton.widthAnchor.constraint(equalToConstant: 32),
+      backButton.heightAnchor.constraint(equalToConstant: 32),
       //      animation.topAnchor.constraint(equalTo: self.centerYAnchor, constant: adapted(dimensionSize: -50, to: .height)),
       //      animation.leftAnchor.constraint(equalTo: self.centerXAnchor, constant: adapted(dimensionSize: -50, to: .width)),
       //      animation.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 200, to: .width)),

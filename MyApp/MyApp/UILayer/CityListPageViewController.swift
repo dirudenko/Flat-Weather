@@ -75,6 +75,7 @@ class CityListPageViewController: UIPageViewController {
       cityPage.append(vc)
     }
     setViewControllers([cityPage[currentIndex]], direction: .forward, animated: true, completion: nil)
+    self.navigationItem.setHidesBackButton(true, animated: false)
   }
 }
 

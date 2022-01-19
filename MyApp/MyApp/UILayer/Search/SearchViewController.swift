@@ -50,6 +50,7 @@ final class SearchViewController: UIViewController {
     searchView.backgroundColor = UIColor(named: "backgroundColor")
     view.backgroundColor = .systemBackground
     searchView.delegate = self
+    self.navigationItem.setHidesBackButton(true, animated: false)
   }
   
   private func updateView() {
@@ -74,6 +75,11 @@ extension SearchViewController: SearchViewProtocol {
     navigationController.setViewControllers([vc], animated: true)
     navigationController.modalPresentationStyle = .fullScreen
     present(navigationController, animated: false)
+  }
+  
+  func backButtonTapped() {
+    let vc = BuilderService.buildPageViewController()
+    navigationController?.pushViewController(vc, animated: true)
   }
 }
 // MARK: - UIViewController extensions

@@ -8,14 +8,15 @@
 import UIKit
 
 class SettingsViewController: UIViewController {
-  
+  // MARK: - Private types
   private let settingsView = SettingsView()
-  private var dataType = [String]()
   private var unitOption: UnitOptions?
-
+  // MARK: - Private variables
+  private var dataType = [String]()
   /// констрейнт для высоты таблицы
   private var flowHeightConstraint: NSLayoutConstraint?
-  
+  // MARK: - UIViewController lifecycle methods
+
   override func viewDidLoad() {
     super.viewDidLoad()
     setupViews()
@@ -28,14 +29,16 @@ class SettingsViewController: UIViewController {
     settingsView.layer.masksToBounds = true
     
   }
-  
+  // MARK: - Private functions
   private func setupViews() {
     view.backgroundColor = .systemBackground
+    self.navigationItem.setHidesBackButton(true, animated: false)
     view.addSubview(settingsView)
     settingsView.settingsTableView.delegate = self
     settingsView.settingsTableView.dataSource = self
     settingsView.unitsTableView.delegate = self
     settingsView.unitsTableView.dataSource = self
+    settingsView.delegate = self
   }
   
   private func setupConstraints() {
@@ -50,11 +53,17 @@ class SettingsViewController: UIViewController {
     flowHeightConstraint?.isActive = true
   }
 }
+// MARK: - UIViewController delegates
 
+extension SettingsViewController: SettingsViewProtocol {
+  func backButtonTapped() {
+    navigationController?.popViewController(animated: true)
+  }
+}
 
+// MARK: - UITableView delegates
 
 extension SettingsViewController: UITableViewDataSource, UITableViewDelegate {
-  
   func numberOfSections(in tableView: UITableView) -> Int {
     switch tableView {
     case settingsView.settingsTableView: return SettingsSections.allCases.count
@@ -130,7 +139,6 @@ extension SettingsViewController: UITableViewDataSource, UITableViewDelegate {
     tableView.deselectRow(at: indexPath, animated: true)
     switch tableView {
     case settingsView.settingsTableView:
-      // guard let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsTableViewCell", for: indexPath) as? SettingsTableViewCell else { return }
       let section = SettingsSections(rawValue: indexPath.section)
       
       switch section {
@@ -140,10 +148,8 @@ extension SettingsViewController: UITableViewDataSource, UITableViewDelegate {
           dataType.removeAll()
           Temperature.allCases.forEach { dataType.append($0.description) }
           unitOption = .temperature
-          
-          
-          view.layoutIfNeeded()
-          view.reloadInputViews()
+         // view.layoutIfNeeded()
+         // view.reloadInputViews()
           settingsView.unitsTableView.isHidden = false
           settingsView.unitsTableView.reloadData()
         case 1:

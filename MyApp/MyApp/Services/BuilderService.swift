@@ -10,7 +10,7 @@ import UIKit
 final class BuilderService {
   
   private static let networkManager: NetworkManagerProtocol = NetworkManager()
-  private static let coreDataManager: CoreDataManagerResultProtocol = CoreDataManager(modelName: "MyApp")
+  private static var coreDataManager: CoreDataManagerResultProtocol = CoreDataManager(modelName: "MyApp")
  
   
   static func buildRootViewController() -> UINavigationController {
@@ -27,9 +27,18 @@ final class BuilderService {
       navigationController = UINavigationController(rootViewController: viewController)
     }
     navigationController.setToolbarHidden(true, animated: false)
+
     return navigationController
   }
 
+  static func buildPageViewController() -> CityListPageViewController {
+    coreDataManager.cityResultsPredicate = nil
+    coreDataManager.loadSavedData()
+    let list = coreDataManager.fetchedResultsController.fetchedObjects ?? []
+    let vc = CityListPageViewController(for: list, index: 0)
+    return vc
+  }
+  
   static func buildMainWeatherViewController(city: MainInfo) -> MainWeatherViewController {
     let viewModel = MainWeatherViewModel(for: city, networkManager: networkManager, coreDataManager: coreDataManager)
     let viewController = MainWeatherViewController(viewModel: viewModel)

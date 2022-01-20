@@ -16,25 +16,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
     guard let windowScene = (scene as? UIWindowScene) else { return }
     let window = UIWindow(windowScene: windowScene)
-//    var viewController = UIViewController()
-//    var navigationController = UINavigationController()
-//    coreDataManager.loadSavedData()
-//    let list = coreDataManager.fetchedResultsController.fetchedObjects ?? []
-//    if list.isEmpty {
-//      viewController = SearchViewController()
-//      viewController.view.backgroundColor = UIColor(named: "backgroundColor")
-//      navigationController = UINavigationController(rootViewController: viewController)
-//    } else {
-//     // guard let mainInfo = list.first?.inList as? Set<MainInfo> else { return }
-//
-//      viewController = CityListPageViewController(for: list, index: 0)
-//      navigationController = UINavigationController(rootViewController: viewController)
-//
-//    }
-//    //let viewController = InitiateViewController(for: list, index: 0)
-//    navigationController.setToolbarHidden(true, animated: false)
-    
-    
     window.rootViewController = BuilderService.buildRootViewController()
     self.window = window
     window.makeKeyAndVisible()
@@ -48,6 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   }
   
   func sceneDidBecomeActive(_ scene: UIScene) {
+    
     // Called when the scene has moved from an inactive state to an active state.
     // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
   }

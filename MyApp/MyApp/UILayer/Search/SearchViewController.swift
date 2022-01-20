@@ -39,16 +39,15 @@ final class SearchViewController: UIViewController {
   
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
-    
     searchView.layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
     searchView.layer.masksToBounds = true
   }
   
   // MARK: - Private functions
   private func setupViews() {
+    view.backgroundColor = .systemBackground
     view.addSubview(searchView)
     searchView.backgroundColor = UIColor(named: "backgroundColor")
-    view.backgroundColor = .systemBackground
     searchView.delegate = self
     self.navigationItem.setHidesBackButton(true, animated: false)
   }

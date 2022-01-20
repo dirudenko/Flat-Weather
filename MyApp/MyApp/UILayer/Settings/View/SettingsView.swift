@@ -40,6 +40,8 @@ class SettingsView: UIView {
   private(set) var backButton = Button(backgroundColor: UIColor(named: "backgroundColor")!, systemImage: "arrow.backward")
   // MARK: - Public variables
   var delegate: SettingsViewProtocol?
+ // private var initialCenter: CGPoint = .zero
+
   // MARK: - Initialization  
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -59,10 +61,32 @@ class SettingsView: UIView {
     addSubview(backButton)
     backgroundColor = UIColor(named: "backgroundColor")
     backButton.addTarget(self, action: #selector(didTapBack), for: .touchDown)
+    let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didPan(_:)))
+addGestureRecognizer(panGestureRecognizer)
   }
   
   @objc private func didTapBack() {
     delegate?.backButtonTapped()
+  }
+  
+  @objc private func didPan(_ sender: UIPanGestureRecognizer) {
+    switch sender.state {
+        case .began:
+           break
+        case .changed:
+            let translation = sender.translation(in: self)
+
+            //self.center = CGPoint(x: initialCenter.x + translation.x,
+                                         // y: initialCenter.y + translation.y)
+      if translation.x > adapted(dimensionSize: 30, to: .width) {
+        delegate?.backButtonTapped()
+
+      }
+    case .ended:
+           break
+        default:
+            break
+        }
   }
   
   private func addConstraints() {

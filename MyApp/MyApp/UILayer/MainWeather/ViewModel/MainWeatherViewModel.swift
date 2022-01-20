@@ -71,7 +71,7 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
   func checkDate() -> Bool {
     let currentTimestamp = Date().timeIntervalSince1970
     let timestamp = Double(fetchedCity.topWeather?.date ?? 0)
-    if (currentTimestamp - timestamp) > 30 {
+    if (currentTimestamp - timestamp) > 3 {
       return true
     } else {
       return false

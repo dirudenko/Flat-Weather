@@ -20,7 +20,6 @@ final class BuilderService {
     let list = coreDataManager.fetchedResultsController.fetchedObjects ?? []
     if list.isEmpty {
       viewController = buildSearchViewController()
-      viewController.view.backgroundColor = UIColor(named: "backgroundColor")
       navigationController = UINavigationController(rootViewController: viewController)
     } else {
       viewController = CityListPageViewController(for: list, index: 0)
@@ -51,5 +50,4 @@ final class BuilderService {
     let viewController = SearchViewController(viewModel: viewModel, searchViewCellModel: searchViewCellModel)
     return viewController
   }
-
 }

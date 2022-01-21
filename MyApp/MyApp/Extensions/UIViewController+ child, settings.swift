@@ -23,24 +23,23 @@ extension UIViewController {
   }
   
   func checkSettings() {
-    let temperature: String? = UserDefaultsManager.get(forKey: "Temperature")
-    let wind: String? = UserDefaultsManager.get(forKey: "Wind")
-    let pressure: String? = UserDefaultsManager.get(forKey: "Atmospheric")
+    let temperature: Temperature? = UserDefaultsManager.get(forKey: "Temperature")
+    let wind: WindSpeed? = UserDefaultsManager.get(forKey: "Wind")
+    let pressure: Pressure? = UserDefaultsManager.get(forKey: "Pressure")
     
     if temperature == nil {
       let temperature: Temperature = .Celcius
-      UserDefaultsManager.set(temperature.description,forKey: "Temperature")
+      UserDefaultsManager.set(temperature,forKey: "Temperature")
     }
-    
     
     if wind == nil {
       let wind: WindSpeed = .kmh
-      UserDefaultsManager.set(wind.description,forKey: "Wind")
+      UserDefaultsManager.set(wind,forKey: "Wind")
     }
     
     if pressure == nil {
       let pressure: Pressure = .mbar
-      UserDefaultsManager.set(pressure.description,forKey: "Atmospheric")
+      UserDefaultsManager.set(pressure,forKey: "Pressure")
     }
   }
 }

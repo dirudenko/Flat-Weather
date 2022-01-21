@@ -37,12 +37,29 @@ class TableView: UITableView {
       backgroundColor = UIColor(named: "backgroundColor")
       separatorStyle = .none
       rowHeight = adapted(dimensionSize: 48, to: .height)
+      allowsSelection = false
+  
+    case .SettingsTableViewCell:
+      super.init(frame: .zero, style: .plain)
+      register(SettingsTableViewCell.self, forCellReuseIdentifier: "SettingsTableViewCell")
+      backgroundColor = UIColor(named: "backgroundColor")
+      separatorStyle = .none
+      rowHeight = adapted(dimensionSize: 32, to: .height)
+      isScrollEnabled = false
+      translatesAutoresizingMaskIntoConstraints = false
     }
-    
   }
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+  
+  func configureForSettings() {
+    self.backgroundColor = .white
+    self.separatorStyle = .none
+    self.rowHeight = adapted(dimensionSize: 32, to: .height)
+    self.layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
+    self.layer.masksToBounds = true
   }
   
   

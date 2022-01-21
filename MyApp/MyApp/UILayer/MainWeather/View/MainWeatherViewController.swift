@@ -44,7 +44,7 @@ final class MainWeatherViewController: UIViewController {
     super.viewDidAppear(animated)
     /// проверка времени для повторного запроса в сеть
     if viewModel.checkDate() {
-      viewModel.loadWeather()
+      //viewModel.loadWeather()
     }
   }
   
@@ -78,12 +78,11 @@ final class MainWeatherViewController: UIViewController {
 // MARK: - Delegates
 extension MainWeatherViewController: HeaderButtonsProtocol {
   func optionsButtonTapped() {
-    let settingsViewController = SettingsViewController()
+    let settingsViewController = BuilderService.buildSettingsViewController()
     navigationController?.pushViewController(settingsViewController, animated: true)
   }
   
   func plusButtonTapped() {
-    print("Plus button tapped")
     let searchViewController = BuilderService.buildSearchViewController()
     navigationController?.pushViewController(searchViewController, animated: true)
  }

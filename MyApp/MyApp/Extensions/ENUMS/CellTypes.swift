@@ -16,4 +16,5 @@ enum TableViewCellTypes {
   case CityListTableViewCell
   case StandartTableViewCell
   case WeeklyTableViewCell
+  case SettingsTableViewCell
 }

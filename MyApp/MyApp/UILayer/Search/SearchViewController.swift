@@ -11,11 +11,11 @@ final class SearchViewController: UIViewController {
   
   // MARK: - Private types
   private var searchView: SearchView!
-  private var viewModel: SearchViewModelProtocol
+  private var searchViewCellModel: SearchViewCellModelProtocol
   
   // MARK: - Initialization
-  init(viewModel: SearchViewModelProtocol, searchViewCellModel: SearchViewCellModelProtocol) {
-    self.viewModel = viewModel
+  init(searchViewCellModel: SearchViewCellModelProtocol) {
+    self.searchViewCellModel = searchViewCellModel
     self.searchView = SearchView(frame: .zero, searchViewCellModel: searchViewCellModel)
     super.init(nibName: nil, bundle: nil)
   }
@@ -30,7 +30,6 @@ final class SearchViewController: UIViewController {
     updateView()
     setupViews()
     setupConstraints()
-    viewModel.startFetch()
   }
   
   deinit {
@@ -53,7 +52,7 @@ final class SearchViewController: UIViewController {
   }
   
   private func updateView() {
-    viewModel.updateViewData = { [weak self] viewData in
+    searchViewCellModel.updateViewData = { [weak self] viewData in
       self?.searchView.viewData = viewData
     }
   }

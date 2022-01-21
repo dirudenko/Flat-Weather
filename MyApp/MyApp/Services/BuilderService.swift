@@ -12,7 +12,6 @@ final class BuilderService {
   private static let networkManager: NetworkManagerProtocol = NetworkManager()
   private static var coreDataManager: CoreDataManagerResultProtocol = CoreDataManager(modelName: "MyApp")
  
-  
   static func buildRootViewController() -> UINavigationController {
     var viewController = UIViewController()
     var navigationController = UINavigationController()
@@ -26,7 +25,6 @@ final class BuilderService {
       navigationController = UINavigationController(rootViewController: viewController)
     }
     navigationController.setToolbarHidden(true, animated: false)
-
     return navigationController
   }
 
@@ -45,9 +43,15 @@ final class BuilderService {
   }
   
   static func buildSearchViewController() -> UIViewController {
-    let viewModel = SearchViewModel(networkManager: networkManager, coreDataManager: coreDataManager)
     let searchViewCellModel = SearchViewCellModel(networkManager: networkManager)
-    let viewController = SearchViewController(viewModel: viewModel, searchViewCellModel: searchViewCellModel)
+    let viewController = SearchViewController(searchViewCellModel: searchViewCellModel)
     return viewController
   }
+  
+  static func buildSettingsViewController() -> SettingsViewController {
+    let viewModel = SettingsViewModel()
+    let viewController = SettingsViewController(viewModel: viewModel)
+    return viewController
+  }
+  
 }

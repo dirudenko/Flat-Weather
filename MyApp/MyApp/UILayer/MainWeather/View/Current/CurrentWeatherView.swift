@@ -12,7 +12,7 @@ protocol HeaderButtonsProtocol: AnyObject {
   func optionsButtonTapped()
 }
 
-class CurrentWeatherView: UIView {
+final class CurrentWeatherView: UIView {
   // MARK: - Private types
   private(set) lazy var collectionView = CurrentWeatherCollectionView(cellType: .WeatherCollectionViewCell)
   private(set) var weatherImage = MainImage(frame: .zero)
@@ -106,6 +106,9 @@ class CurrentWeatherView: UIView {
     bringSubviewToFront(loadingVC)
     addButton.addTarget(self, action: #selector(didTapAdd), for: .touchDown)
     optionsButton.addTarget(self, action: #selector(didTapOptions), for: .touchDown)
+    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+    weatherImage.isUserInteractionEnabled = true
+    weatherImage.addGestureRecognizer(tapGestureRecognizer)
     backgroundColor = UIColor(named: "backgroundColor")
     layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
     layer.masksToBounds = true
@@ -127,6 +130,13 @@ class CurrentWeatherView: UIView {
   
   @objc private func didTapAdd() {
     delegate?.plusButtonTapped()
+  }
+  
+  @objc private func imageTapped(tapGestureRecognizer: UITapGestureRecognizer)
+  {
+    //  let tappedImage = tapGestureRecognizer.view as! UIImageView
+    // TODO: Анимация перехода на экран с изображением погоды
+      print("IMAGE TAPPED")
   }
   
   private func configure(with model: MainInfo?) {
@@ -153,7 +163,7 @@ class CurrentWeatherView: UIView {
   
 }
 // MARK: - UIView delegates
-extension CurrentWeatherView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension CurrentWeatherView: UICollectionViewDataSource, UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return currentWeather != nil ? 4 : 0
   }

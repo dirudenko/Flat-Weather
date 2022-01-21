@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Pressure: Int, CustomStringConvertible, Codable, CaseIterable {
+enum Pressure: Int, Settings, CaseIterable {
   case mbar
   case atm
   case mmHg

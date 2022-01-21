@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum WindSpeed: Int, CustomStringConvertible, Codable, CaseIterable {
+enum WindSpeed: Int, Settings, CaseIterable {
   case kmh
   case milh
   case ms

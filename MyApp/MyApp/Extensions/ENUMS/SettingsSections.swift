@@ -34,14 +34,14 @@ enum UnitOptions: Int, CaseIterable, SectionType {
   var containsType: String {
     switch self {
     case .temperature:
-      let temperature: String? = UserDefaultsManager.get(forKey: "Temperature")
-      return temperature ?? "NO TEMP"
+      let temperature: Temperature? = UserDefaultsManager.get(forKey: "Temperature")
+      return temperature?.description ?? "Error"
     case .wind:
-      let wind: String? = UserDefaultsManager.get(forKey: "Wind")
-      return wind ?? "NO wind"
+      let wind: WindSpeed? = UserDefaultsManager.get(forKey: "Wind")
+      return wind?.description ?? "Error"
     case .pressure:
-      let pressure: String? = UserDefaultsManager.get(forKey: "Atmospheric")
-      return pressure ?? "NO pressure"
+      let pressure: Pressure? = UserDefaultsManager.get(forKey: "Pressure")
+      return pressure?.description ?? "Error"
     }
   }
   
@@ -55,7 +55,7 @@ enum UnitOptions: Int, CaseIterable, SectionType {
 }
 
 enum ExtraOptions: Int, CaseIterable, SectionType {
-  
+    
   case about
   case privacy
   

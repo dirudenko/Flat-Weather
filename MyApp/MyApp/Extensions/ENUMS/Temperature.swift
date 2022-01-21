@@ -7,7 +7,11 @@
 
 import Foundation
 
-enum Temperature: Int, CustomStringConvertible, Codable, CaseIterable {
+protocol Settings: CustomStringConvertible, Codable {
+  var description: String { get }
+}
+
+enum Temperature: Int, Settings, CaseIterable {
   case Celcius
   case Fahrenheit
   

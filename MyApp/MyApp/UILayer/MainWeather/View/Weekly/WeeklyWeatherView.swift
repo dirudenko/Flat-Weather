@@ -62,7 +62,7 @@ class WeeklyWeatherView: UIView {
   
   private func setupFonts() {
     dateLabel.font = AppFont.regular(size: 16)
-    dateLabel.text = "Forecats 7 days"
+    dateLabel.text = "Forecast 7 days"
   }
   
   private func addConstraints() {
@@ -93,7 +93,7 @@ extension WeeklyWeatherView: UITableViewDataSource, UITableViewDelegate {
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    tableView.deselectRow(at: indexPath, animated: true)
+    tableView.deselectRow(at: indexPath, animated: false)
   }
 }
 

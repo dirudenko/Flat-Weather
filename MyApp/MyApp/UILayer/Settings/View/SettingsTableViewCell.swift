@@ -12,7 +12,7 @@ class SettingsTableViewCell: UITableViewCell {
     private(set) var nameLabel = DescriptionLabel()
     private(set) var unitLabel = DescriptionLabel()
   
-    var unitsType: SectionType? {
+    var unitsType: UnitOptions? {
     didSet {
       nameLabel.text = unitsType?.description
       unitLabel.text = unitsType?.containsType
@@ -48,7 +48,6 @@ class SettingsTableViewCell: UITableViewCell {
         
         nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 6, to: .height)),
         nameLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
-       // nameLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 150, to: .width)),
         
         unitLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 6, to: .height)),
         unitLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 278, to: .width)),

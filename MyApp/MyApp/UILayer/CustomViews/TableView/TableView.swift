@@ -20,7 +20,7 @@ class TableView: UITableView {
       isHidden = false
       translatesAutoresizingMaskIntoConstraints = false
       register(CityListTableViewCell.self, forCellReuseIdentifier: "CityListTableViewCell")
-      backgroundColor = UIColor(named: "backgroundColor")
+      backgroundColor = UIColor.clear
       rowHeight = adapted(dimensionSize: 80, to: .height)
       
     case .StandartTableViewCell:
@@ -28,13 +28,13 @@ class TableView: UITableView {
       isHidden = true
       translatesAutoresizingMaskIntoConstraints = false
       register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-      backgroundColor = UIColor(named: "backgroundColor")
-      
+      backgroundColor = UIColor.clear
+
     case .WeeklyTableViewCell:
       super.init(frame: .zero, style: .plain)
       translatesAutoresizingMaskIntoConstraints = false
       register(WeeklyTableViewCell.self, forCellReuseIdentifier: "WeeklyTableViewCell")
-      backgroundColor = UIColor(named: "backgroundColor")
+      backgroundColor = UIColor.clear
       separatorStyle = .none
       rowHeight = adapted(dimensionSize: 48, to: .height)
       allowsSelection = false
@@ -42,7 +42,7 @@ class TableView: UITableView {
     case .SettingsTableViewCell:
       super.init(frame: .zero, style: .plain)
       register(SettingsTableViewCell.self, forCellReuseIdentifier: "SettingsTableViewCell")
-      backgroundColor = UIColor(named: "backgroundColor")
+      backgroundColor = UIColor.clear
       separatorStyle = .none
       rowHeight = adapted(dimensionSize: 32, to: .height)
       isScrollEnabled = false

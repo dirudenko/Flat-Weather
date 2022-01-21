@@ -22,7 +22,10 @@ class SearchView: UIView {
     searchBar.placeholder = "Найти город..."
     searchBar.searchTextField.layer.cornerRadius = 16
     searchBar.searchTextField.borderStyle = .roundedRect
-    searchBar.barTintColor = UIColor(named: "backgroundColor")
+    searchBar.barTintColor = .clear
+    searchBar.backgroundColor = UIColor.clear
+    searchBar.isTranslucent = true
+    searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
     searchBar.searchTextField.backgroundColor = .systemGray6
     return searchBar
   }()
@@ -33,6 +36,7 @@ class SearchView: UIView {
   private var searchViewCellModel: SearchViewCellModelProtocol
   private(set) var loadingVC = LoadingView()
   private(set) var backButton = Button(backgroundColor: UIColor(named: "backgroundColor")!, systemImage: "arrow.backward")
+  private let gradient = Constants.Design.gradient
   // MARK: - Public types
   var delegate: SearchViewProtocol?
   var city = [SearchModel](){
@@ -61,6 +65,7 @@ class SearchView: UIView {
   
   override func layoutSubviews() {
     super.layoutSubviews()
+    gradient.frame = self.bounds
     switch viewData {
     case .initial:
       // animation.removeFromSuperview()
@@ -107,6 +112,7 @@ class SearchView: UIView {
     cityListTableView.delegate = self
     cityListTableView.dataSource = self
     searchViewCellModel.coreDataManager.fetchedResultsController.delegate = self
+    layer.insertSublayer(gradient, at:0)
   }
   
   private func updateView() {
@@ -154,7 +160,7 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
     let headerView = UIView(frame: .zero)
-    headerView.backgroundColor = UIColor(named: "backgroundColor")
+    headerView.backgroundColor = .clear
     return headerView
   }
   
@@ -165,7 +171,7 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
       let cityName = "\(city[indexPath.row].name)"
       let cityCountry = "\(city[indexPath.row].country)"
       cell.textLabel?.text = cityName + " " + cityCountry
-      cell.backgroundColor = UIColor(named: "backgroundColor")
+      cell.backgroundColor = .clear
       return cell
       
     case cityListTableView:

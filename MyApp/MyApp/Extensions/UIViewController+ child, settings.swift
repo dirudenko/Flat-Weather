@@ -26,7 +26,7 @@ extension UIViewController {
     let temperature: Temperature? = UserDefaultsManager.get(forKey: "Temperature")
     let wind: WindSpeed? = UserDefaultsManager.get(forKey: "Wind")
     let pressure: Pressure? = UserDefaultsManager.get(forKey: "Pressure")
-    
+  //  UserDefaults.standard.set(true, forKey: "UnitChange")
     if temperature == nil {
       let temperature: Temperature = .Celcius
       UserDefaultsManager.set(temperature,forKey: "Temperature")

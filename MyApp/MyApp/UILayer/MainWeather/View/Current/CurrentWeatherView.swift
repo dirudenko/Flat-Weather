@@ -24,7 +24,8 @@ final class CurrentWeatherView: UIView {
   private var currentWeather: MainInfo?
   private(set) var addButton = Button(backgroundColor: UIColor(named: "backgroundColor")!, systemImage: "plus")
   private(set) var optionsButton = Button(backgroundColor: UIColor(named: "backgroundColor")!, systemImage: "line.3.horizontal")
- 
+  private let gradient = Constants.Design.gradient
+
   // MARK: - Private variables
   private(set) var collectionViewTopSmall: NSLayoutConstraint?
   private(set) var collectionViewTopBig: NSLayoutConstraint?
@@ -59,6 +60,8 @@ final class CurrentWeatherView: UIView {
       collectionView.reloadData()
     }
   }
+  
+  
   var delegate: HeaderButtonsProtocol?
   // MARK: - Initialization
   override init(frame: CGRect) {
@@ -74,6 +77,7 @@ final class CurrentWeatherView: UIView {
   /// Data Driven состояние для вьюшки
   override func layoutSubviews() {
     super.layoutSubviews()
+    gradient.frame = self.bounds
     switch viewData {
     case .initial:
       break
@@ -109,11 +113,11 @@ final class CurrentWeatherView: UIView {
     let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
     weatherImage.isUserInteractionEnabled = true
     weatherImage.addGestureRecognizer(tapGestureRecognizer)
-    backgroundColor = UIColor(named: "backgroundColor")
     layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
     layer.masksToBounds = true
     collectionView.delegate = self
     collectionView.dataSource = self
+    layer.insertSublayer(gradient, at:0)
   }
   
   private func setupFonts() {

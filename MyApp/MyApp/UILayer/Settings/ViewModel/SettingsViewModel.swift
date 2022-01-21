@@ -32,12 +32,15 @@ class SettingsViewModel: SettingsViewModelProtocol {
     case .temperature:
       let temperature = unit as? Temperature
       UserDefaultsManager.set(temperature,forKey: "Temperature")
+      UserDefaults.standard.set(true, forKey: "UnitChange")
     case .wind:
       let temperature = unit as? WindSpeed
       UserDefaultsManager.set(temperature,forKey: "Wind")
+      UserDefaults.standard.set(true, forKey: "UnitChange")
     case .pressure:
       let temperature = unit as? Pressure
       UserDefaultsManager.set(temperature,forKey: "Pressure")
+      UserDefaults.standard.set(true, forKey: "UnitChange")
     }
     updateViewData?(.success)
   }

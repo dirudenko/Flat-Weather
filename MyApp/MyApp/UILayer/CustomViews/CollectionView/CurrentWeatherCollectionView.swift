@@ -43,7 +43,7 @@ class CurrentWeatherCollectionView: UICollectionView {
     isScrollEnabled = false
     translatesAutoresizingMaskIntoConstraints = false
     register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "WeatherCollectionViewCell")
-    backgroundColor = UIColor(named: "backgroundColor")
+    backgroundColor = UIColor.clear
 
   }
   
@@ -51,8 +51,7 @@ class CurrentWeatherCollectionView: UICollectionView {
     isScrollEnabled = true
     translatesAutoresizingMaskIntoConstraints = false
     register(HourlyCollectionViewCell.self, forCellWithReuseIdentifier: "HourlyCollectionViewCell")
-    backgroundColor = UIColor(named: "backgroundColor")
-
+    backgroundColor = UIColor(named: "bottomColor")
   }
   
 

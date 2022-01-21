@@ -55,7 +55,7 @@ class WeeklyWeatherView: UIView {
   private func setupLayouts() {
     addSubview(weeklyListTableView)
     addSubview(dateLabel)
-    backgroundColor = UIColor(named: "backgroundColor")
+    backgroundColor = UIColor(named: "bottomColor")
     weeklyListTableView.delegate = self
     weeklyListTableView.dataSource = self
   }

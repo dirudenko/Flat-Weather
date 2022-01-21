@@ -15,7 +15,7 @@ class WeatherCollectionViewCell: UICollectionViewCell {
   // MARK: - Initialization
   override init(frame: CGRect) {
     super.init(frame: frame)
-    backgroundColor = UIColor(named: "backgroundColor")
+    backgroundColor = UIColor.clear
     setupLayouts()
     addConstraints()
     setupFonts()

@@ -26,7 +26,7 @@ class WeeklyTableViewCell: UITableViewCell {
     }
   // MARK: - Private functions
     private func setupLayouts() {
-      backgroundColor = UIColor(named: "backgroundColor")
+      backgroundColor = UIColor.clear
       addSubview(conditionImage)
       addSubview(temperatureLabel)
       addSubview(dayLabel)

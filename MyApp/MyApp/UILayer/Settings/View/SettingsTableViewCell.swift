@@ -31,7 +31,7 @@ class SettingsTableViewCell: UITableViewCell {
     }
       
     private func setupLayouts() {
-      backgroundColor = UIColor(named: "backgroundColor")
+      backgroundColor = .clear
       addSubview(nameLabel)
       addSubview(unitLabel)
     }

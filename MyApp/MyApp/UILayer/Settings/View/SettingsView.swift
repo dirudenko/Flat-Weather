@@ -18,7 +18,7 @@ class SettingsView: UIView {
   private let settingsTableView = TableView(celltype: .SettingsTableViewCell)
   
   private let unitsTableView = TableView(celltype: .StandartTableViewCell)
-
+  private let gradient = Constants.Design.gradient
   private let backButton = Button(backgroundColor: UIColor(named: "backgroundColor")!, systemImage: "arrow.backward")
   // MARK: - Public variables
   var delegate: SettingsViewProtocol?
@@ -52,6 +52,7 @@ class SettingsView: UIView {
   /// Data Driven состояние для вьюшки
   override func layoutSubviews() {
     super.layoutSubviews()
+    gradient.frame = self.bounds
     switch viewData {
     case .initial:
       break
@@ -74,15 +75,14 @@ class SettingsView: UIView {
     addSubview(settingsTableView)
     addSubview(unitsTableView)
     addSubview(backButton)
-    settingsTableView.backgroundColor = UIColor(named: "backgroundColor")
     settingsTableView.delegate = self
     settingsTableView.dataSource = self
     unitsTableView.delegate = self
     unitsTableView.dataSource = self
-    backgroundColor = UIColor(named: "backgroundColor")
     backButton.addTarget(self, action: #selector(didTapBack), for: .touchDown)
     let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didPan(_:)))
     addGestureRecognizer(panGestureRecognizer)
+    layer.insertSublayer(gradient, at:0)
   }
   
   @objc private func didTapBack() {
@@ -138,7 +138,7 @@ extension SettingsView: UITableViewDataSource, UITableViewDelegate {
     switch tableView {
     case settingsTableView:
       let view = UIView()
-      view.backgroundColor = UIColor(named: "backgroundColor")
+      view.backgroundColor = .clear
       let titleLabel = DescriptionLabel()
       titleLabel.font = AppFont.regular(size: 12)
       titleLabel.text = SettingsSections(rawValue: section)?.description
@@ -193,15 +193,15 @@ extension SettingsView: UITableViewDataSource, UITableViewDelegate {
         case 0:
           Temperature.allCases.forEach { dataType.append($0) }
           unitOption = .temperature
-          delegate?.unitPressed()
+        //  delegate?.unitPressed()
         case 1:
           WindSpeed.allCases.forEach { dataType.append($0) }
           unitOption = .wind
-          delegate?.unitPressed()
+        //  delegate?.unitPressed()
         case 2:
           Pressure.allCases.forEach {  dataType.append($0) }
           unitOption = .pressure
-          delegate?.unitPressed()
+        //  delegate?.unitPressed()
 
         default: break
         }

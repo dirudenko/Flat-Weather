@@ -32,7 +32,16 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
   
   func startFetch() {
     guard let data = fetchDataFromCoreData() else { return }
-    updateViewData?(.fetching(data))
+    let result = convertData(data: data)
+    coreDataManager.saveContext()
+    switch result {
+    case .success(let data):
+      updateViewData?(.fetching(data))
+      UserDefaultsManager.set(false,forKey: "UnitChange")
+    case .failure(_):
+      updateViewData?(.failure)
+    }
+    
   }
   
   private func updateCoreData(model: WeatherModel) {
@@ -86,6 +95,47 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
     guard let data = coreDataManager.fetchedResultsController.fetchedObjects?.first else { return nil }
     return data
   }
+  
+  private func convertData(data: MainInfo) -> Result<MainInfo, NetworkErrors> {
+    guard let temperature: Temperature = UserDefaultsManager.get(forKey: "Temperature"),
+    let wind: WindSpeed = UserDefaultsManager.get(forKey: "Wind"),
+          let pressure: Pressure = UserDefaultsManager.get(forKey: "Pressure") else { return .failure(.noData) }
+    let isChanged = UserDefaults.standard.object(forKey: "UnitChange") as? Bool
+    var convertedData = data
+
+    if isChanged == true {
+    switch temperature {
+    case .Celcius:
+      convertedData.topWeather?.temperature = Int16(data.topWeather!.temperature * 5 / 9 - 32)
+    case .Fahrenheit:
+      convertedData.topWeather?.temperature = Int16(data.topWeather!.temperature * 9 / 5 + 32)
+    }
+    
+    switch wind {
+    case .kmh:
+      break
+    case .milh:
+      break
+    case .ms:
+      break
+    }
+    
+    switch pressure {
+    case .mbar:
+      break
+    case .atm:
+      break
+    case .mmHg:
+      break
+    case .inHg:
+      break
+    case .hPa:
+      break
+    }
+    }
+    return .success(convertedData)
+  }
+  
 }
 
 

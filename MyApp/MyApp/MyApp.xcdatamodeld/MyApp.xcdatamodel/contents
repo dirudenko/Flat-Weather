@@ -42,6 +42,7 @@
     <entity name="TopBar" representedClassName="TopBar" syncable="YES">
         <attribute name="date" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="desc" attributeType="String"/>
+        <attribute name="feelsLike" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="iconId" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="pressure" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="temperature" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -64,7 +65,7 @@
         <element name="BottomBar" positionX="126" positionY="81" width="128" height="104"/>
         <element name="Hourly" positionX="135" positionY="90" width="128" height="134"/>
         <element name="MainInfo" positionX="-63" positionY="-18" width="128" height="179"/>
-        <element name="TopBar" positionX="314.96484375" positionY="75.43359375" width="128" height="119"/>
+        <element name="TopBar" positionX="314.96484375" positionY="75.43359375" width="128" height="134"/>
         <element name="Weekly" positionX="144" positionY="108" width="128" height="119"/>
     </elements>
 </model>

@@ -7,21 +7,35 @@
 
 import Foundation
 
-protocol SettingsViewModelProtocol {
+protocol SettingsViewModelProtocol: AnyObject {
   var updateViewData: ((SettingsViewData) -> ())? { get set }
+  func getSettings() -> SettingsModel?
   func changeSettings(unit: Settings, type: UnitOptions)
   func unitPressed()
 }
 
-class SettingsViewModel: SettingsViewModelProtocol {
+class SettingsViewModel: SettingsViewModelProtocol, SubcribeSettings {
+  func settingsChanged(unit: Settings, type: UnitOptions) {
+    changeSettings(unit: unit, type: type)
+  }
+  
+  
   
   // MARK: - Public variables
   var updateViewData: ((SettingsViewData) -> ())?
+  var observer: SettingsObserver
   // MARK: - Initialization
-  init() {
+  init(observer: SettingsObserver) {
     updateViewData?(.initial)
+    self.observer = observer
+    self.observer.register(observer: self)
   }
   // MARK: - Public functions
+  
+//  func model() -> SettingsModel {
+//    guard let model = getSettings() else { fatalError() }
+//    return model
+//  }
   
   func unitPressed() {
     updateViewData?(.loading)
@@ -31,18 +45,30 @@ class SettingsViewModel: SettingsViewModelProtocol {
     switch type {
     case .temperature:
       let temperature = unit as? Temperature
+      if temperature != UserDefaultsManager.get(forKey: "Temperature") {
       UserDefaultsManager.set(temperature,forKey: "Temperature")
-      UserDefaults.standard.set(true, forKey: "UnitChange")
+        observer.notifyObserver(unit: unit, type: type)
+      } else {
+        updateViewData?(.success)
+      }
     case .wind:
-      let temperature = unit as? WindSpeed
-      UserDefaultsManager.set(temperature,forKey: "Wind")
-      UserDefaults.standard.set(true, forKey: "UnitChange")
-    case .pressure:
-      let temperature = unit as? Pressure
-      UserDefaultsManager.set(temperature,forKey: "Pressure")
-      UserDefaults.standard.set(true, forKey: "UnitChange")
-    }
-    updateViewData?(.success)
+      let wind = unit as? WindSpeed
+     // UserDefaultsManager.set(temperature,forKey: "Wind")
+      if wind != UserDefaultsManager.get(forKey: "Wind") {
+      UserDefaultsManager.set(wind,forKey: "Wind")
+        observer.notifyObserver(unit: unit, type: type)
+      } else {
+        updateViewData?(.success)
+      }    case .pressure:
+      let pressure = unit as? Pressure
+     // UserDefaultsManager.set(temperature,forKey: "Pressure")
+      if pressure != UserDefaultsManager.get(forKey: "Pressure") {
+      UserDefaultsManager.set(pressure,forKey: "Pressure")
+        observer.notifyObserver(unit: unit, type: type)
+      } else {
+        updateViewData?(.success)
+      }    }
+   // updateViewData?(.success)
   }
   // MARK: - Private functions
   func getSettings() -> SettingsModel? {

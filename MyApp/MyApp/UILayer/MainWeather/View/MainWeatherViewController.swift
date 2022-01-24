@@ -37,15 +37,14 @@ final class MainWeatherViewController: UIViewController {
     updateView()
     setupLayouts()
     checkSettings()
-    //viewModel.startFetch()
+    viewModel.startFetch()
   }
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     /// проверка времени для повторного запроса в сеть
-    viewModel.startFetch()
     if viewModel.checkDate() {
-      //viewModel.loadWeather()
+      viewModel.loadWeather()
     }
   }
   

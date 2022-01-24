@@ -177,6 +177,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
                                             in: managedContext)!
     let weather = TopBar(entity: entity, insertInto: managedContext)
     weather.temperature = Int16(data.current.temp)
+    weather.feelsLike = Int16(data.current.feelsLike)
     weather.date = Int64(data.current.dt)
     weather.iconId = Int16(data.current.weather.first?.id ?? 0)
     weather.desc = data.current.weather.first?.weatherDescription

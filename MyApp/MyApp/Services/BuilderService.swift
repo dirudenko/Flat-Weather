@@ -11,6 +11,7 @@ final class BuilderService {
   
   private static let networkManager: NetworkManagerProtocol = NetworkManager()
   private static var coreDataManager: CoreDataManagerResultProtocol = CoreDataManager(modelName: "MyApp")
+  private static let settingsObserver = SettingsObserver()
  
   static func buildRootViewController() -> UINavigationController {
     var viewController = UIViewController()
@@ -37,7 +38,7 @@ final class BuilderService {
   }
   
   static func buildMainWeatherViewController(city: MainInfo) -> MainWeatherViewController {
-    let viewModel = MainWeatherViewModel(for: city, networkManager: networkManager, coreDataManager: coreDataManager)
+    let viewModel = MainWeatherViewModel(for: city, networkManager: networkManager, coreDataManager: coreDataManager, observer: settingsObserver)
     let viewController = MainWeatherViewController(viewModel: viewModel)
     return viewController
   }
@@ -49,7 +50,7 @@ final class BuilderService {
   }
   
   static func buildSettingsViewController() -> SettingsViewController {
-    let viewModel = SettingsViewModel()
+    let viewModel = SettingsViewModel(observer: settingsObserver)
     let viewController = SettingsViewController(viewModel: viewModel)
     return viewController
   }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol MainWeatherViewModelProtocol {
+protocol MainWeatherViewModelProtocol: AnyObject {
   var updateViewData: ((MainViewData) ->())? { get set }
   var networkManager: NetworkManagerProtocol { get }
   var coreDataManager: CoreDataManagerResultProtocol { get }
@@ -22,26 +22,21 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
   var updateViewData: ((MainViewData) -> ())?
   var coreDataManager: CoreDataManagerResultProtocol
   private var fetchedCity: MainInfo
+  var observer: SettingsObserver
   
-  init(for list: MainInfo, networkManager: NetworkManagerProtocol, coreDataManager: CoreDataManagerResultProtocol) {
+  
+  init(for list: MainInfo, networkManager: NetworkManagerProtocol, coreDataManager: CoreDataManagerResultProtocol, observer: SettingsObserver) {
     updateViewData?(.initial)
     self.coreDataManager = coreDataManager
     self.networkManager = networkManager
     self.fetchedCity = list
+    self.observer = observer
+    self.observer.register(observer: self)
   }
   
   func startFetch() {
     guard let data = fetchDataFromCoreData() else { return }
-    let result = convertData(data: data)
-    coreDataManager.saveContext()
-    switch result {
-    case .success(let data):
-      updateViewData?(.fetching(data))
-      UserDefaultsManager.set(false,forKey: "UnitChange")
-    case .failure(_):
-      updateViewData?(.failure)
-    }
-    
+    updateViewData?(.fetching(data))
   }
   
   private func updateCoreData(model: WeatherModel) {
@@ -80,7 +75,7 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
   func checkDate() -> Bool {
     let currentTimestamp = Date().timeIntervalSince1970
     let timestamp = Double(fetchedCity.topWeather?.date ?? 0)
-    if (currentTimestamp - timestamp) > 3 {
+    if (currentTimestamp - timestamp) > 3600 {
       return true
     } else {
       return false
@@ -96,14 +91,13 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
     return data
   }
   
-  private func convertData(data: MainInfo) -> Result<MainInfo, NetworkErrors> {
+  private func convertData(data: MainInfo, type: UnitOptions) -> Result<MainInfo, NetworkErrors> {
     guard let temperature: Temperature = UserDefaultsManager.get(forKey: "Temperature"),
-    let wind: WindSpeed = UserDefaultsManager.get(forKey: "Wind"),
+          let wind: WindSpeed = UserDefaultsManager.get(forKey: "Wind"),
           let pressure: Pressure = UserDefaultsManager.get(forKey: "Pressure") else { return .failure(.noData) }
-    let isChanged = UserDefaults.standard.object(forKey: "UnitChange") as? Bool
-    var convertedData = data
-
-    if isChanged == true {
+    
+    let convertedData = data
+    
     switch temperature {
     case .Celcius:
       convertedData.topWeather?.temperature = Int16(data.topWeather!.temperature * 5 / 9 - 32)
@@ -132,10 +126,39 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
     case .hPa:
       break
     }
-    }
+    
     return .success(convertedData)
+    
   }
-  
 }
-
+extension MainWeatherViewModel: SubcribeSettings {
+  func settingsChanged(unit: Settings, type: UnitOptions) {
+    let data = fetchDataFromCoreData()
+    let result = convertData(data: data!, type: type)
+    switch result {
+    case .success(let data):
+      updateViewData?(.fetching(data))
+      coreDataManager.saveContext()
+    case .failure(_):
+      updateViewData?(.failure)
+    }
+    //      guard let temperature: Temperature = UserDefaultsManager.get(forKey: "Temperature") else { return  }
+    //
+    //    let data = fetchDataFromCoreData()
+    //
+    //
+    //      switch temperature {
+    //      case .Celcius:
+    //        data?.topWeather?.temperature = Int16((data?.topWeather!.temperature)! * 5 / 9 - 32)
+    //      case .Fahrenheit:
+    //        data?.topWeather?.temperature = Int16((data?.topWeather!.temperature)! * 9 / 5 + 32)
+    //      }
+    //    coreDataManager.saveContext()
+    //
+    //    updateViewData?(.success(data!))
+    //  }
+    
+    
+  }
+}
 

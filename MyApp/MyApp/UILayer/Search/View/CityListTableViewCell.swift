@@ -34,6 +34,7 @@ class CityListTableViewCell: UITableViewCell {
     addSubview(nameLabel)
     addSubview(descriptionLabel)
     backgroundColor = .white
+    descriptionLabel.textAlignment = .center
   }
   
   private func setupFonts() {
@@ -69,13 +70,13 @@ class CityListTableViewCell: UITableViewCell {
       conditionImage.heightAnchor.constraint(equalToConstant: imageSize),
       
       temperatureLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: adapted(dimensionSize: 4, to: .height)),
-      temperatureLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 14, to: .width)),
+      temperatureLabel.leftAnchor.constraint(equalTo: nameLabel.leftAnchor),
       temperatureLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: adapted(dimensionSize: 24, to: .height)),
       temperatureLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 44, to: .width)),
       temperatureLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 14, to: .height)),
       
       descriptionLabel.topAnchor.constraint(equalTo: conditionImage.bottomAnchor, constant: adapted(dimensionSize: 2, to: .height)),
-      descriptionLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 248, to: .width)),
+      descriptionLabel.centerXAnchor.constraint(equalTo: conditionImage.centerXAnchor),
       // descriptionLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: adapted(dimensionSize: 16, to: .width)),
       descriptionLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 62, to: .width)),
       descriptionLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 14, to: .height))
@@ -84,7 +85,7 @@ class CityListTableViewCell: UITableViewCell {
   
   func configure(with model: MainInfo) {
     descriptionLabel.text = model.topWeather?.desc
-    temperatureLabel.text = "\(Int(model.topWeather?.temperature ?? 0))°"
+    temperatureLabel.text = "\(Int(model.topWeather?.temperature ?? 0))°/\(Int(model.topWeather?.feelsLike ?? 0))"
     nameLabel.text = model.name
     
     var imageName =  IconHadler.iconDictionary.keyedValue(key: Int(model.topWeather?.iconId ?? 0))

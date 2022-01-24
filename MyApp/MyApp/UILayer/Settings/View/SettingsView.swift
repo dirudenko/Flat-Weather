@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol SettingsViewProtocol {
+protocol SettingsViewProtocol: AnyObject {
   func backButtonTapped()
   func unitChanged(unit: Settings, type: UnitOptions?)
   func unitPressed()
@@ -19,7 +19,7 @@ class SettingsView: UIView {
   
   private let unitsTableView = TableView(celltype: .StandartTableViewCell)
   private let gradient = Constants.Design.gradient
-  private let backButton = Button(backgroundColor: UIColor(named: "backgroundColor")!, systemImage: "arrow.backward")
+  private let backButton = Button(systemImage: "arrow.backward")
   // MARK: - Public variables
   var delegate: SettingsViewProtocol?
   
@@ -193,15 +193,15 @@ extension SettingsView: UITableViewDataSource, UITableViewDelegate {
         case 0:
           Temperature.allCases.forEach { dataType.append($0) }
           unitOption = .temperature
-        //  delegate?.unitPressed()
+          delegate?.unitPressed()
         case 1:
           WindSpeed.allCases.forEach { dataType.append($0) }
           unitOption = .wind
-        //  delegate?.unitPressed()
+          delegate?.unitPressed()
         case 2:
           Pressure.allCases.forEach {  dataType.append($0) }
           unitOption = .pressure
-        //  delegate?.unitPressed()
+          delegate?.unitPressed()
 
         default: break
         }

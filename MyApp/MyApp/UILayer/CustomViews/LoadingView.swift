@@ -11,6 +11,7 @@ class LoadingView: UIView {
   
   override init(frame: CGRect) {
     super.init(frame: frame)
+    translatesAutoresizingMaskIntoConstraints = false
     addSpinner()
   }
   
@@ -21,7 +22,6 @@ class LoadingView: UIView {
   
   
    private func addSpinner() {
-  
     let spinner = UIActivityIndicatorView(style: .large)
     spinner.color = .systemGray
     spinner.translatesAutoresizingMaskIntoConstraints = false
@@ -35,5 +35,9 @@ class LoadingView: UIView {
   
   func makeInvisible() {
     self.isHidden = true
+  }
+  
+  func makeVisible() {
+    self.isHidden = false
   }
 }

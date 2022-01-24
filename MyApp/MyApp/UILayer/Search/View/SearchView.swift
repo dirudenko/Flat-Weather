@@ -8,7 +8,7 @@
 import UIKit
 import CoreData
 
-protocol SearchViewProtocol {
+protocol SearchViewProtocol: AnyObject {
   func setViewFromSearch(fot city: [MainInfo], at index: Int)
   func setViewFromCityList(fot city: [MainInfo], at index: Int)
   func backButtonTapped()
@@ -35,7 +35,7 @@ class SearchView: UIView {
   // private let animation = AnimationView()
   private var searchViewCellModel: SearchViewCellModelProtocol
   private(set) var loadingVC = LoadingView()
-  private(set) var backButton = Button(backgroundColor: UIColor(named: "backgroundColor")!, systemImage: "arrow.backward")
+  private(set) var backButton = Button(systemImage: "arrow.backward")
   private let gradient = Constants.Design.gradient
   // MARK: - Public types
   var delegate: SearchViewProtocol?

@@ -22,8 +22,8 @@ final class CurrentWeatherView: UIView {
   private(set) var conditionLabel = DescriptionLabel()
   private(set) var loadingVC = LoadingView()
   private var currentWeather: MainInfo?
-  private(set) var addButton = Button(backgroundColor: UIColor(named: "backgroundColor")!, systemImage: "plus")
-  private(set) var optionsButton = Button(backgroundColor: UIColor(named: "backgroundColor")!, systemImage: "line.3.horizontal")
+  private(set) var addButton = Button(systemImage: "plus")
+  private(set) var optionsButton = Button(systemImage: "line.3.horizontal")
   private let gradient = Constants.Design.gradient
 
   // MARK: - Private variables
@@ -53,6 +53,8 @@ final class CurrentWeatherView: UIView {
   private(set) var conditionLabelLeftBig: NSLayoutConstraint?
   private(set) var conditionLabelLeftSmall: NSLayoutConstraint?
   private var topPadding = adapted(dimensionSize: 444, to: .height)
+  lazy var shadowView = UIView()
+  
   // MARK: - Public variables
   var viewData: MainViewData = .initial {
     didSet {
@@ -69,6 +71,7 @@ final class CurrentWeatherView: UIView {
     setupLayouts()
     setupConstraints()
     setupFonts()
+    
   }
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
@@ -77,6 +80,7 @@ final class CurrentWeatherView: UIView {
   /// Data Driven состояние для вьюшки
   override func layoutSubviews() {
     super.layoutSubviews()
+    shadowView.frame = bounds
     gradient.frame = self.bounds
     switch viewData {
     case .initial:
@@ -98,6 +102,7 @@ final class CurrentWeatherView: UIView {
   }
   // MARK: - Private functions
   private func setupLayouts() {
+  
     addSubview(weatherImage)
     addSubview(dateLabel)
     addSubview(cityNameLabel)
@@ -107,6 +112,7 @@ final class CurrentWeatherView: UIView {
     addSubview(addButton)
     addSubview(loadingVC)
     addSubview(optionsButton)
+    backgroundColor = UIColor(named: "bottomColor")
     bringSubviewToFront(loadingVC)
     addButton.addTarget(self, action: #selector(didTapAdd), for: .touchDown)
     optionsButton.addTarget(self, action: #selector(didTapOptions), for: .touchDown)
@@ -119,6 +125,8 @@ final class CurrentWeatherView: UIView {
     collectionView.dataSource = self
     layer.insertSublayer(gradient, at:0)
   }
+  
+  
   
   private func setupFonts() {
     dateLabel.font = AppFont.regular(size: 16)
@@ -197,7 +205,6 @@ extension CurrentWeatherView {
     
     let imageSizeBig: CGFloat = adapted(dimensionSize: 240, to: .height)
     let imageSizeSmall: CGFloat = adapted(dimensionSize: 160, to: .height)
-    loadingVC.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
       
       addButton.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 16, to: .height)),

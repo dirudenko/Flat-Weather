@@ -8,36 +8,31 @@
 import UIKit
 
 class Button: UIButton {
-
-    
-  override init(frame: CGRect) {
-      super.init(frame: frame)
-      configure()
-  }
   
+  
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    configure()
+  }
   
   required init?(coder: NSCoder) {
-      fatalError("init(coder:) has not been implemented")
+    fatalError("init(coder:) has not been implemented")
   }
   
-  
-  init(backgroundColor: UIColor, systemImage: String) {
-      super.init(frame: .zero)
-      //self.backgroundColor = backgroundColor
-      if let image = UIImage(systemName: systemImage)?.withTintColor(.white, renderingMode: .alwaysOriginal) {
+  init( systemImage: String) {
+    super.init(frame: .zero)
+    if let image = UIImage(systemName: systemImage)?.withTintColor(.white, renderingMode: .alwaysOriginal) {
       setImage(image, for: .normal)
     }
-      configure()
+    configure()
   }
   
-  
   private func configure() {
-      //layer.cornerRadius      = 10
-     // setTitleColor(.white, for: .normal)
+    //layer.cornerRadius      = 10
+    // setTitleColor(.white, for: .normal)
     //  titleLabel?.font        = UIFont.preferredFont(forTextStyle: .headline)
     imageView?.contentMode = .scaleToFill
-
-   // backgroundColor = .black
-      translatesAutoresizingMaskIntoConstraints = false
+    backgroundColor = .clear
+    translatesAutoresizingMaskIntoConstraints = false
   }
 }

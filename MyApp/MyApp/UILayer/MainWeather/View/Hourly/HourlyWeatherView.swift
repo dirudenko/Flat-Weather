@@ -46,9 +46,11 @@ class HourlyWeatherView: UIView {
       loadingVC.isHidden = false
     case .fetching(let weatherModel):
       hourlyWeather = weatherModel
+      dateLabel.text = "TEST"
       loadingVC.makeInvisible()
     case .success(let weatherModel):
       loadingVC.makeInvisible()
+      dateLabel.text = "TEST"
       hourlyWeather = weatherModel
     case .failure:
       // TODO: Show Error
@@ -69,9 +71,7 @@ class HourlyWeatherView: UIView {
     collectionView.dataSource = self
   }
   
-  private func addConstraints() {
-    loadingVC.translatesAutoresizingMaskIntoConstraints = false
-    
+  private func addConstraints() {    
     NSLayoutConstraint.activate([
       
       dateLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 9, to: .height)),

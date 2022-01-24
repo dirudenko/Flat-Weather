@@ -23,7 +23,7 @@ class CurrentWeatherCollectionView: UICollectionView {
       layout.sectionInset = UIEdgeInsets(top: 0, left: adapted(dimensionSize: 16, to: .width), bottom: 0, right: 0)
       layout.itemSize = CGSize(width: adapted(dimensionSize: 72, to: .width), height: adapted(dimensionSize: 104, to: .height))
       layout.scrollDirection = .horizontal
-      let frame = CGRect(x: adapted(dimensionSize: 0, to: .width), y: adapted(dimensionSize: 36, to: .height), width: adapted(dimensionSize: 390, to: .width), height: adapted(dimensionSize: 104, to: .height))
+      let frame = CGRect(x: adapted(dimensionSize: 0, to: .width), y: adapted(dimensionSize: 16, to: .height), width: adapted(dimensionSize: 390, to: .width), height: adapted(dimensionSize: 104, to: .height))
       super.init(frame: frame, collectionViewLayout: layout)
       configureForHourlyCollectionViewCell()
       
@@ -32,7 +32,7 @@ class CurrentWeatherCollectionView: UICollectionView {
       layout.sectionInset = UIEdgeInsets(top: adapted(dimensionSize: 17, to: .height), left: adapted(dimensionSize: 22, to: .width), bottom: adapted(dimensionSize: 17, to: .height), right: adapted(dimensionSize: 22, to: .width))
       layout.itemSize = CGSize(width: adapted(dimensionSize: 122, to: .width), height: adapted(dimensionSize: 32, to: .height))
       super.init(frame: .zero, collectionViewLayout: layout)
-      register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "WeatherCollectionViewCell")
+      //register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "WeatherCollectionViewCell")
       configureForWeatherCollectionViewCell()
     }
     

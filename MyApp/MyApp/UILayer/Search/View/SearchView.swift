@@ -12,6 +12,7 @@ protocol SearchViewProtocol: AnyObject {
   func setViewFromSearch(fot city: [MainInfo], at index: Int)
   func setViewFromCityList(fot city: [MainInfo], at index: Int)
   func backButtonTapped()
+  func didEdit(at section: Int)
 }
 
 class SearchView: UIView {
@@ -38,7 +39,7 @@ class SearchView: UIView {
   private(set) var backButton = Button(systemImage: "arrow.backward")
   private let gradient = Constants.Design.gradient
   // MARK: - Public types
-  var delegate: SearchViewProtocol?
+  weak var delegate: SearchViewProtocol?
   var city = [SearchModel](){
     didSet {
       searchTableView.reloadData()
@@ -189,7 +190,7 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
     switch tableView {
     case searchTableView:
       let model = searchViewCellModel.setCity(model: city[indexPath.row], for: .StandartTableViewCell)
-      delegate?.setViewFromCityList(fot: model, at: model.count - 1)
+      delegate?.setViewFromSearch(fot: model, at: model.count - 1)
     case cityListTableView:
       let model = searchViewCellModel.setCity(model: nil, for: .CityListTableViewCell)
       delegate?.setViewFromCityList(fot: model, at: indexPath.section)
@@ -254,7 +255,7 @@ extension SearchView: NSFetchedResultsControllerDelegate {
       if let indexPath = indexPath {
         let section = indexPath.row
         cityListTableView.deleteSections([section], with: .fade)
-        
+        delegate?.didEdit(at: section)
       }
     case .insert:
       if let indexPath = newIndexPath {

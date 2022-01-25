@@ -64,7 +64,7 @@ final class CurrentWeatherView: UIView {
   }
   
   
-  var delegate: HeaderButtonsProtocol?
+  weak var delegate: HeaderButtonsProtocol?
   // MARK: - Initialization
   override init(frame: CGRect) {
     super.init(frame: frame)

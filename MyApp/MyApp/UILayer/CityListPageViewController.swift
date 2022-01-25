@@ -12,18 +12,21 @@ class CityListPageViewController: UIPageViewController {
   // MARK: - Private types
   private let pageControl = UIPageControl()
   /// Список городов, сохраненных в БД
-  private let list: [MainInfo]
+  private var list: [MainInfo]
   /// Массив контроллеров с городами из list с прогнозами погоды
   private var cityPage = [MainWeatherViewController]()
+  private let observer: SearchObserver
   // MARK: - Private variables
   /// Индекс города, показанного на экране
   private var currentIndex: Int
   
   // MARK: - Initialization
-  init(for list: [MainInfo], index: Int) {
+  init(for list: [MainInfo], index: Int, observer: SearchObserver) {
     self.list = list
     self.currentIndex = index
+    self.observer = observer
     super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+    observer.register(observer: self)
   }
   
   required init?(coder: NSCoder) {
@@ -37,8 +40,9 @@ class CityListPageViewController: UIPageViewController {
     configurePageControl()
   }
   
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    
   }
   
   override func viewDidLayoutSubviews() {
@@ -70,11 +74,12 @@ class CityListPageViewController: UIPageViewController {
   private func setupPageController() {
     self.dataSource = self
     self.delegate = self
+  //  cityPage.removeAll()
     list.forEach {
       let vc = BuilderService.buildMainWeatherViewController(city: $0)
       cityPage.append(vc)
     }
-    setViewControllers([cityPage[currentIndex]], direction: .forward, animated: true, completion: nil)
+    setViewControllers([cityPage[currentIndex]], direction: .forward, animated: false, completion: nil)
     self.navigationItem.setHidesBackButton(true, animated: false)
   }
 }
@@ -109,5 +114,19 @@ extension CityListPageViewController: UIPageViewControllerDataSource, UIPageView
   
   func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
     pageControl.isHidden = true
+  }
+}
+
+extension CityListPageViewController: SubcribeSearch {
+  func delete(at index: Int) {
+//    let vc  = BuilderService.buildPageViewController()
+//    let navigationController = UINavigationController(rootViewController: vc)
+//    navigationController.setViewControllers([vc], animated: true)
+//    navigationController.modalPresentationStyle = .fullScreen
+//    present(navigationController, animated: false)
+  //  let vc = BuilderService.buildPageViewController()
+  //  navigationController?.pushViewController(vc, animated: true)
+   // let vc = BuilderService.buildPageViewController()
+  //  navigationController?.setViewControllers([vc], animated: true)
   }
 }

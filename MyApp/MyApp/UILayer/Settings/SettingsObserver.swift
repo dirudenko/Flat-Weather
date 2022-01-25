@@ -34,3 +34,6 @@ class SettingsObserver {
   }
 }
 
+//struct WeakSubscriber {
+//  weak var value: SubcribeSettings?
+//}

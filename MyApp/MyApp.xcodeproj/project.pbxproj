@@ -41,6 +41,7 @@
 		692080FD279AFDDF00B2C1E2 /* UIView + Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692080FC279AFDDF00B2C1E2 /* UIView + Ext.swift */; };
 		692080FF279E8EBB00B2C1E2 /* SearchViewTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692080FE279E8EBB00B2C1E2 /* SearchViewTableViewDataSource.swift */; };
 		69208101279EA93900B2C1E2 /* SettingsObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69208100279EA93900B2C1E2 /* SettingsObserver.swift */; };
+		69208103279ED38E00B2C1E2 /* DataConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69208102279ED38E00B2C1E2 /* DataConverter.swift */; };
 		6927F4F4277B1C04004DDAF4 /* WeeklyWeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6927F4F3277B1C04004DDAF4 /* WeeklyWeatherView.swift */; };
 		6927F4F7277C56A4004DDAF4 /* WeeklyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6927F4F6277C56A4004DDAF4 /* WeeklyTableViewCell.swift */; };
 		6927F4FB277CE337004DDAF4 /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6927F4FA277CE337004DDAF4 /* WeatherModel.swift */; };
@@ -86,6 +87,7 @@
 		69914011276BB98C003A64E6 /* String + capitalize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69914010276BB98C003A64E6 /* String + capitalize.swift */; };
 		69914015276C7CB1003A64E6 /* HourlyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69914014276C7CB1003A64E6 /* HourlyCollectionViewCell.swift */; };
 		69914017276C7D19003A64E6 /* HourlyWeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69914016276C7D19003A64E6 /* HourlyWeatherView.swift */; };
+		69A4C114279FCFBE00C8AA27 /* SearchObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A4C113279FCFBE00C8AA27 /* SearchObserver.swift */; };
 		69D074A42771F2DA00B901E5 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D074A32771F2DA00B901E5 /* Device.swift */; };
 		69D074A62771F4CE00B901E5 /* Dimension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D074A52771F4CE00B901E5 /* Dimension.swift */; };
 		69D074A82771F4FF00B901E5 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D074A72771F4FF00B901E5 /* Font.swift */; };
@@ -158,6 +160,7 @@
 		692080FC279AFDDF00B2C1E2 /* UIView + Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Ext.swift"; sourceTree = "<group>"; };
 		692080FE279E8EBB00B2C1E2 /* SearchViewTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewTableViewDataSource.swift; sourceTree = "<group>"; };
 		69208100279EA93900B2C1E2 /* SettingsObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsObserver.swift; sourceTree = "<group>"; };
+		69208102279ED38E00B2C1E2 /* DataConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataConverter.swift; sourceTree = "<group>"; };
 		6927F4F3277B1C04004DDAF4 /* WeeklyWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyWeatherView.swift; sourceTree = "<group>"; };
 		6927F4F6277C56A4004DDAF4 /* WeeklyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyTableViewCell.swift; sourceTree = "<group>"; };
 		6927F4FA277CE337004DDAF4 /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
@@ -203,6 +206,7 @@
 		69914010276BB98C003A64E6 /* String + capitalize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String + capitalize.swift"; sourceTree = "<group>"; };
 		69914014276C7CB1003A64E6 /* HourlyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyCollectionViewCell.swift; sourceTree = "<group>"; };
 		69914016276C7D19003A64E6 /* HourlyWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherView.swift; sourceTree = "<group>"; };
+		69A4C113279FCFBE00C8AA27 /* SearchObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchObserver.swift; sourceTree = "<group>"; };
 		69D074A32771F2DA00B901E5 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 		69D074A52771F4CE00B901E5 /* Dimension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimension.swift; sourceTree = "<group>"; };
 		69D074A72771F4FF00B901E5 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
@@ -566,6 +570,7 @@
 				6976E4532791F1440069177A /* Model */,
 				6927F5132786E761004DDAF4 /* SearchViewController.swift */,
 				69D074BE27748AE400B901E5 /* View */,
+				69A4C113279FCFBE00C8AA27 /* SearchObserver.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -591,6 +596,7 @@
 				69D074AE2771F58F00B901E5 /* AdaptiveLayoutHelper.swift */,
 				69D074B02771F5E900B901E5 /* AdaptiveConstraints.swift */,
 				692080FA279AD0AC00B2C1E2 /* Constants.swift */,
+				69208102279ED38E00B2C1E2 /* DataConverter.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -829,6 +835,7 @@
 				6927F517278749D0004DDAF4 /* SettingsViewController.swift in Sources */,
 				69D074AF2771F58F00B901E5 /* AdaptiveLayoutHelper.swift in Sources */,
 				692080FB279AD0AC00B2C1E2 /* Constants.swift in Sources */,
+				69208103279ED38E00B2C1E2 /* DataConverter.swift in Sources */,
 				6976E48227970BD90069177A /* Weekly+CoreDataProperties.swift in Sources */,
 				69D074A82771F4FF00B901E5 /* Font.swift in Sources */,
 				692080F92799B85000B2C1E2 /* SettingsViewModel.swift in Sources */,
@@ -848,6 +855,7 @@
 				692080FD279AFDDF00B2C1E2 /* UIView + Ext.swift in Sources */,
 				69914017276C7D19003A64E6 /* HourlyWeatherView.swift in Sources */,
 				69D074A62771F4CE00B901E5 /* Dimension.swift in Sources */,
+				69A4C114279FCFBE00C8AA27 /* SearchObserver.swift in Sources */,
 				6976E4582791F26B0069177A /* TableView.swift in Sources */,
 				69194DF0276A0CFB00430597 /* NetworkErrors.swift in Sources */,
 				6927F51C27874C78004DDAF4 /* Temperature.swift in Sources */,

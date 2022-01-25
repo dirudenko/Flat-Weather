@@ -21,7 +21,7 @@ class SettingsView: UIView {
   private let gradient = Constants.Design.gradient
   private let backButton = Button(systemImage: "arrow.backward")
   // MARK: - Public variables
-  var delegate: SettingsViewProtocol?
+  weak var delegate: SettingsViewProtocol?
   
   var viewData: SettingsViewData = .initial {
     didSet {

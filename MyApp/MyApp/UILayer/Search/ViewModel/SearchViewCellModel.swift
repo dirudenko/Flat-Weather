@@ -11,7 +11,7 @@ import CoreData
 protocol SearchViewCellModelProtocol {
   var updateViewData: ((SearchViewData) ->())? { get set }
   var networkManager: NetworkManagerProtocol { get }
-  var coreDataManager: CoreDataManager { get }
+  var coreDataManager: CoreDataManagerResultProtocol { get }
   func setSections(at tableView: TableViewCellTypes) -> Int
   func getObjects(at section: Int) -> MainInfo?
   func searchText(text: String)
@@ -23,21 +23,24 @@ protocol SearchViewCellModelProtocol {
 final class SearchViewCellModel: SearchViewCellModelProtocol {
   // MARK: - Private variables
   var networkManager: NetworkManagerProtocol
-  var coreDataManager = CoreDataManager(modelName: "MyApp")
-  // var city = [SearchModel]()
+  var coreDataManager: CoreDataManagerResultProtocol
+  private var observer: SearchObserver
   var updateViewData: ((SearchViewData) -> ())?
   // MARK: - Initialization
-  init(networkManager: NetworkManagerProtocol) {
+  init(networkManager: NetworkManagerProtocol, observer: SearchObserver, coreDataManager: CoreDataManagerResultProtocol) {
     updateViewData?(.initial)
-    //self.coreDataManager = coreDataManager
+    self.coreDataManager = coreDataManager
     self.networkManager = networkManager
-    
+    self.observer = observer
+    self.observer.register(observer: self)
   }
   // MARK: - Public functions
   /// получение количества секций для таблиц
   func setSections(at tableView: TableViewCellTypes) -> Int {
     switch tableView {
     case .CityListTableViewCell:
+      coreDataManager.cityResultsPredicate = nil
+      coreDataManager.loadSavedData()
       return coreDataManager.fetchedResultsController.fetchedObjects?.count ?? 0
     case .StandartTableViewCell:
       
@@ -56,6 +59,7 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
     guard let object = getObjects(at: index) else { print("ERROR")
       return }
     coreDataManager.removeDataFromMainWeather(object: object)
+    observer.notifyObserver(index: index)
     //updateViewData?(.initial)
   }
   
@@ -100,5 +104,10 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
   }
 }
 
-
+// MARK: - Observer
+extension SearchViewCellModel: SubcribeSearch {
+  func delete(at index: Int) {
+  //  removeObject(at: index)
+  }
+}
 

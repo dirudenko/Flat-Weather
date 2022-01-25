@@ -12,7 +12,7 @@ final class SearchViewController: UIViewController {
   // MARK: - Private types
   private var searchView: SearchView!
   private var searchViewCellModel: SearchViewCellModelProtocol
-  
+  private var didEdit = false
   // MARK: - Initialization
   init(searchViewCellModel: SearchViewCellModelProtocol) {
     self.searchViewCellModel = searchViewCellModel
@@ -30,10 +30,6 @@ final class SearchViewController: UIViewController {
     updateView()
     setupViews()
     setupConstraints()
-  }
-  
-  deinit {
-    print("SearchVC deleted")
   }
   
   override func viewDidLayoutSubviews() {
@@ -59,25 +55,41 @@ final class SearchViewController: UIViewController {
 }
 // MARK: - UIViewController delegates
 extension SearchViewController: SearchViewProtocol {
+  func didEdit(at section: Int) {
+    didEdit = true
+  }
+  
   func setViewFromCityList(fot city: [MainInfo], at index: Int) {
-    let vc  = CityListPageViewController(for: city, index: index)
-    let navigationController = UINavigationController(rootViewController: vc)
-    navigationController.modalPresentationStyle = .fullScreen
-    navigationController.setViewControllers([vc], animated: true)
-    present(navigationController, animated: false)
+    let vc  = BuilderService.buildPageViewController(at: index)
+//    let navigationController = UINavigationController(rootViewController: vc)
+//    navigationController.modalPresentationStyle = .fullScreen
+//    navigationController.setViewControllers([vc], animated: true)
+//    present(navigationController, animated: false)
+   // navigationController?.viewControllers.removeAll()
+    navigationController?.setViewControllers([vc], animated: true)
+   // navigationController?.pushViewController(vc, animated: true)
   }
   
   func setViewFromSearch(fot city: [MainInfo], at index: Int) {
-    let vc  = CityListPageViewController(for: city, index: index)
-    let navigationController = UINavigationController(rootViewController: vc)
-    navigationController.setViewControllers([vc], animated: true)
-    navigationController.modalPresentationStyle = .fullScreen
-    present(navigationController, animated: false)
+   // navigationController?.dismiss(animated: false, completion: nil)
+    let vc  = BuilderService.buildPageViewController(at: index)
+   // let navigationController = UINavigationController(rootViewController: vc)
+//navigationController.setViewControllers([vc], animated: true)
+   // navigationController.modalPresentationStyle = .fullScreen
+  //  present(navigationController, animated: false)
+    //navigationController?.pushViewController(vc, animated: true)
+    navigationController?.setViewControllers([vc], animated: true)
   }
   
   func backButtonTapped() {
-    let vc = BuilderService.buildPageViewController()
-    navigationController?.pushViewController(vc, animated: true)
+//    let vc = BuilderService.buildPageViewController()
+//    navigationController?.pushViewController(vc, animated: true)
+    if didEdit {
+      let vc  = BuilderService.buildPageViewController()
+      navigationController?.setViewControllers([vc], animated: true)
+    } else {
+    navigationController?.popViewController(animated: true)
+    }
   }
 }
 // MARK: - UIViewController extensions

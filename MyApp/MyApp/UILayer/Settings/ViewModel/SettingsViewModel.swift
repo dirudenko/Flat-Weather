@@ -14,13 +14,7 @@ protocol SettingsViewModelProtocol: AnyObject {
   func unitPressed()
 }
 
-class SettingsViewModel: SettingsViewModelProtocol, SubcribeSettings {
-  func settingsChanged(unit: Settings, type: UnitOptions) {
-    changeSettings(unit: unit, type: type)
-  }
-  
-  
-  
+class SettingsViewModel: SettingsViewModelProtocol {
   // MARK: - Public variables
   var updateViewData: ((SettingsViewData) -> ())?
   var observer: SettingsObserver
@@ -68,7 +62,6 @@ class SettingsViewModel: SettingsViewModelProtocol, SubcribeSettings {
       } else {
         updateViewData?(.success)
       }    }
-   // updateViewData?(.success)
   }
   // MARK: - Private functions
   func getSettings() -> SettingsModel? {
@@ -80,5 +73,11 @@ class SettingsViewModel: SettingsViewModelProtocol, SubcribeSettings {
                                pressure: pressure)
     
     return model
+  }
+}
+// MARK: - Observer 
+extension SettingsViewModel: SubcribeSettings {
+  func settingsChanged(unit: Settings, type: UnitOptions) {
+    changeSettings(unit: unit, type: type)
   }
 }

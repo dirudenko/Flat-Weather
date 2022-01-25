@@ -12,28 +12,29 @@ final class BuilderService {
   private static let networkManager: NetworkManagerProtocol = NetworkManager()
   private static var coreDataManager: CoreDataManagerResultProtocol = CoreDataManager(modelName: "MyApp")
   private static let settingsObserver = SettingsObserver()
+  private static let searchObserver = SearchObserver()
  
   static func buildRootViewController() -> UINavigationController {
     var viewController = UIViewController()
     var navigationController = UINavigationController()
-    coreDataManager.loadSavedData()
-    let list = coreDataManager.fetchedResultsController.fetchedObjects ?? []
-    if list.isEmpty {
+  //  coreDataManager.loadSavedData()
+  //  let list = coreDataManager.fetchedResultsController.fetchedObjects ?? []
+    if coreDataManager.entityIsEmpty() {
       viewController = buildSearchViewController()
       navigationController = UINavigationController(rootViewController: viewController)
     } else {
-      viewController = CityListPageViewController(for: list, index: 0)
+      viewController = buildPageViewController()
       navigationController = UINavigationController(rootViewController: viewController)
     }
     navigationController.setToolbarHidden(true, animated: false)
     return navigationController
   }
 
-  static func buildPageViewController() -> CityListPageViewController {
+  static func buildPageViewController(at index: Int = 0) -> CityListPageViewController {
     coreDataManager.cityResultsPredicate = nil
     coreDataManager.loadSavedData()
     let list = coreDataManager.fetchedResultsController.fetchedObjects ?? []
-    let vc = CityListPageViewController(for: list, index: 0)
+    let vc = CityListPageViewController(for: list, index: index, observer: searchObserver)
     return vc
   }
   
@@ -44,7 +45,7 @@ final class BuilderService {
   }
   
   static func buildSearchViewController() -> UIViewController {
-    let searchViewCellModel = SearchViewCellModel(networkManager: networkManager)
+    let searchViewCellModel = SearchViewCellModel(networkManager: networkManager, observer: searchObserver, coreDataManager: coreDataManager)
     let viewController = SearchViewController(searchViewCellModel: searchViewCellModel)
     return viewController
   }

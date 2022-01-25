@@ -66,7 +66,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
     let controller = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedContext, sectionNameKeyPath: nil, cacheName: nil)
     
-    //controller.fetchRequest.predicate = cityResultsPredicate
+    controller.fetchRequest.predicate = cityResultsPredicate
     do {
       try controller.performFetch()
     } catch {
@@ -142,15 +142,15 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     
     for (index, item) in data.daily.enumerated() {
       let weather = Weekly(entity: entity, insertInto: managedContext)
-      weather.tempDay = Int16(item.temp.day)
-      weather.tempNight = Int16(item.temp.night)
+      weather.tempDay = item.temp.day
+      weather.tempNight = item.temp.night
       weather.date = Int64(item.dt)
       weather.iconId = Int16(item.weather.first?.id ?? 0)
       weather.rain = Int16((item.pop ?? 0) * 100)
       list?.insertIntoWeeklyWeather(weather, at: index)
       weather.weather = list
     }
-    saveContext()
+    //saveContext()
   }
   
   func configureHourly(from data: WeatherModel, list: MainInfo?) {
@@ -159,8 +159,8 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     
     for (index, item) in data.hourly.enumerated() {
       let weather = Hourly(entity: entity, insertInto: managedContext)
-      weather.temp = Int16(item.temp)
-      weather.fellsLike = Int16(item.feelsLike)
+      weather.temp = item.temp
+      weather.fellsLike = item.feelsLike
       weather.date = Int64(item.dt)
       weather.iconId = Int16(item.weather.first?.id ?? 0)
       weather.rain = Int16((item.pop ?? 0) * 100)
@@ -168,7 +168,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
       list?.insertIntoHourlyWeather(weather, at: index)
       weather.weather = list
     }
-    saveContext()  
+    //saveContext()  
   }
   
   /// Конфигурация верхнего бара с текущими погодными данными
@@ -176,13 +176,13 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     let entity = NSEntityDescription.entity(forEntityName: "TopBar",
                                             in: managedContext)!
     let weather = TopBar(entity: entity, insertInto: managedContext)
-    weather.temperature = Int16(data.current.temp)
-    weather.feelsLike = Int16(data.current.feelsLike)
+    weather.temperature = data.current.temp
+    weather.feelsLike = data.current.feelsLike
     weather.date = Int64(data.current.dt)
     weather.iconId = Int16(data.current.weather.first?.id ?? 0)
     weather.desc = data.current.weather.first?.weatherDescription
     weather.weather = list
-    saveContext()
+   // saveContext()
   }
   
   /// Конфигурация collectionView бара с текущими погодными данными
@@ -195,7 +195,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     weather.pressure = Int16(data.current.pressure)
     weather.rain = Int16((data.current.pop ?? 0) * 100)
     weather.weather = list
-    saveContext()
+   // saveContext()
   }
 }
 

@@ -14,7 +14,6 @@ final class MainWeatherViewController: UIViewController {
   private let forcatsButton = Button()
   private var weeklyWeatherView = WeeklyWeatherView()
   private var viewModel: MainWeatherViewModelProtocol
-
   // MARK: - Private variables
   private var isPressed = false
   private var weeklyWeatherViewTopSmall: NSLayoutConstraint?
@@ -37,6 +36,11 @@ final class MainWeatherViewController: UIViewController {
     updateView()
     setupLayouts()
     checkSettings()
+    viewModel.checkSettings()
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
     viewModel.startFetch()
   }
   
@@ -44,8 +48,13 @@ final class MainWeatherViewController: UIViewController {
     super.viewDidAppear(animated)
     /// проверка времени для повторного запроса в сеть
     if viewModel.checkDate() {
+      print("API CALL")
       viewModel.loadWeather()
     }
+  }
+  
+  deinit {
+    print("MAIN VC DELETED \(viewModel.fetchedCity.name)")
   }
   
   // MARK: - Private functions

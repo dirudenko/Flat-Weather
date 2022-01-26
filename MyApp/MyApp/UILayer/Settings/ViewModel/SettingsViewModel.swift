@@ -69,6 +69,35 @@ class SettingsViewModel: SettingsViewModelProtocol {
     
     return model
   }
+  
+  /// сортировка данных для вывода текущего значения первым по списку
+  private func sortDataType(data: [Settings], currentUnit: UnitOptions?) -> [Settings] {
+    var unitIndex: Int?
+
+    switch currentUnit {
+    case .temperature:
+      let temperature: Temperature? = UserDefaultsManager.get(forKey: "Temperature")
+      for (index,item) in data.enumerated() {
+        if item.description == temperature?.description {
+          unitIndex = index
+        }
+      }
+      
+    case .wind:
+      let wind: WindSpeed? = UserDefaultsManager.get(forKey: "Wind")
+     // return wind?.description ?? "Error"
+    case .pressure:
+      let pressure: Pressure? = UserDefaultsManager.get(forKey: "Pressure")
+     // return pressure?.description ?? "Error"
+    default: break
+    }
+    
+    var newData = data
+    newData.swapAt(1, unitIndex ?? 1)
+    return newData
+  }
+  
+  
 }
 // MARK: - Observer 
 extension SettingsViewModel: SubcribeSettings {

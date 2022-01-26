@@ -48,8 +48,8 @@ final class MainWeatherViewController: UIViewController {
     /// проверка времени для повторного запроса в сеть
     if viewModel.checkDate() {
       print("API CALL")
+      viewModel.loadWeather()
     }
-    viewModel.loadWeather()
 
   }
   

@@ -54,13 +54,4 @@ class TableView: UITableView {
     fatalError("init(coder:) has not been implemented")
   }
   
-  func configureForSettings() {
-    self.backgroundColor = .white
-    self.separatorStyle = .none
-    self.rowHeight = adapted(dimensionSize: 32, to: .height)
-    self.layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
-    self.layer.masksToBounds = true
-  }
-  
-  
 }

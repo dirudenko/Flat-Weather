@@ -28,7 +28,8 @@ class Picker: UIPickerView {
     view.addSubview(self)
     centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-    backgroundColor = .white
+    backgroundColor = .clear
+    isUserInteractionEnabled = true
   }
   
 }

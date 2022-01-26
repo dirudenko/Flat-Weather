@@ -17,7 +17,6 @@ class SettingsView: UIView {
   // MARK: - Private types
   private let settingsTableView = TableView(celltype: .SettingsTableViewCell)
   private var picker: Picker?
-  private let unitsTableView = TableView(celltype: .StandartTableViewCell)
   private let gradient = Constants.Design.gradient
   private let backButton = Button(systemImage: "arrow.backward")
   // MARK: - Public variables
@@ -29,20 +28,17 @@ class SettingsView: UIView {
     }
   }
   // MARK: - Private variables
+  /// данные(размерности) выбранного типа
   private var dataType = [Settings]()
-  private var type: UnitOptions?
-  /// констрейнт для высоты таблицы
-  private var flowHeightConstraint: NSLayoutConstraint?
-  // private var initialCenter: CGPoint = .zero
+  ///выбранный тип данных для изменения
   private var unitOption: UnitOptions?
-
+  
   
   // MARK: - Initialization
   override init(frame: CGRect) {
     super.init(frame: frame)
     setupLayouts()
     addConstraints()
-    picker = Picker(for: self)
   }
   
   required init?(coder aDecoder: NSCoder) {
@@ -58,11 +54,10 @@ class SettingsView: UIView {
     case .initial:
       break
     case .loading:
-      unitsTableView.isHidden = false
-      unitsTableView.reloadData()
+      picker?.isHidden = false
+      picker?.reloadComponent(0)
     case .success:
-      unitsTableView.isHidden = true
-      dataType.removeAll()
+      picker?.isHidden = true
       settingsTableView.reloadData()
     case .failure:
       break
@@ -72,14 +67,11 @@ class SettingsView: UIView {
   // MARK: - Private functions
   
   private func setupLayouts() {
-    unitsTableView.configureForSettings()
     addSubview(settingsTableView)
-    addSubview(unitsTableView)
     addSubview(backButton)
+    picker = Picker(for: self)
     settingsTableView.delegate = self
     settingsTableView.dataSource = self
-    unitsTableView.delegate = self
-    unitsTableView.dataSource = self
     picker?.dataSource = self
     picker?.delegate = self
     backButton.addTarget(self, action: #selector(didTapBack), for: .touchDown)
@@ -109,8 +101,44 @@ class SettingsView: UIView {
       break
     }
   }
+  /// сортировка данных для вывода текущего значения первым по списку
+  private func sortDataType(data: [Settings], currentUnit: UnitOptions?) -> [Settings] {
+    var unitIndex: Int?
+
+    switch currentUnit {
+    case .temperature:
+      let temperature: Temperature? = UserDefaultsManager.get(forKey: "Temperature")
+      for (index,item) in data.enumerated() {
+        if item.description == temperature?.description {
+          unitIndex = index
+        }
+      }
+      
+    case .wind:
+      let wind: WindSpeed? = UserDefaultsManager.get(forKey: "Wind")
+      for (index,item) in data.enumerated() {
+        if item.description == wind?.description {
+          unitIndex = index
+        }
+      }
+    case .pressure:
+      let pressure: Pressure? = UserDefaultsManager.get(forKey: "Pressure")
+      for (index,item) in data.enumerated() {
+        if item.description == pressure?.description {
+          unitIndex = index
+        }
+      }
+    default: break
+    }
+    
+    var newData = data
+    newData.swapAt(0, unitIndex ?? 0)
+    return newData
+  }
+  
 }
 
+// MARK: - UIPickerView delegates
 
 extension SettingsView: UIPickerViewDelegate, UIPickerViewDataSource {
   func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -118,7 +146,17 @@ extension SettingsView: UIPickerViewDelegate, UIPickerViewDataSource {
   }
   
   func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-    return 1
+    return dataType.count
+  }
+  
+  func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    return dataType[row].description
+  }
+  
+  func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    
+    let unit = dataType[row]
+    delegate?.unitChanged(unit: unit, type: unitOption)
   }
   
   
@@ -128,25 +166,15 @@ extension SettingsView: UIPickerViewDelegate, UIPickerViewDataSource {
 
 extension SettingsView: UITableViewDataSource, UITableViewDelegate {
   func numberOfSections(in tableView: UITableView) -> Int {
-    switch tableView {
-    case settingsTableView: return SettingsSections.allCases.count
-    case unitsTableView: return 1
-    default: return 0
-    }
+    return SettingsSections.allCases.count
+    
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    switch tableView {
-    case settingsTableView:
-      
-      guard let section = SettingsSections(rawValue: section) else { return 0 }
-      switch section {
-      case .Units: return UnitOptions.allCases.count
-      case .Extra: return ExtraOptions.allCases.count
-      }
-    case unitsTableView:
-      return dataType.count
-    default: return 0
+    guard let section = SettingsSections(rawValue: section) else { return 0 }
+    switch section {
+    case .Units: return UnitOptions.allCases.count
+    case .Extra: return ExtraOptions.allCases.count
     }
   }
   
@@ -169,65 +197,49 @@ extension SettingsView: UITableViewDataSource, UITableViewDelegate {
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    switch tableView {
-    case settingsTableView:
-      guard let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsTableViewCell", for: indexPath) as? SettingsTableViewCell,
-            let section = SettingsSections(rawValue: indexPath.section) else { return UITableViewCell() }
-      switch section {
-      case .Units:
-        let units = UnitOptions(rawValue: indexPath.row)
-        // cell.nameLabel.text = units?.description
-        cell.unitsType = units
-      case .Extra:
-        let extra = ExtraOptions(rawValue: indexPath.row)
-        cell.nameLabel.text = extra?.description
-        cell.unitLabel.text = ""
-      }
-      return cell
-    case unitsTableView:
-      if dataType.count > 0 {
-        let height = unitsTableView.rowHeight * CGFloat(dataType.count + 2)
-        self.flowHeightConstraint?.constant = height
-        layoutIfNeeded()
-      }
-      let cell = tableView.dequeueReusableCell(withIdentifier: "cell")! as UITableViewCell
-      cell.textLabel?.text = dataType[indexPath.row].description
-      return cell
-      
-    default: return UITableViewCell()
+    guard let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsTableViewCell", for: indexPath) as? SettingsTableViewCell,
+          let section = SettingsSections(rawValue: indexPath.section) else { return UITableViewCell() }
+    switch section {
+    case .Units:
+      let units = UnitOptions(rawValue: indexPath.row)
+      cell.unitsType = units
+    case .Extra:
+      let extra = ExtraOptions(rawValue: indexPath.row)
+      cell.nameLabel.text = extra?.description
+      cell.unitLabel.text = ""
     }
+    return cell
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
-    switch tableView {
-    case settingsTableView:
-      let section = SettingsSections(rawValue: indexPath.section)
-      switch section {
-      case .Units:
-        switch indexPath.row {
-        case 0:
-          Temperature.allCases.forEach { dataType.append($0) }
-          unitOption = .temperature
-          delegate?.unitPressed()
-        case 1:
-          WindSpeed.allCases.forEach { dataType.append($0) }
-          unitOption = .wind
-          delegate?.unitPressed()
-        case 2:
-          Pressure.allCases.forEach {  dataType.append($0) }
-          unitOption = .pressure
-          delegate?.unitPressed()
-
-        default: break
-        }
-      case .Extra:
-        break
+    let section = SettingsSections(rawValue: indexPath.section)
+    switch section {
+    case .Units:
+      switch indexPath.row {
+      case 0:
+        dataType.removeAll()
+        Temperature.allCases.forEach { dataType.append($0) }
+        unitOption = .temperature
+        dataType =  sortDataType(data: dataType, currentUnit: unitOption)
+        delegate?.unitPressed()
+      case 1:
+        dataType.removeAll()
+        WindSpeed.allCases.forEach { dataType.append($0) }
+        unitOption = .wind
+        dataType =  sortDataType(data: dataType, currentUnit: unitOption)
+        delegate?.unitPressed()
+      case 2:
+        dataType.removeAll()
+        Pressure.allCases.forEach {  dataType.append($0) }
+        unitOption = .pressure
+        dataType =  sortDataType(data: dataType, currentUnit: unitOption)
+        delegate?.unitPressed()
+        
       default: break
       }
-    case unitsTableView:
-      let unit = dataType[indexPath.row]
-      delegate?.unitChanged(unit: unit, type: unitOption)
+    case .Extra:
+      break
     default: break
     }
   }
@@ -243,9 +255,6 @@ extension SettingsView {
       settingsTableView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
       settingsTableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
       
-      unitsTableView.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: adapted(dimensionSize: 9, to: .height)),
-      unitsTableView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-      unitsTableView.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 120, to: .width)),
       
       backButton.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 16, to: .height)),
       backButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
@@ -255,7 +264,5 @@ extension SettingsView {
       
       
     ])
-    flowHeightConstraint = unitsTableView.heightAnchor.constraint(equalToConstant: 64)
-    flowHeightConstraint?.isActive = true
   }
 }

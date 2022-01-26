@@ -14,7 +14,7 @@ struct WeatherModel: Codable {
     let timezoneOffset: Int
     let current: Current
     let hourly: [Current]
-    let daily: [Daily]
+  var daily: [Daily]
 
     enum CodingKeys: String, CodingKey {
         case lat, lon, timezone

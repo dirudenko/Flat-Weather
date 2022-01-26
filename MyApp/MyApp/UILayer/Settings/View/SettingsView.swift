@@ -16,7 +16,7 @@ protocol SettingsViewProtocol: AnyObject {
 class SettingsView: UIView {
   // MARK: - Private types
   private let settingsTableView = TableView(celltype: .SettingsTableViewCell)
-  
+  private var picker: Picker?
   private let unitsTableView = TableView(celltype: .StandartTableViewCell)
   private let gradient = Constants.Design.gradient
   private let backButton = Button(systemImage: "arrow.backward")
@@ -42,6 +42,7 @@ class SettingsView: UIView {
     super.init(frame: frame)
     setupLayouts()
     addConstraints()
+    picker = Picker(for: self)
   }
   
   required init?(coder aDecoder: NSCoder) {
@@ -79,6 +80,8 @@ class SettingsView: UIView {
     settingsTableView.dataSource = self
     unitsTableView.delegate = self
     unitsTableView.dataSource = self
+    picker?.dataSource = self
+    picker?.delegate = self
     backButton.addTarget(self, action: #selector(didTapBack), for: .touchDown)
     let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didPan(_:)))
     addGestureRecognizer(panGestureRecognizer)
@@ -106,6 +109,19 @@ class SettingsView: UIView {
       break
     }
   }
+}
+
+
+extension SettingsView: UIPickerViewDelegate, UIPickerViewDataSource {
+  func numberOfComponents(in pickerView: UIPickerView) -> Int {
+    return 1
+  }
+  
+  func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    return 1
+  }
+  
+  
 }
 
 // MARK: - UITableView delegates

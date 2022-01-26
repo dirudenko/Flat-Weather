@@ -147,10 +147,11 @@ class CoreDataManager: CoreDataManagerResultProtocol {
       weather.date = Int64(item.dt)
       weather.iconId = Int16(item.weather.first?.id ?? 0)
       weather.rain = Int16((item.pop ?? 0) * 100)
+      weather.name = list?.name ?? ""
+      weather.id = Int16(index)
       list?.insertIntoWeeklyWeather(weather, at: index)
       weather.weather = list
     }
-    //saveContext()
   }
   
   func configureHourly(from data: WeatherModel, list: MainInfo?) {
@@ -160,15 +161,15 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     for (index, item) in data.hourly.enumerated() {
       let weather = Hourly(entity: entity, insertInto: managedContext)
       weather.temp = item.temp
-      weather.fellsLike = item.feelsLike
+      weather.fillsLike = item.feelsLike
       weather.date = Int64(item.dt)
       weather.iconId = Int16(item.weather.first?.id ?? 0)
       weather.rain = Int16((item.pop ?? 0) * 100)
       weather.name = list?.name ?? ""
-      list?.insertIntoHourlyWeather(weather, at: index)
+      weather.id = Int16(index)
+      list?.addToHourlyWeather(weather)
       weather.weather = list
     }
-    //saveContext()  
   }
   
   /// Конфигурация верхнего бара с текущими погодными данными
@@ -199,6 +200,9 @@ class CoreDataManager: CoreDataManagerResultProtocol {
   }
 }
 
+private func deleteHourly() {
+  
+}
 
 
 /// Класс для тестирования КорДаты с инМемори хранением данных

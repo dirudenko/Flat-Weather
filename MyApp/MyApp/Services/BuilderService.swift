@@ -26,6 +26,7 @@ final class BuilderService {
       viewController = buildPageViewController()
       navigationController = UINavigationController(rootViewController: viewController)
     }
+    navigationController.checkSettings()
     navigationController.setToolbarHidden(true, animated: false)
     return navigationController
   }

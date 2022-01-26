@@ -35,7 +35,6 @@ final class MainWeatherViewController: UIViewController {
     super.viewDidLoad()
     updateView()
     setupLayouts()
-    checkSettings()
     viewModel.checkSettings()
   }
   
@@ -49,8 +48,9 @@ final class MainWeatherViewController: UIViewController {
     /// проверка времени для повторного запроса в сеть
     if viewModel.checkDate() {
       print("API CALL")
-      viewModel.loadWeather()
     }
+    viewModel.loadWeather()
+
   }
   
   deinit {

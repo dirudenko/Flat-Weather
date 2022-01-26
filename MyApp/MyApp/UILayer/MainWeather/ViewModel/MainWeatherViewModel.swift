@@ -147,7 +147,7 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
       let hourlyWeather: [Hourly] = data.hourlyWeather?.toArray() else { return .failure(.noData) }
       for (index,item) in convertedHourlyWeather.enumerated() {
         item.temp = dataConverter.convertTemperature(value: hourlyWeather[index].temp, unit: .Celcius)
-        item.fellsLike = dataConverter.convertTemperature(value: hourlyWeather[index].fellsLike, unit: .Celcius)
+        item.fillsLike = dataConverter.convertTemperature(value: hourlyWeather[index].fillsLike, unit: .Celcius)
       }
     case .Fahrenheit:
       print(convertedData.name)
@@ -156,7 +156,7 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
       let hourlyWeather: [Hourly] = data.hourlyWeather?.toArray() else { return .failure(.noData) }
       for (index,item) in convertedHourlyWeather.enumerated() {
         item.temp = dataConverter.convertTemperature(value: hourlyWeather[index].temp, unit: .Fahrenheit)
-        item.fellsLike = dataConverter.convertTemperature(value: hourlyWeather[index].fellsLike, unit: .Fahrenheit)
+        item.fillsLike = dataConverter.convertTemperature(value: hourlyWeather[index].fillsLike, unit: .Fahrenheit)
       }
     }
     } else

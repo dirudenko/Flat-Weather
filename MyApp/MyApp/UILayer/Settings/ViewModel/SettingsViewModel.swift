@@ -26,11 +26,6 @@ class SettingsViewModel: SettingsViewModelProtocol {
   }
   // MARK: - Public functions
   
-//  func model() -> SettingsModel {
-//    guard let model = getSettings() else { fatalError() }
-//    return model
-//  }
-  
   func unitPressed() {
     updateViewData?(.loading)
   }

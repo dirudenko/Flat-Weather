@@ -82,7 +82,7 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     }
     conditionImage.image = UIImage(systemName: imageName ?? "thermometer.sun")?.withTintColor(.white, renderingMode: .alwaysOriginal)
     
-    temperatureLabel.text = "\(Int(modelElement.fellsLike))°/\(Int(modelElement.temp))°"
+    temperatureLabel.text = "\(Int(modelElement.fillsLike))°/\(Int(modelElement.temp))°"
     if index == 0 {
       timeLabel.text = "Now"
     } else {

@@ -9,16 +9,17 @@
     </entity>
     <entity name="Hourly" representedClassName="Hourly" syncable="YES">
         <attribute name="date" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="fellsLike" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="fillsLike" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="iconId" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="rain" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="temp" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="weather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MainInfo" inverseName="hourlyWeather" inverseEntity="MainInfo"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
+                <constraint value="id"/>
                 <constraint value="name"/>
-                <constraint value="date"/>
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
@@ -51,21 +52,24 @@
     <entity name="Weekly" representedClassName="Weekly" syncable="YES">
         <attribute name="date" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="iconId" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="rain" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="tempDay" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="tempNight" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="weather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MainInfo" inverseName="weeklyWeather" inverseEntity="MainInfo"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
-                <constraint value="date"/>
+                <constraint value="id"/>
+                <constraint value="name"/>
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
     <elements>
         <element name="BottomBar" positionX="126" positionY="81" width="128" height="104"/>
-        <element name="Hourly" positionX="135" positionY="90" width="128" height="134"/>
+        <element name="Hourly" positionX="135" positionY="90" width="128" height="149"/>
         <element name="MainInfo" positionX="-63" positionY="-18" width="128" height="179"/>
         <element name="TopBar" positionX="314.96484375" positionY="75.43359375" width="128" height="134"/>
-        <element name="Weekly" positionX="144" positionY="108" width="128" height="119"/>
+        <element name="Weekly" positionX="144" positionY="108" width="128" height="149"/>
     </elements>
 </model>

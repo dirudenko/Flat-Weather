@@ -76,7 +76,7 @@ class WeeklyTableViewCell: UITableViewCell {
       conditionImage.image = UIImage(systemName: imageName ?? "thermometer.sun")?.withTintColor(.white, renderingMode: .alwaysOriginal)
   
       temperatureLabel.text = "\(Int(model.tempNight))°/\(Int(model.tempDay))°"
-      rainLabel.text = "\(model.rain )"
+      rainLabel.text = "\(model.rain)%"
     
         let date = Date(timeIntervalSince1970: TimeInterval(model.date)).dateDayFormatter()
       dayLabel.text = "\(date)".capitalizedFirstLetter

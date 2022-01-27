@@ -13,6 +13,9 @@ protocol CoreDataManagerProtocol {
   var cityResultsPredicate: NSPredicate? { get set }
   func saveContext()
   func entityIsEmpty() -> Bool
+  func loadSavedData()
+  var fetchedResultsController: NSFetchedResultsController<MainInfo> { get }
+  func removeDataFromMainWeather(object: MainInfo)
 }
 
 //protocol CoreDataManagerListProtocol: CoreDataManagerProtocol {
@@ -24,14 +27,12 @@ protocol CoreDataManagerProtocol {
 //}
 
 protocol CoreDataManagerResultProtocol: CoreDataManagerProtocol {
-  func loadSavedData()
   func configureTopView(from data: WeatherModel, list: MainInfo?)
   func configureBottomView(from data: WeatherModel, list: MainInfo?)
-  var fetchedResultsController: NSFetchedResultsController<MainInfo> { get }
   func configureHourly(from data: WeatherModel, list: MainInfo?)
   func configureWeekly(from data: WeatherModel, list: MainInfo?)
   func saveToList(city: SearchModel)
-  func removeDataFromMainWeather(object: MainInfo)
+  func updateUnitTypes(list: MainInfo?)
 }
 
 
@@ -127,12 +128,30 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     let entity = NSEntityDescription.entity(forEntityName: "MainInfo",
                                             in: managedContext)!
     let list = MainInfo(entity: entity, insertInto: managedContext)
+    
     list.id = Int64(city.lat + city.lon)
     list.name = city.name
     list.lat = city.lat
     list.lon = city.lon
     list.country = city.country
     list.date = Date()
+    saveContext()
+    updateUnitTypes(list: list)
+  }
+  
+  
+  func updateUnitTypes(list: MainInfo?) {
+    let entity = NSEntityDescription.entity(forEntityName: "UnitsTypes",
+                                            in: managedContext)!
+    let units = UnitsTypes(entity: entity, insertInto: managedContext)
+    guard let temperatureType: Temperature = UserDefaultsManager.get(forKey: "Temperature"),
+    let windSpeedType: WindSpeed = UserDefaultsManager.get(forKey: "Wind"),
+          let pressureType: Pressure = UserDefaultsManager.get(forKey: "Pressure") else { return }
+    units.tempType = Int16(temperatureType.rawValue)
+    print(temperatureType.rawValue)
+    units.windType = Int16(windSpeedType.rawValue)
+    units.pressureType = Int16(pressureType.rawValue)
+    list?.unitTypes = units
     saveContext()
   }
   
@@ -161,7 +180,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     for (index, item) in data.hourly.enumerated() {
       let weather = Hourly(entity: entity, insertInto: managedContext)
       weather.temp = item.temp
-      weather.fillsLike = item.feelsLike
+      weather.feelsLike = item.feelsLike
       weather.date = Int64(item.dt)
       weather.iconId = Int16(item.weather.first?.id ?? 0)
       weather.rain = Int16((item.pop ?? 0) * 100)
@@ -199,11 +218,6 @@ class CoreDataManager: CoreDataManagerResultProtocol {
    // saveContext()
   }
 }
-
-private func deleteHourly() {
-  
-}
-
 
 /// Класс для тестирования КорДаты с инМемори хранением данных
 class TestCoreDataManager: CoreDataManager {

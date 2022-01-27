@@ -53,7 +53,6 @@ final class CurrentWeatherView: UIView {
   private(set) var conditionLabelLeftBig: NSLayoutConstraint?
   private(set) var conditionLabelLeftSmall: NSLayoutConstraint?
   private var topPadding = adapted(dimensionSize: 444, to: .height)
-  lazy var shadowView = UIView()
   
   // MARK: - Public variables
   var viewData: MainViewData = .initial {
@@ -62,8 +61,6 @@ final class CurrentWeatherView: UIView {
       collectionView.reloadData()
     }
   }
-  
-  
   weak var delegate: HeaderButtonsProtocol?
   // MARK: - Initialization
   override init(frame: CGRect) {
@@ -80,7 +77,6 @@ final class CurrentWeatherView: UIView {
   /// Data Driven состояние для вьюшки
   override func layoutSubviews() {
     super.layoutSubviews()
-    shadowView.frame = bounds
     gradient.frame = self.bounds
     switch viewData {
     case .initial:
@@ -90,7 +86,7 @@ final class CurrentWeatherView: UIView {
       configure(with: mainInfo)
       loadingVC.makeInvisible()
     case .loading:
-      loadingVC.isHidden = false
+      loadingVC.makeVisible()
     case .success(let weatherModel):
       loadingVC.makeInvisible()
       currentWeather = weatherModel
@@ -169,8 +165,7 @@ final class CurrentWeatherView: UIView {
     } else {
       weatherImage.image = UIImage(systemName: imageName ?? "thermometer.sun.fill")
     }
-    
-    temperatureLabel.text = "\(Int(topBar.temperature))°"
+    temperatureLabel.text = "\(Int(topBar.temperature))° "
   }
   
 }

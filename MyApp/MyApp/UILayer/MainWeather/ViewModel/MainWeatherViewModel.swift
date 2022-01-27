@@ -13,20 +13,17 @@ protocol MainWeatherViewModelProtocol: AnyObject {
   var coreDataManager: CoreDataManagerResultProtocol? { get }
   func startFetch()
   func loadWeather()
-  func checkSettings()
   func checkDate() -> Bool
-  var fetchedCity: MainInfo {get}
 }
-// TODO: изменение значение по умолчанию при добавлении нового города. Иначе неправильно пересчитываются значения
 final class MainWeatherViewModel: MainWeatherViewModelProtocol {
   
   var networkManager: NetworkManagerProtocol
   var updateViewData: ((MainViewData) -> ())?
   var coreDataManager: CoreDataManagerResultProtocol?
-  var fetchedCity: MainInfo
+  private var fetchedCity: MainInfo
   weak var observer: SettingsObserver?
   private let dataConverter = DataConverter()
-
+  
   init(for list: MainInfo, networkManager: NetworkManagerProtocol,
        coreDataManager: CoreDataManagerResultProtocol,
        observer: SettingsObserver) {
@@ -39,19 +36,18 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
   }
   
   func startFetch() {
-    //checkSettings()
     updateViewData?(.fetching(fetchedCity))
   }
- /// Обновление КорДаты после запроса в сеть
+  /// Обновление КорДаты после запроса в сеть
   private func updateCoreData(model: WeatherModel, context: MainInfo) {
-   // let city = fetchedCity
     self.coreDataManager?.configureTopView(from: model, list: context)
     self.coreDataManager?.configureBottomView(from: model, list: context)
     self.coreDataManager?.configureHourly(from: model, list: context)
     self.coreDataManager?.configureWeekly(from: model, list: context)
     coreDataManager?.saveContext()
+    self.coreDataManager?.updateUnitTypes(list: context)
   }
-  
+  /// загрузка погодных данных с сети
   func loadWeather() {
     updateViewData?(.loading)
     guard
@@ -64,9 +60,14 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
       case .success(let weather):
         DispatchQueue.main.async {
           self.updateCoreData(model: weather, context: self.fetchedCity)
-          self.updateViewData?(.success(self.fetchedCity))
-        }
-        
+          let result = self.convertData(data: self.fetchedCity, weather: weather)
+          switch result {
+          case .success(let weather):
+            self.updateCoreData(model: weather, context: self.fetchedCity)
+            self.updateViewData?(.success(self.fetchedCity))
+          case .failure(_): self.updateViewData?(.failure)
+          }
+          }
       case .failure(let error):
         print(error.rawValue)
         DispatchQueue.main.async {
@@ -86,129 +87,78 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
     }
   }
   
-  
-//  private func fetchDataFromCoreData() -> MainInfo? {
-//    let name = fetchedCity.name
-//    self.coreDataManager.cityResultsPredicate = NSPredicate(format: "name == %@", name)
-//    self.coreDataManager.loadSavedData()
-//    guard let data = coreDataManager.fetchedResultsController.fetchedObjects?.first else {  return nil }
-//    return data
-//  }
-  
- /// проверка настроек перед выводом на экран на наличие изменений относительно настроек по-умолчанию, которые сохранены в КорДате
-  func checkSettings() {
-    let temperature: Temperature? = UserDefaultsManager.get(forKey: "Temperature")
-    let wind: WindSpeed? = UserDefaultsManager.get(forKey: "Wind")
-    let pressure: Pressure? = UserDefaultsManager.get(forKey: "Pressure")
-    if temperature == .Fahrenheit {
-      let result = convertData(data: fetchedCity, type: .temperature)
-      switch result {
-      case .success(let data):
-        fetchedCity = data
-        updateViewData?(.fetching(fetchedCity))
-       // coreDataManager.saveContext()
-      case .failure(_):
-        updateViewData?(.failure)
-      }
-    }
-    
-    switch wind {
-    case .kmh:
-      break
-    case .milh:
-      break
-    default: break
-    }
-    
-//    if wind == nil {
-//      let wind: WindSpeed = .kmh
-//      UserDefaultsManager.set(wind,forKey: "Wind")
-//    }
-//
-//    if pressure == nil {
-//      let pressure: Pressure = .mbar
-//      UserDefaultsManager.set(pressure,forKey: "Pressure")
-//    }
-  }
- /// конвертирование данных по-умочалнию, сохраненных в КорДате, в выбранный тип
-  private func convertData(data: MainInfo, type: UnitOptions) -> Result<MainInfo, NetworkErrors> {
-    guard let temperature: Temperature = UserDefaultsManager.get(forKey: "Temperature"),
-          let wind: WindSpeed = UserDefaultsManager.get(forKey: "Wind"),
-          let pressure: Pressure = UserDefaultsManager.get(forKey: "Pressure") else
-          { return .failure(.noData) }
-    let convertedData = data
-    print(fetchedCity.topWeather?.temperature)
+  /// конвертирование заруженных данных, в выбранный тип
+
+  func convertData(data: MainInfo, weather: WeatherModel?) -> Result<WeatherModel, NetworkErrors> {
     /// конвертирование температуры
-    if type == .temperature {
-    switch temperature {
-    case .Celcius:
-      convertedData.topWeather?.temperature = dataConverter.convertTemperature(value: data.topWeather!.temperature, unit: .Celcius)
-      guard let convertedHourlyWeather: [Hourly] = convertedData.hourlyWeather?.toArray(),
-      let hourlyWeather: [Hourly] = data.hourlyWeather?.toArray() else { return .failure(.noData) }
-      for (index,item) in convertedHourlyWeather.enumerated() {
-        item.temp = dataConverter.convertTemperature(value: hourlyWeather[index].temp, unit: .Celcius)
-        item.fillsLike = dataConverter.convertTemperature(value: hourlyWeather[index].fillsLike, unit: .Celcius)
+    guard var weather = weather else {
+      return .failure(.failed)
+    }
+    switch data.unitTypes?.tempType {
+      ///Celsius default
+    case 0:
+      break
+      ///Fahrenheit
+    case 1:
+      weather.current.temp = dataConverter.convertTemperature(value: data.topWeather?.temperature ?? 0, unit: .Fahrenheit)
+      guard let hourlyWeather: [Hourly] = data.hourlyWeather?.toArray() else { return .failure(.noData) }
+      for (index, _) in weather.hourly.enumerated() {
+        weather.hourly[index].temp = dataConverter.convertTemperature(value: hourlyWeather[index].temp, unit: .Fahrenheit)
+        weather.hourly[index].feelsLike = dataConverter.convertTemperature(value: hourlyWeather[index].feelsLike, unit: .Fahrenheit)
       }
-    case .Fahrenheit:
-      print(convertedData.name)
-      convertedData.topWeather?.temperature = dataConverter.convertTemperature(value: data.topWeather!.temperature, unit: .Fahrenheit)
-      guard let convertedHourlyWeather: [Hourly] = convertedData.hourlyWeather?.toArray(),
-      let hourlyWeather: [Hourly] = data.hourlyWeather?.toArray() else { return .failure(.noData) }
-      for (index,item) in convertedHourlyWeather.enumerated() {
-        item.temp = dataConverter.convertTemperature(value: hourlyWeather[index].temp, unit: .Fahrenheit)
-        item.fillsLike = dataConverter.convertTemperature(value: hourlyWeather[index].fillsLike, unit: .Fahrenheit)
+        guard let weeklyWeather: [Weekly] = data.weeklyWeather?.toArray() else { return .failure(.noData) }
+      for (index, _) in weather.daily.enumerated() {
+        weather.daily[index].temp.day = dataConverter.convertTemperature(value: weeklyWeather[index].tempDay, unit: .Fahrenheit)
+        weather.daily[index].temp.night = dataConverter.convertTemperature(value: weeklyWeather[index].tempNight, unit: .Fahrenheit)
       }
-    }
-    } else
-    if type == .wind {
-    
-    switch wind {
-    case .kmh:
-      break
-    case .milh:
-      break
-    case .ms:
-      break
-    }
-    } else
-    if type == .pressure {
-    
-    
-    switch pressure {
-    case .mbar:
-      break
-    case .atm:
-      break
-    case .mmHg:
-      break
-    case .inHg:
-      break
-    case .hPa:
-      break
+    default: fatalError()
     }
     
+    ///конвертирование скорости ветра
+    switch data.unitTypes?.windType {
+      /// km/h
+    case 0:
+      weather.current.windSpeed = dataConverter.convertWindSpeed(value: data.bottomWeather?.wind ?? 0, unit: .kmh)
+      /// mil/h
+    case 1 :
+      weather.current.windSpeed = dataConverter.convertWindSpeed(value: data.bottomWeather?.wind ?? 0, unit: .milh)
+
+      /// m/s default
+    case 2: break
+    default: fatalError()
     }
-    return .success(convertedData)
     
+    /// конвертирование давления
+    switch data.unitTypes?.pressureType {
+      ///mBar
+    case 0:
+      weather.current.pressure = Int(dataConverter.convertPressure(value: Double((data.bottomWeather?.pressure ?? 0)), unit: .mbar))
+      ///atm
+    case 1:
+      weather.current.pressure = Int(dataConverter.convertPressure(value: Double((data.bottomWeather?.pressure ?? 0)), unit: .atm))
+      ///mmHg
+    case 2:
+      weather.current.pressure = Int(dataConverter.convertPressure(value: Double((data.bottomWeather?.pressure ?? 0)), unit: .mmHg))
+      /// inHg
+    case 3:
+      weather.current.pressure = Int(dataConverter.convertPressure(value: Double((data.bottomWeather?.pressure ?? 0)), unit: .inHg))
+      /// hPa default
+    case 4:
+      break
+    default: fatalError()
+    }
+    
+    
+    return .success(weather)
   }
+  
 }
 
 /// Observer delegate
 extension MainWeatherViewModel: SubcribeSettings {
   func settingsChanged(unit: Settings, type: UnitOptions) {
-//    if dataModel == nil {
-//      let data = fetchedCity
-//      dataModel = data
-//    }
-    let result = convertData(data: fetchedCity, type: type)
-    switch result {
-    case .success(let data):
-      fetchedCity = data
-      updateViewData?(.fetching(fetchedCity))
-     // coreDataManager.saveContext()
-    case .failure(_):
-      updateViewData?(.failure)
-    }
+    coreDataManager?.updateUnitTypes(list: fetchedCity)
+    loadWeather()
   }
 }
 

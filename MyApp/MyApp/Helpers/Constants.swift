@@ -26,5 +26,4 @@ struct Constants {
   struct Network {
     
   }
-  
 }

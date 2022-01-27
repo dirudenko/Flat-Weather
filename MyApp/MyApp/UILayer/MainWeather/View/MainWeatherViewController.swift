@@ -11,7 +11,7 @@ final class MainWeatherViewController: UIViewController {
   // MARK: - Private types
   private var currentWeatherView = CurrentWeatherView()
   private var hourlyWeatherView = HourlyWeatherView()
-  private let forcatsButton = Button()
+  private let forcastButton = Button()
   private var weeklyWeatherView = WeeklyWeatherView()
   private var viewModel: MainWeatherViewModelProtocol
   // MARK: - Private variables
@@ -35,7 +35,6 @@ final class MainWeatherViewController: UIViewController {
     super.viewDidLoad()
     updateView()
     setupLayouts()
-    viewModel.checkSettings()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -50,12 +49,9 @@ final class MainWeatherViewController: UIViewController {
       print("API CALL")
       viewModel.loadWeather()
     }
-
+   
   }
   
-  deinit {
-    print("MAIN VC DELETED \(viewModel.fetchedCity.name)")
-  }
   
   // MARK: - Private functions
   /// подписывание на изменение состояний View
@@ -72,10 +68,12 @@ final class MainWeatherViewController: UIViewController {
     view.addSubview(currentWeatherView)
     view.addSubview(hourlyWeatherView)
     view.addSubview(weeklyWeatherView)
+    view.addSubview(forcastButton)
     setupConstraints()
     let swipeGestureRecognizerDown = UISwipeGestureRecognizer(target: self, action: #selector(didSwipe(_:)))
     let swipeGestureRecognizerUp = UISwipeGestureRecognizer(target: self, action: #selector(didSwipe(_:)))
-    
+    forcastButton.addTarget(self, action: #selector(didTapButton), for: .touchDown)
+    forcastButton.addText()
     swipeGestureRecognizerDown.direction = .down
     swipeGestureRecognizerUp.direction = .up
     view.addGestureRecognizer(swipeGestureRecognizerDown)
@@ -83,6 +81,23 @@ final class MainWeatherViewController: UIViewController {
     currentWeatherView.delegate = self
 
   }
+ 
+  @objc private func didTapButton() {
+    
+    forcastButton.isHidden = true
+    
+    currentWeatherView.changeConstraints(isPressed: true)
+    
+    headerWeatherViewHeightBig?.isActive = false
+    headerWeatherViewHeightSmall?.isActive = true
+    
+    weeklyWeatherViewTopBig?.isActive = false
+    weeklyWeatherViewTopSmall?.isActive = true
+    UIView.animate(withDuration: 0.3) {
+      self.view.layoutIfNeeded()
+    }
+  }
+  
 }
 // MARK: - Delegates
 extension MainWeatherViewController: HeaderButtonsProtocol {
@@ -102,6 +117,8 @@ extension MainWeatherViewController {
   @objc private func didSwipe(_ sender: UISwipeGestureRecognizer) {
     switch sender.direction {
     case .up:
+      forcastButton.isHidden = true
+
       currentWeatherView.changeConstraints(isPressed: true)
       
       headerWeatherViewHeightBig?.isActive = false
@@ -113,6 +130,7 @@ extension MainWeatherViewController {
         self.view.layoutIfNeeded()
       }
     case .down:
+      forcastButton.isHidden = false
       currentWeatherView.changeConstraints(isPressed: false)
       
       headerWeatherViewHeightSmall?.isActive = false
@@ -144,7 +162,12 @@ extension MainWeatherViewController {
       hourlyWeatherView.topAnchor.constraint(equalTo: currentWeatherView.bottomAnchor, constant: adapted(dimensionSize: 16, to: .height)),
       hourlyWeatherView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: adapted(dimensionSize: 0, to: .width)),
       hourlyWeatherView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: adapted(dimensionSize: 0, to: .width)),
-      hourlyWeatherView.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 140, to: .height))
+      hourlyWeatherView.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 140, to: .height)),
+      
+      forcastButton.topAnchor.constraint(equalTo: hourlyWeatherView.bottomAnchor, constant: adapted(dimensionSize: 6, to: .height)),
+      forcastButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: adapted(dimensionSize: 0, to: .width)),
+      forcastButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: adapted(dimensionSize: 0, to: .width)),
+      forcastButton.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 34, to: .height))
     ])
     
     weeklyWeatherViewTopBig = weeklyWeatherView.topAnchor.constraint(equalTo: view.bottomAnchor)

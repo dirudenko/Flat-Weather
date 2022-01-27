@@ -12,8 +12,8 @@ struct WeatherModel: Codable {
     let lat, lon: Double
     let timezone: String
     let timezoneOffset: Int
-    let current: Current
-    let hourly: [Current]
+  var current: Current
+  var hourly: [Current]
   var daily: [Daily]
 
     enum CodingKeys: String, CodingKey {
@@ -27,11 +27,11 @@ struct WeatherModel: Codable {
 struct Current: Codable {
   let dt: Int
       let sunrise, sunset: Int?
-      let temp, feelsLike: Double
-      let pressure, humidity: Int
+      var temp, feelsLike: Double
+  var pressure, humidity: Int
       let dewPoint, uvi: Double
       let clouds, visibility: Int
-      let windSpeed: Double
+  var windSpeed: Double
       let windDeg: Int
       let windGust: Double?
       let weather: [Weather]
@@ -86,7 +86,7 @@ struct Daily: Codable {
     let dt, sunrise, sunset, moonrise: Int
     let moonset: Int
     let moonPhase: Double
-    let temp: Temp
+  var temp: Temp
     let feelsLike: FeelsLike
     let pressure, humidity: Int
     let dewPoint, windSpeed: Double
@@ -120,6 +120,6 @@ struct FeelsLike: Codable {
 
 // MARK: - Temp
 struct Temp: Codable {
-    let day, min, max, night: Double
+  var day, min, max, night: Double
     let eve, morn: Double
 }

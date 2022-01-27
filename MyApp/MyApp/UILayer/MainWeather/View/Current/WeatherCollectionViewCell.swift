@@ -66,15 +66,17 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     switch index {
     case 0:
       conditionImage.image = UIImage(systemName: "wind")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-      conditionStatusLabel.text = "\(bottomBar.wind) km/h"
-      conditionNameLabel.text = "Wind"
+      let wind: WindSpeed = WindSpeed(rawValue: UserDefaultsManager.get(forKey: "Wind")!) ?? .ms
+      conditionStatusLabel.text = "\(Int(bottomBar.wind)) \(wind.description)"
+      conditionNameLabel.text = "Wind Speed"
     case 1:
       conditionImage.image = UIImage(systemName: "cloud.drizzle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-      conditionStatusLabel.text = "\(bottomBar.rain)%"
-      conditionNameLabel.text = "Rain"
+      conditionStatusLabel.text = "\(bottomBar.rain) %"
+      conditionNameLabel.text = "Precipitation"
     case 2:
       conditionImage.image = UIImage(systemName: "thermometer")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-      conditionStatusLabel.text = "\(bottomBar.pressure) mBar"
+      let pressure: Pressure = Pressure(rawValue: UserDefaultsManager.get(forKey: "Pressure")!) ?? .hPa
+      conditionStatusLabel.text = "\(bottomBar.pressure) \(pressure.description)"
       conditionNameLabel.text = "Pressure"
     case 3:
       conditionImage.image = UIImage(systemName: "humidity")?.withTintColor(.white, renderingMode: .alwaysOriginal)

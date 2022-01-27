@@ -73,7 +73,7 @@ class HourlyCollectionViewCell: UICollectionViewCell {
   func configure(with model: [Hourly], index: Int) {
     let modelElement = model[index]
     let pop = modelElement.rain
-    rainLabel.text = "\(pop)% rain"
+    rainLabel.text = "\(pop)% pop"
     
     var imageName =  IconHadler.iconDictionary.keyedValue(key: Int(modelElement.iconId ))
     if ((imageName?.contains(".fill")) != nil) {
@@ -82,7 +82,7 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     }
     conditionImage.image = UIImage(systemName: imageName ?? "thermometer.sun")?.withTintColor(.white, renderingMode: .alwaysOriginal)
     
-    temperatureLabel.text = "\(Int(modelElement.fillsLike))°/\(Int(modelElement.temp))°"
+    temperatureLabel.text = "\(Int(modelElement.feelsLike))°/\(Int(modelElement.temp))°"
     if index == 0 {
       timeLabel.text = "Now"
     } else {

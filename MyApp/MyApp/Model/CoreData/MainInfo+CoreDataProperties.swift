@@ -2,7 +2,7 @@
 //  MainInfo+CoreDataProperties.swift
 //  MyApp
 //
-//  Created by Dmitry on 18.01.2022.
+//  Created by Dmitry on 26.01.2022.
 //
 //
 
@@ -23,9 +23,10 @@ extension MainInfo {
     @NSManaged public var lon: Double
     @NSManaged public var name: String
     @NSManaged public var bottomWeather: BottomBar?
-    @NSManaged public var topWeather: TopBar?
     @NSManaged public var hourlyWeather: NSOrderedSet?
+    @NSManaged public var topWeather: TopBar?
     @NSManaged public var weeklyWeather: NSOrderedSet?
+    @NSManaged public var unitTypes: UnitsTypes?
 
 }
 

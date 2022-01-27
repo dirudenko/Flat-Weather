@@ -18,7 +18,7 @@ extension Hourly {
 
     @NSManaged public var temp: Double
     @NSManaged public var name: String
-    @NSManaged public var fillsLike: Double
+    @NSManaged public var feelsLike: Double
     @NSManaged public var date: Int64
     @NSManaged public var rain: Int16
     @NSManaged public var iconId: Int16

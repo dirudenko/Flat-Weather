@@ -46,11 +46,11 @@ class HourlyWeatherView: UIView {
       loadingVC.isHidden = false
     case .fetching(let weatherModel):
       hourlyWeather = weatherModel
-      dateLabel.text = "TEST"
+     // dateLabel.text = "TEST"
       loadingVC.makeInvisible()
     case .success(let weatherModel):
       loadingVC.makeInvisible()
-      dateLabel.text = "TEST"
+    //  dateLabel.text = "TEST"
       hourlyWeather = weatherModel
     case .failure:
       // TODO: Show Error
@@ -88,7 +88,6 @@ class HourlyWeatherView: UIView {
 extension HourlyWeatherView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     let items = hourlyWeather?.hourlyWeather?.count
-    print(items)
     return items ?? 0
   }
   

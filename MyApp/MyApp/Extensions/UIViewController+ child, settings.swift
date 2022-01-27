@@ -33,12 +33,12 @@ extension UIViewController {
     }
     
     if wind == nil {
-      let wind: WindSpeed = .kmh
+      let wind: WindSpeed = .ms
       UserDefaultsManager.set(wind,forKey: "Wind")
     }
     
     if pressure == nil {
-      let pressure: Pressure = .mbar
+      let pressure: Pressure = .hPa
       UserDefaultsManager.set(pressure,forKey: "Pressure")
     }
   }

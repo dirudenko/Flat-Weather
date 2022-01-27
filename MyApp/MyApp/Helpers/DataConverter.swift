@@ -20,5 +20,36 @@ final class DataConverter {
     }
   }
   
+  func convertWindSpeed(value: Double, unit: WindSpeed) -> Double {
+    switch unit {
+    case .ms:
+      return value
+    case .kmh:
+      let windSpeed = Measurement(value: value, unit: UnitSpeed.metersPerSecond)
+      return windSpeed.converted(to: .kilometersPerHour).value
+    case .milh:
+      let windSpeed = Measurement(value: value, unit: UnitSpeed.metersPerSecond)
+      return windSpeed.converted(to: .milesPerHour).value
+    }
+  }
+  
+  func convertPressure(value: Double, unit: Pressure) -> Double {
+    switch unit {
+    case .mbar:
+      let pressure = Measurement(value: value, unit: UnitPressure.hectopascals)
+      return pressure.converted(to: .millibars).value
+    case .atm:
+      let pressure = value / 1013
+      return pressure
+    case .mmHg:
+      let pressure = Measurement(value: value, unit: UnitPressure.hectopascals)
+      return pressure.converted(to: .millimetersOfMercury).value
+    case .inHg:
+      let pressure = Measurement(value: value, unit: UnitPressure.hectopascals)
+      return pressure.converted(to: .inchesOfMercury).value
+    case .hPa:
+      return value
+    }
+  }
 
 }

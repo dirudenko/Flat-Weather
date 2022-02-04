@@ -42,7 +42,6 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
       coreDataManager.cityResultsPredicate = nil
       coreDataManager.loadSavedData()
       let sections = coreDataManager.fetchedResultsController.fetchedObjects?.count
-      print(sections)
       return  sections ?? 0
     case .StandartTableViewCell:
       return 1

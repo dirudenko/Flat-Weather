@@ -63,7 +63,6 @@
 		6976E4552791F1CA0069177A /* SearchViewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6976E4542791F1CA0069177A /* SearchViewData.swift */; };
 		6976E4582791F26B0069177A /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6976E4572791F26B0069177A /* TableView.swift */; };
 		6976E45A2791F3080069177A /* CellTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6976E4592791F3080069177A /* CellTypes.swift */; };
-		6976E45E2791FA690069177A /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6976E45D2791FA690069177A /* SearchViewModel.swift */; };
 		6976E46027920DB80069177A /* SearchViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6976E45F27920DB80069177A /* SearchViewCellModel.swift */; };
 		6976E462279516770069177A /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6976E461279516770069177A /* SearchModel.swift */; };
 		6976E4642795A6290069177A /* Double+ Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6976E4632795A6290069177A /* Double+ Ext.swift */; };
@@ -184,7 +183,6 @@
 		6976E4542791F1CA0069177A /* SearchViewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewData.swift; sourceTree = "<group>"; };
 		6976E4572791F26B0069177A /* TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
 		6976E4592791F3080069177A /* CellTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellTypes.swift; sourceTree = "<group>"; };
-		6976E45D2791FA690069177A /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		6976E45F27920DB80069177A /* SearchViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewCellModel.swift; sourceTree = "<group>"; };
 		6976E461279516770069177A /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
 		6976E4632795A6290069177A /* Double+ Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+ Ext.swift"; sourceTree = "<group>"; };
@@ -561,7 +559,6 @@
 		6976E45B2791FA500069177A /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				6976E45D2791FA690069177A /* SearchViewModel.swift */,
 				6976E45F27920DB80069177A /* SearchViewCellModel.swift */,
 			);
 			path = ViewModel;
@@ -582,10 +579,34 @@
 		699F158E27ABDC2C00F15534 /* PageView */ = {
 			isa = PBXGroup;
 			children = (
-				69DD879D2775B27100566053 /* CityListPageViewController.swift */,
+				699F159327AD4D6200F15534 /* ViewModel */,
+				699F159227AD4D5C00F15534 /* Model */,
+				699F159127AD4D3D00F15534 /* View */,
 				699F158F27AC0A8400F15534 /* LocationViewController.swift */,
 			);
 			path = PageView;
+			sourceTree = "<group>";
+		};
+		699F159127AD4D3D00F15534 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				69DD879D2775B27100566053 /* CityListPageViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		699F159227AD4D5C00F15534 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		699F159327AD4D6200F15534 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		69A4C11527A0306E00C8AA27 /* Picker */ = {
@@ -828,7 +849,6 @@
 				692080F72799B81800B2C1E2 /* SettingsViewData.swift in Sources */,
 				69194DFB276B3E7900430597 /* MockData.swift in Sources */,
 				692080FF279E8EBB00B2C1E2 /* SearchViewTableViewDataSource.swift in Sources */,
-				6976E45E2791FA690069177A /* SearchViewModel.swift in Sources */,
 				6976E46E2796AEC00069177A /* MainInfo+CoreDataProperties.swift in Sources */,
 				69194DF8276A775900430597 /* MainWeatherViewController.swift in Sources */,
 				6976E4702796B4D00069177A /* NSSet + ext .swift in Sources */,
@@ -1078,7 +1098,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = N3G8R7BNR2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyApp/Info.plist;
@@ -1109,7 +1129,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = N3G8R7BNR2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyApp/Info.plist;

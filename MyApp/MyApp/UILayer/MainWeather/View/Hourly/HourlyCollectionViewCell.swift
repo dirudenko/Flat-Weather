@@ -53,8 +53,8 @@ class HourlyCollectionViewCell: UICollectionViewCell {
       
       conditionImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 36, to: .height)),
       conditionImage.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 24, to: .width)),
-      conditionImage.widthAnchor.constraint(equalToConstant: Constants.Design.imageCellSize),
-      conditionImage.heightAnchor.constraint(equalToConstant: Constants.Design.imageCellSize),
+      conditionImage.widthAnchor.constraint(equalToConstant: Constants.Design.imageCellSize - 12),
+      conditionImage.heightAnchor.constraint(equalToConstant: Constants.Design.imageCellSize - 12),
       
       temperatureLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 64, to: .height)),
       temperatureLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 14, to: .width)),

@@ -20,6 +20,7 @@ final class MainWeatherViewController: UIViewController {
   private var weeklyWeatherViewTopBig: NSLayoutConstraint?
   private var headerWeatherViewHeightSmall: NSLayoutConstraint?
   private var headerWeatherViewHeightBig: NSLayoutConstraint?
+  private var timer: Timer?
   // MARK: - Initialization
   init(viewModel: MainWeatherViewModelProtocol) {
     self.viewModel = viewModel
@@ -50,9 +51,13 @@ final class MainWeatherViewController: UIViewController {
     if viewModel.checkDate() {
       viewModel.loadWeather()
     }
-   
+    timer = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(runTimedCode), userInfo: nil, repeats: true)
+
   }
   
+  deinit {
+    timer?.invalidate()
+  }
   
   // MARK: - Private functions
   /// подписывание на изменение состояний View
@@ -82,6 +87,10 @@ final class MainWeatherViewController: UIViewController {
     view.addGestureRecognizer(swipeGestureRecognizerDown)
     view.addGestureRecognizer(swipeGestureRecognizerUp)
     currentWeatherView.delegate = self
+  }
+  
+  @objc private func runTimedCode() {
+    viewModel.loadWeather()
   }
  
   @objc private func didTapButton() {

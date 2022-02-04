@@ -105,7 +105,6 @@ class SearchView: UIView {
   
   private func setupView() {
     backButton.addTarget(self, action: #selector(didTapBack), for: .touchDown)
-   // spinnerView.makeInvisible()
     searchBar.delegate = self
     searchTableView.delegate = self
     searchTableView.dataSource = self
@@ -264,12 +263,7 @@ extension SearchView: NSFetchedResultsControllerDelegate {
     case .update:
       if let indexPath = indexPath {
         let section = indexPath.row
-      //  DispatchQueue.main.async {
         cityListTableView.reloadSections([section], with: .none)
-        //}
-//        guard let cell = cityListTableView.cellForRow(at: indexPath) as? CityListTableViewCell,
-//              let model = (searchViewCellModel.getObjects(at: indexPath.section)) else { break }
-//        cell.configure(with: model)
       }
     case .move:
       if let indexPath = indexPath {

@@ -16,14 +16,15 @@ protocol MainWeatherViewModelProtocol: AnyObject {
   func checkDate() -> Bool
 }
 final class MainWeatherViewModel: MainWeatherViewModelProtocol {
-  
+  // MARK: - Private types
+  private let dataConverter = DataConverter()
+  // MARK: - Public types
   var networkManager: NetworkManagerProtocol
   var updateViewData: ((MainViewData) -> ())?
   var coreDataManager: CoreDataManagerResultProtocol?
   var fetchedCity: MainInfo
   weak var observer: SettingsObserver?
-  private let dataConverter = DataConverter()
-  
+  // MARK: - Initialization
   init(for list: MainInfo, networkManager: NetworkManagerProtocol,
        coreDataManager: CoreDataManagerResultProtocol,
        observer: SettingsObserver) {
@@ -34,18 +35,9 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
     self.observer = observer
     self.observer?.register(observer: self)
   }
-  
+  // MARK: - Public functions
   func startFetch() {
     updateViewData?(.fetching(fetchedCity))
-  }
-  /// Обновление КорДаты после запроса в сеть
-  private func updateCoreData(model: WeatherModel, context: MainInfo) {
-    coreDataManager?.configureTopView(from: model, list: context)
-    coreDataManager?.configureBottomView(from: model, list: context)
-    coreDataManager?.configureHourly(from: model, list: context)
-    coreDataManager?.configureWeekly(from: model, list: context)
-    //coreDataManager?.saveContext()
-    coreDataManager?.updateUnitTypes(list: context)
   }
   /// загрузка погодных данных с сети
   func loadWeather() {
@@ -76,6 +68,7 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
       }
     }
   }
+  
   /// проверка даты последнего обновления данных
   func checkDate() -> Bool {
     let currentTimestamp = Date().timeIntervalSince1970
@@ -94,8 +87,6 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
     guard var weather = weather else {
       return .failure(.failed)
     }
-   
-   
     ///конвертирование скорости ветра
     switch data.unitTypes?.windType {
       /// km/h
@@ -153,23 +144,27 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
       break
     default: break
     }
-    
-    
     return .success(weather)
   }
-  
+  // MARK: - Private functions
+
+  /// Обновление КорДаты после запроса в сеть
+  private func updateCoreData(model: WeatherModel, context: MainInfo) {
+    coreDataManager?.configureTopView(from: model, list: context)
+    coreDataManager?.configureBottomView(from: model, list: context)
+    coreDataManager?.configureHourly(from: model, list: context)
+    coreDataManager?.configureWeekly(from: model, list: context)
+    coreDataManager?.updateUnitTypes(list: context)
+  }
 }
 
-/// Observer delegate
+// MARK: - Observer delegate
 extension MainWeatherViewModel: SubcribeSettings {
   func settingsChanged(unit: Settings, type: UnitOptions) {
-    
     DispatchQueue.main.async {
       self.coreDataManager?.updateUnitTypes(list: self.fetchedCity)
-    //  coreDataManager?.saveContext()
       self.loadWeather()
     }
-    
   }
 }
 

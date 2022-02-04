@@ -25,7 +25,11 @@ final class LocationManager: NSObject {
       print("Enabled")
       manager = CLLocationManager()
      // manager?.delegate = self
-      manager?.desiredAccuracy = kCLLocationAccuracyBest
+      if #available(iOS 14.0, *) {
+        manager?.desiredAccuracy = kCLLocationAccuracyReduced
+      } else {
+        manager?.desiredAccuracy = kCLLocationAccuracyHundredMeters
+      }
       manager?.requestWhenInUseAuthorization()
      // manager?.requestLocation()
     return true
@@ -78,7 +82,7 @@ final class LocationManager: NSObject {
 
   func saveCurrentCity(_ userLocation: SearchModel) {
     coreDataManager.saveToList(city: userLocation, isCurrentLocation: true)
-    coreDataManager.saveContext()
+   // coreDataManager.saveContext()
   }
   
 }

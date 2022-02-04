@@ -17,14 +17,14 @@ class CityListPageViewController: UIPageViewController {
   /// Массив контроллеров с городами из list с прогнозами погоды
   private var cityPage = [MainWeatherViewController]()
   private let observer: SearchObserver
-  private let gps = LocationManager()
+  private let location = LocationManager()
   let coreDataManager = CoreDataManager(modelName: "MyApp")
   // MARK: - Private variables
   /// Индекс города, показанного на экране
   private var currentIndex: Int
   private var userLocation = SearchModel(name: "Current Location", localNames: nil, lat: 0, lon: 0, country: "Current Country", state: nil)
   
-
+  
   // MARK: - Initialization
   init(for list: [MainInfo], index: Int, observer: SearchObserver) {
     self.list = list
@@ -47,16 +47,11 @@ class CityListPageViewController: UIPageViewController {
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-
-    if gps.checkServiceIsEnabled(){
-      gps.manager?.delegate = self
-      gps.manager?.startUpdatingLocation()
-    }
-  }
-  
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
     
+    if location.checkServiceIsEnabled(){
+      location.manager?.delegate = self
+      location.manager?.startUpdatingLocation()
+    }
   }
   
   override func viewDidLayoutSubviews() {
@@ -134,28 +129,28 @@ extension CityListPageViewController: UIPageViewControllerDataSource, UIPageView
     pageControl.isHidden = true
   }
 }
-
+// MARK: - Observer delegate
 extension CityListPageViewController: SubcribeSearch {
   func delete(at index: Int) {
-//    let vc  = BuilderService.buildPageViewController()
-//    let navigationController = UINavigationController(rootViewController: vc)
-//    navigationController.setViewControllers([vc], animated: true)
-//    navigationController.modalPresentationStyle = .fullScreen
-//    present(navigationController, animated: false)
-  //  let vc = BuilderService.buildPageViewController()
-  //  navigationController?.pushViewController(vc, animated: true)
-   // let vc = BuilderService.buildPageViewController()
-  //  navigationController?.setViewControllers([vc], animated: true)
+    //    let vc  = BuilderService.buildPageViewController()
+    //    let navigationController = UINavigationController(rootViewController: vc)
+    //    navigationController.setViewControllers([vc], animated: true)
+    //    navigationController.modalPresentationStyle = .fullScreen
+    //    present(navigationController, animated: false)
+    //  let vc = BuilderService.buildPageViewController()
+    //  navigationController?.pushViewController(vc, animated: true)
+    // let vc = BuilderService.buildPageViewController()
+    //  navigationController?.setViewControllers([vc], animated: true)
   }
 }
-
+// MARK: - LocationManagerDelegate delegates
 extension CityListPageViewController: CLLocationManagerDelegate {
- 
+  
   func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-    guard let checkLocationAuth = gps.checkLocationAuth() else { return }
+    guard let checkLocationAuth = location.checkLocationAuth() else { return }
     /// проверка на случай если пользователь запретил геолокацию для приложения. Текущий город будет удален
     if !checkLocationAuth {
-      gps.deleteCurrentCity()
+      location.deleteCurrentCity()
       let vc = BuilderService.buildRootViewController()
       vc.modalPresentationStyle = .fullScreen
       present(vc, animated: false, completion: nil)
@@ -163,30 +158,15 @@ extension CityListPageViewController: CLLocationManagerDelegate {
   }
   
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    if let location = locations.first {
-      gps.manager?.stopUpdatingLocation()
+    if let location = locations.last {
       /// изменение геопозиции при использовании приложения
       userLocation.lat = location.coordinate.latitude
       userLocation.lon = location.coordinate.longitude
+      self.location.saveCurrentCity(userLocation)
       
-//      gps.deleteCurrentCity()
-//      gps.saveCurrentCity(userLocation)
-//      guard let city = gps.loadCurrentCity() else { return }
-//              cityPage.first?.viewModel.loadWeather()
-//      let vc = BuilderService.buildRootViewController()
-//      vc.modalPresentationStyle = .fullScreen
-//      present(vc, animated: false, completion: nil)
-      
-//      coreDataManager.saveToList(city: userLocation, isCurrentLocation: true)
-//      coreDataManager.saveContext()
-//      coreDataManager.cityResultsPredicate = nil
-//      coreDataManager.loadSavedData()
-//      list = coreDataManager.fetchedResultsController.fetchedObjects ?? []
-//      dataSource = nil
-//      dataSource = self
     }
-    }
-   
+  }
+  
   
   func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
     print(error)

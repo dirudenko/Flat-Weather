@@ -56,9 +56,9 @@ class SettingsViewController: UIViewController {
     settingsView.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
       settingsView.topAnchor.constraint(equalTo: view.topAnchor, constant: adapted(dimensionSize: 62, to: .height)),
-      settingsView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
-      settingsView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
-      settingsView.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 766, to: .height))
+      settingsView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: Constants.Design.horizontalViewPadding),
+      settingsView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -Constants.Design.horizontalViewPadding),
+      settingsView.heightAnchor.constraint(equalToConstant: Constants.Design.viewHeight)
     ])
   }
 }

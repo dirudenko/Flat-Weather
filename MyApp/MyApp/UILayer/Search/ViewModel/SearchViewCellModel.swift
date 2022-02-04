@@ -41,9 +41,10 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
     case .CityListTableViewCell:
       coreDataManager.cityResultsPredicate = nil
       coreDataManager.loadSavedData()
-      return coreDataManager.fetchedResultsController.fetchedObjects?.count ?? 0
+      let sections = coreDataManager.fetchedResultsController.fetchedObjects?.count
+      print(sections)
+      return  sections ?? 0
     case .StandartTableViewCell:
-      
       return 1
     default:
       return 0
@@ -60,7 +61,6 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
       return }
     coreDataManager.removeDataFromMainWeather(object: object)
     observer.notifyObserver(index: index)
-    //updateViewData?(.initial)
   }
   
   /// Передеча текста в качестве предиката для фетчРеквеста списка всех городов
@@ -94,8 +94,8 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
     case .CityListTableViewCell:
       return coreDataManager.fetchedResultsController.fetchedObjects ?? []
     case .StandartTableViewCell:
-      guard let model = model else { return []}
-      coreDataManager.saveToList(city: model)
+      guard let model = model else { return [] }
+      coreDataManager.saveToList(city: model, isCurrentLocation: false)
       coreDataManager.loadSavedData()
       return coreDataManager.fetchedResultsController.fetchedObjects ?? []
     default:

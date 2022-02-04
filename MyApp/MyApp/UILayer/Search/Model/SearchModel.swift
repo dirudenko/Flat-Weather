@@ -10,7 +10,7 @@ import Foundation
 struct SearchModel: Codable {
   let name: String
   let localNames: [String: String]?
-  let lat, lon: Double
+  var lat, lon: Double
   let country: String
   let state: String?
   

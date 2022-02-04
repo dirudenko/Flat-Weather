@@ -8,6 +8,7 @@
 import Foundation
 
 extension String {
+  /// вывод строки с заглавной буквы
     var capitalizedFirstLetter: String {
           let string = self
           return string.replacingCharacters(in: startIndex...startIndex, with: String(self[startIndex]).capitalized)

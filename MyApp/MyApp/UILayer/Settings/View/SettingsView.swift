@@ -38,6 +38,7 @@ class SettingsView: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
     setupLayouts()
+    setupViews()
     addConstraints()
   }
   
@@ -46,7 +47,7 @@ class SettingsView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
   
-  /// Data Driven состояние для вьюшки
+  /// Data Driven состояние для View
   override func layoutSubviews() {
     super.layoutSubviews()
     gradient.frame = self.bounds
@@ -69,6 +70,10 @@ class SettingsView: UIView {
   private func setupLayouts() {
     addSubview(settingsTableView)
     addSubview(backButton)
+    layer.insertSublayer(gradient, at:0)
+  }
+  
+  private func setupViews() {
     picker = Picker(for: self)
     settingsTableView.delegate = self
     settingsTableView.dataSource = self
@@ -77,7 +82,6 @@ class SettingsView: UIView {
     backButton.addTarget(self, action: #selector(didTapBack), for: .touchDown)
     let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didPan(_:)))
     addGestureRecognizer(panGestureRecognizer)
-    layer.insertSublayer(gradient, at:0)
   }
   
   @objc private func didTapBack() {
@@ -90,8 +94,6 @@ class SettingsView: UIView {
       break
     case .changed:
       let translation = sender.translation(in: self)
-      //self.center = CGPoint(x: initialCenter.x + translation.x,
-      // y: initialCenter.y + translation.y)
       if translation.x > adapted(dimensionSize: 30, to: .width) {
         delegate?.backButtonTapped()
       }
@@ -184,12 +186,12 @@ extension SettingsView: UITableViewDataSource, UITableViewDelegate {
       let view = UIView()
       view.backgroundColor = .clear
       let titleLabel = DescriptionLabel()
-      titleLabel.font = AppFont.regular(size: 12)
+      titleLabel.font = Constants.Fonts.small
       titleLabel.text = SettingsSections(rawValue: section)?.description
       view.addSubview(titleLabel)
       titleLabel.translatesAutoresizingMaskIntoConstraints = false
       titleLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-      titleLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)).isActive = true
+      titleLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: Constants.Design.horizontalViewPadding).isActive = true
       return view
     default:
       return UIView(frame: .zero)
@@ -251,15 +253,15 @@ extension SettingsView {
   private func addConstraints() {
     NSLayoutConstraint.activate([
       settingsTableView.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: adapted(dimensionSize: 9, to: .height)),
-      settingsTableView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
-      settingsTableView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
+      settingsTableView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: Constants.Design.horizontalViewPadding),
+      settingsTableView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -Constants.Design.horizontalViewPadding),
       settingsTableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
       
       
-      backButton.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 16, to: .height)),
-      backButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
-      backButton.widthAnchor.constraint(equalToConstant: 32),
-      backButton.heightAnchor.constraint(equalToConstant: 32)
+      backButton.topAnchor.constraint(equalTo: self.topAnchor, constant: Constants.Design.verticalViewPadding),
+      backButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: Constants.Design.horizontalViewPadding),
+      backButton.widthAnchor.constraint(equalToConstant: Constants.Design.buttonSize),
+      backButton.heightAnchor.constraint(equalToConstant: Constants.Design.buttonSize)
       
       
       

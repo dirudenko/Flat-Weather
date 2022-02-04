@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21C52" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21D49" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="BottomBar" representedClassName="BottomBar" syncable="YES">
         <attribute name="humidity" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="pressure" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
@@ -33,7 +33,7 @@
         <relationship name="bottomWeather" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="BottomBar" inverseName="weather" inverseEntity="BottomBar"/>
         <relationship name="hourlyWeather" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Hourly" inverseName="weather" inverseEntity="Hourly"/>
         <relationship name="topWeather" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="TopBar" inverseName="weather" inverseEntity="TopBar"/>
-        <relationship name="unitTypes" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UnitsTypes" inverseName="main" inverseEntity="UnitsTypes"/>
+        <relationship name="unitTypes" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="UnitsTypes" inverseName="main" inverseEntity="UnitsTypes"/>
         <relationship name="weeklyWeather" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Weekly" inverseName="weather" inverseEntity="Weekly"/>
         <uniquenessConstraints>
             <uniquenessConstraint>

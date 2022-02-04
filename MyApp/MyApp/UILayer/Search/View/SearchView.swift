@@ -20,7 +20,7 @@ class SearchView: UIView {
   private let searchBar: UISearchBar = {
     let searchBar = UISearchBar()
     searchBar.translatesAutoresizingMaskIntoConstraints = false
-    searchBar.placeholder = "Найти город..."
+    searchBar.placeholder = "Find city..."
     searchBar.searchTextField.layer.cornerRadius = 16
     searchBar.searchTextField.borderStyle = .roundedRect
     searchBar.barTintColor = .clear
@@ -33,10 +33,9 @@ class SearchView: UIView {
   
   private let cityListTableView = TableView(celltype: .CityListTableViewCell)
   private let searchTableView = TableView(celltype: .StandartTableViewCell)
-  // private let animation = AnimationView()
   private var searchViewCellModel: SearchViewCellModelProtocol
-  private(set) var loadingVC = LoadingView()
-  private(set) var backButton = Button(systemImage: "arrow.backward")
+  private let spinnerView = LoadingView()
+  private let backButton = Button(systemImage: "arrow.backward")
   private let gradient = Constants.Design.gradient
   // MARK: - Public types
   weak var delegate: SearchViewProtocol?
@@ -57,6 +56,7 @@ class SearchView: UIView {
     super.init(frame: frame)
     updateView()
     setupLayouts()
+    setupView()
     addConstraints()
   }
   
@@ -69,9 +69,8 @@ class SearchView: UIView {
     gradient.frame = self.bounds
     switch viewData {
     case .initial:
-      // animation.removeFromSuperview()
       searchBar.resignFirstResponder()
-      loadingVC.isHidden = true
+      spinnerView.isHidden = true
       cityListTableView.isHidden = false
       searchTableView.isHidden = true
       if searchViewCellModel.coreDataManager.entityIsEmpty() {
@@ -80,17 +79,14 @@ class SearchView: UIView {
         backButton.isHidden = false
       }
     case .load:
-      loadingVC.isHidden = false
+      spinnerView.isHidden = false
       cityListTableView.isHidden = true
       searchTableView.isHidden = false
     case .success(let model):
       city = model
-      loadingVC.makeInvisible()
+      spinnerView.makeInvisible()
       searchTableView.isHidden = false
       cityListTableView.isHidden = true
-      //      animation.removeFromSuperview()
-      //      searchBar.isHidden = false
-      //      searchBar.becomeFirstResponder()
     case .failure:
       break
     }
@@ -101,19 +97,21 @@ class SearchView: UIView {
     addSubview(searchBar)
     addSubview(searchTableView)
     addSubview(cityListTableView)
-    // addSubview(animation)
-    addSubview(loadingVC)
+    addSubview(spinnerView)
     addSubview(backButton)
-    bringSubviewToFront(loadingVC)
+    bringSubviewToFront(spinnerView)
+    layer.insertSublayer(gradient, at:0)
+  }
+  
+  private func setupView() {
     backButton.addTarget(self, action: #selector(didTapBack), for: .touchDown)
-    loadingVC.makeInvisible()
+   // spinnerView.makeInvisible()
     searchBar.delegate = self
     searchTableView.delegate = self
     searchTableView.dataSource = self
     cityListTableView.delegate = self
     cityListTableView.dataSource = self
     searchViewCellModel.coreDataManager.fetchedResultsController.delegate = self
-    layer.insertSublayer(gradient, at:0)
   }
   
   private func updateView() {
@@ -265,11 +263,14 @@ extension SearchView: NSFetchedResultsControllerDelegate {
       }
     case .update:
       if let indexPath = indexPath {
-        guard let cell = cityListTableView.cellForRow(at: indexPath) as? CityListTableViewCell,
-              let model = (searchViewCellModel.getObjects(at: indexPath.section)) else { break }
-        cell.configure(with: model)
+        let section = indexPath.row
+      //  DispatchQueue.main.async {
+        cityListTableView.reloadSections([section], with: .none)
+        //}
+//        guard let cell = cityListTableView.cellForRow(at: indexPath) as? CityListTableViewCell,
+//              let model = (searchViewCellModel.getObjects(at: indexPath.section)) else { break }
+//        cell.configure(with: model)
       }
-      
     case .move:
       if let indexPath = indexPath {
         let section = indexPath.row
@@ -293,37 +294,33 @@ extension SearchView: NSFetchedResultsControllerDelegate {
 extension SearchView {
   private func addConstraints() {
     let safeArea = self.safeAreaLayoutGuide
-    loadingVC.translatesAutoresizingMaskIntoConstraints = false
     
     NSLayoutConstraint.activate([
       
       searchBar.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: adapted(dimensionSize: 9, to: .height)),
-      searchBar.leftAnchor.constraint(equalTo: safeArea.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
-      searchBar.rightAnchor.constraint(equalTo: safeArea.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
+      searchBar.leftAnchor.constraint(equalTo: safeArea.leftAnchor, constant: Constants.Design.horizontalViewPadding),
+      searchBar.rightAnchor.constraint(equalTo: safeArea.rightAnchor, constant: -Constants.Design.horizontalViewPadding),
       searchBar.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 50, to: .height)),
       
       searchTableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: adapted(dimensionSize: 9, to: .height)),
-      searchTableView.leftAnchor.constraint(equalTo: safeArea.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
-      searchTableView.rightAnchor.constraint(equalTo: safeArea.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
+      searchTableView.leftAnchor.constraint(equalTo: safeArea.leftAnchor, constant: Constants.Design.horizontalViewPadding),
+      searchTableView.rightAnchor.constraint(equalTo: safeArea.rightAnchor, constant: -Constants.Design.horizontalViewPadding),
       searchTableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
       
       cityListTableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: adapted(dimensionSize: 9, to: .height)),
-      cityListTableView.leftAnchor.constraint(equalTo: safeArea.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
-      cityListTableView.rightAnchor.constraint(equalTo: safeArea.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
+      cityListTableView.leftAnchor.constraint(equalTo: safeArea.leftAnchor, constant: Constants.Design.horizontalViewPadding),
+      cityListTableView.rightAnchor.constraint(equalTo: safeArea.rightAnchor, constant: -Constants.Design.horizontalViewPadding),
       cityListTableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
       
       
-      backButton.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 16, to: .height)),
-      backButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
-      backButton.widthAnchor.constraint(equalToConstant: 32),
-      backButton.heightAnchor.constraint(equalToConstant: 32),
-      //      animation.topAnchor.constraint(equalTo: self.centerYAnchor, constant: adapted(dimensionSize: -50, to: .height)),
-      //      animation.leftAnchor.constraint(equalTo: self.centerXAnchor, constant: adapted(dimensionSize: -50, to: .width)),
-      //      animation.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 200, to: .width)),
-      //      animation.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 200, to: .height)),
+      backButton.topAnchor.constraint(equalTo: self.topAnchor, constant: Constants.Design.verticalViewPadding),
+      backButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: Constants.Design.horizontalViewPadding),
+      backButton.widthAnchor.constraint(equalToConstant: Constants.Design.buttonSize),
+      backButton.heightAnchor.constraint(equalToConstant: Constants.Design.buttonSize),
+     
       
-      loadingVC.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-      loadingVC.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+      spinnerView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+      spinnerView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
       
     ])
   }

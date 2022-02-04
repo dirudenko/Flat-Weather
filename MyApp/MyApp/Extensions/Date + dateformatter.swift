@@ -6,9 +6,9 @@
 //
 
 import Foundation
+/// форматирование даты в нужный формат на главном экране
 
 extension Date {
-  
   func dateFormatter() -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "EEEE | d MMM"

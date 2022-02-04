@@ -12,6 +12,11 @@ enum WeatherApi {
   case getCityName(name: String)
 }
 
+enum Units: String {
+  case metric = "metric"
+  case imperial = "imperial"
+}
+
 extension WeatherApi: EndPointType {
   
   var baseURL: URL {
@@ -28,6 +33,16 @@ extension WeatherApi: EndPointType {
     }
   }
   
+  var units: Units {
+    let temperature: Temperature? = UserDefaultsManager.get(forKey: "Temperature")
+    switch temperature {
+    case .Celcius:
+      return .metric
+    case .Fahrenheit:
+      return .imperial
+    default: fatalError()
+    }
+  }
   
   var httpMethod: HTTPMethod {
     return .get
@@ -42,8 +57,8 @@ extension WeatherApi: EndPointType {
                                   "lat": lat,
                                   "lon": lon,
                                   "exclude": "minutely,alerts",
-                                  "appid": NetworkManager.weatherAPIKey,
-                                  "units": "metric",
+                                  "appid": Constants.Network.weatherAPIKey,
+                                  "units": units.rawValue,
                                   "lang": "en",
                                 ])
     case .getCityName(let name):
@@ -52,7 +67,7 @@ extension WeatherApi: EndPointType {
                                 urlParameters: [
                                   "q": name,
                                   "limit": 20,
-                                  "appid": NetworkManager.weatherAPIKey
+                                  "appid": Constants.Network.weatherAPIKey
                                 ])
     }
   }

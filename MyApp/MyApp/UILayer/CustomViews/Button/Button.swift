@@ -37,14 +37,13 @@ class Button: UIButton {
   }
   
   func addText() {
- 
-    
     setTitle("Forcast for 7 days", for: .normal)
     setTitleColor(UIColor(named: "bottomColor"), for: .normal)
 
     let image = UIImage(systemName: "chevron.down")?.withTintColor(UIColor(named: "bottomColor")!, renderingMode: .alwaysOriginal)
     setImage(image, for: .normal)
     backgroundColor = .clear
-    imageEdgeInsets.left = adapted(dimensionSize: 280, to: .width)
+    imageEdgeInsets.left = adapted(dimensionSize: 150, to: .width)
+    titleLabel?.adjustsFontSizeToFitWidth = true
   }
 }

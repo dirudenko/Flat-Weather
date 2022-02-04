@@ -31,7 +31,7 @@ protocol CoreDataManagerResultProtocol: CoreDataManagerProtocol {
   func configureBottomView(from data: WeatherModel, list: MainInfo?)
   func configureHourly(from data: WeatherModel, list: MainInfo?)
   func configureWeekly(from data: WeatherModel, list: MainInfo?)
-  func saveToList(city: SearchModel)
+  func saveToList(city: SearchModel, isCurrentLocation: Bool)
   func updateUnitTypes(list: MainInfo?)
 }
 
@@ -124,19 +124,24 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     }
   
   /// Сохранение добавленного города в КорДату
-  func saveToList(city: SearchModel) {
+  func saveToList(city: SearchModel, isCurrentLocation: Bool) {
     let entity = NSEntityDescription.entity(forEntityName: "MainInfo",
                                             in: managedContext)!
     let list = MainInfo(entity: entity, insertInto: managedContext)
     
-    list.id = Int64(city.lat + city.lon)
+    list.id = isCurrentLocation ? 0 : Int64(city.lat + city.lon)
     list.name = city.name
     list.lat = city.lat
     list.lon = city.lon
     list.country = city.country
+    if isCurrentLocation {
+      let date = Date(timeIntervalSince1970: 0)
+      list.date = date
+    } else {
     list.date = Date()
-    saveContext()
+    }
     updateUnitTypes(list: list)
+    saveContext()
   }
   
   
@@ -147,12 +152,12 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     guard let temperatureType: Temperature = UserDefaultsManager.get(forKey: "Temperature"),
     let windSpeedType: WindSpeed = UserDefaultsManager.get(forKey: "Wind"),
           let pressureType: Pressure = UserDefaultsManager.get(forKey: "Pressure") else { return }
+    
     units.tempType = Int16(temperatureType.rawValue)
-    print(temperatureType.rawValue)
     units.windType = Int16(windSpeedType.rawValue)
     units.pressureType = Int16(pressureType.rawValue)
     list?.unitTypes = units
-    saveContext()
+    //saveContext()
   }
   
   func configureWeekly(from data: WeatherModel, list: MainInfo?) {
@@ -171,6 +176,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
       list?.insertIntoWeeklyWeather(weather, at: index)
       weather.weather = list
     }
+   // saveContext()
   }
   
   func configureHourly(from data: WeatherModel, list: MainInfo?) {
@@ -189,6 +195,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
       list?.addToHourlyWeather(weather)
       weather.weather = list
     }
+   // saveContext()
   }
   
   /// Конфигурация верхнего бара с текущими погодными данными
@@ -202,7 +209,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     weather.iconId = Int16(data.current.weather.first?.id ?? 0)
     weather.desc = data.current.weather.first?.weatherDescription
     weather.weather = list
-   // saveContext()
+    saveContext()
   }
   
   /// Конфигурация collectionView бара с текущими погодными данными
@@ -215,7 +222,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     weather.pressure = Int16(data.current.pressure)
     weather.rain = Int16((data.current.pop ?? 0) * 100)
     weather.weather = list
-   // saveContext()
+    saveContext()
   }
 }
 

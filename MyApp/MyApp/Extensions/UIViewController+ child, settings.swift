@@ -21,18 +21,22 @@ extension UIViewController {
     view.removeFromSuperview()
     removeFromParent()
   }
-  
+  /// Проверка наличия размерности данных и их установка в случае необходимости
   func checkSettings() {
     let temperature: Temperature? = UserDefaultsManager.get(forKey: "Temperature")
-    let wind: WindSpeed? = UserDefaultsManager.get(forKey: "Wind")
+   // let wind: WindSpeed? = UserDefaultsManager.get(forKey: "Wind")
     let pressure: Pressure? = UserDefaultsManager.get(forKey: "Pressure")
-  //  UserDefaults.standard.set(true, forKey: "UnitChange")
+
     if temperature == nil {
       let temperature: Temperature = .Celcius
       UserDefaultsManager.set(temperature,forKey: "Temperature")
     }
     
-    if wind == nil {
+    switch temperature {
+    case .Fahrenheit:
+      let wind: WindSpeed = .milh
+      UserDefaultsManager.set(wind,forKey: "Wind")
+    default:
       let wind: WindSpeed = .ms
       UserDefaultsManager.set(wind,forKey: "Wind")
     }

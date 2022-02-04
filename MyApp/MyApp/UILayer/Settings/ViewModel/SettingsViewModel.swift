@@ -73,6 +73,9 @@ class SettingsViewModel: SettingsViewModelProtocol {
 // MARK: - Observer 
 extension SettingsViewModel: SubcribeSettings {
   func settingsChanged(unit: Settings, type: UnitOptions) {
-    changeSettings(unit: unit, type: type)
+    DispatchQueue.main.async {
+      self.changeSettings(unit: unit, type: type)
+
+    }
   }
 }

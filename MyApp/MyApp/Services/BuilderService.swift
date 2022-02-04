@@ -13,18 +13,23 @@ final class BuilderService {
   private static var coreDataManager: CoreDataManagerResultProtocol = CoreDataManager(modelName: "MyApp")
   private static let settingsObserver = SettingsObserver()
   private static let searchObserver = SearchObserver()
+  private static let locationManager = LocationManager()
  
   static func buildRootViewController() -> UINavigationController {
     var viewController = UIViewController()
     var navigationController = UINavigationController()
-  //  coreDataManager.loadSavedData()
-  //  let list = coreDataManager.fetchedResultsController.fetchedObjects ?? []
+   
+    if locationManager.checkServiceIsEnabled() && coreDataManager.entityIsEmpty() {
+      viewController = LocationViewController()
+      navigationController = UINavigationController(rootViewController: viewController)
+    } else {
     if coreDataManager.entityIsEmpty() {
       viewController = buildSearchViewController()
       navigationController = UINavigationController(rootViewController: viewController)
     } else {
       viewController = buildPageViewController()
       navigationController = UINavigationController(rootViewController: viewController)
+    }
     }
     navigationController.checkSettings()
     navigationController.setToolbarHidden(true, animated: false)
@@ -58,3 +63,5 @@ final class BuilderService {
   }
   
 }
+
+

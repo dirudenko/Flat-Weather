@@ -13,7 +13,7 @@ final class MainWeatherViewController: UIViewController {
   private var hourlyWeatherView = HourlyWeatherView()
   private let forcastButton = Button()
   private var weeklyWeatherView = WeeklyWeatherView()
-  private var viewModel: MainWeatherViewModelProtocol
+  private(set) var viewModel: MainWeatherViewModelProtocol
   // MARK: - Private variables
   private var isPressed = false
   private var weeklyWeatherViewTopSmall: NSLayoutConstraint?
@@ -33,8 +33,10 @@ final class MainWeatherViewController: UIViewController {
   // MARK: - UIViewController lifecycle methods
   override func viewDidLoad() {
     super.viewDidLoad()
-    updateView()
     setupLayouts()
+    setupView()
+    setupConstraints()
+    updateView()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -46,7 +48,6 @@ final class MainWeatherViewController: UIViewController {
     super.viewDidAppear(animated)
     /// проверка времени для повторного запроса в сеть
     if viewModel.checkDate() {
-      print("API CALL")
       viewModel.loadWeather()
     }
    
@@ -69,7 +70,9 @@ final class MainWeatherViewController: UIViewController {
     view.addSubview(hourlyWeatherView)
     view.addSubview(weeklyWeatherView)
     view.addSubview(forcastButton)
-    setupConstraints()
+  }
+  
+  private func setupView() {
     let swipeGestureRecognizerDown = UISwipeGestureRecognizer(target: self, action: #selector(didSwipe(_:)))
     let swipeGestureRecognizerUp = UISwipeGestureRecognizer(target: self, action: #selector(didSwipe(_:)))
     forcastButton.addTarget(self, action: #selector(didTapButton), for: .touchDown)
@@ -79,7 +82,6 @@ final class MainWeatherViewController: UIViewController {
     view.addGestureRecognizer(swipeGestureRecognizerDown)
     view.addGestureRecognizer(swipeGestureRecognizerUp)
     currentWeatherView.delegate = self
-
   }
  
   @objc private func didTapButton() {
@@ -165,8 +167,8 @@ extension MainWeatherViewController {
       hourlyWeatherView.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 140, to: .height)),
       
       forcastButton.topAnchor.constraint(equalTo: hourlyWeatherView.bottomAnchor, constant: adapted(dimensionSize: 6, to: .height)),
-      forcastButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: adapted(dimensionSize: 0, to: .width)),
-      forcastButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: adapted(dimensionSize: 0, to: .width)),
+      forcastButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+      forcastButton.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 140, to: .width)),
       forcastButton.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 34, to: .height))
     ])
     

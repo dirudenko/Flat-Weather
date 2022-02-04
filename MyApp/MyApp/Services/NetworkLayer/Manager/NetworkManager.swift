@@ -8,16 +8,12 @@
 import Foundation
 
 protocol NetworkManagerProtocol {
-  var weatherAPIKey: String { get }
   var router: Router<WeatherApi> { get }
   func getWeather(lon: Double, lat: Double, completion: @escaping (Result<WeatherModel, NetworkErrors>) -> Void)
   func getCityName(name: String, completion: @escaping (Result<[SearchModel], NetworkErrors>) -> Void)
 }
 
 struct NetworkManager: NetworkManagerProtocol {
-  var weatherAPIKey = "4151621f5318e81115ce7581adb25359"
-  
-  static let weatherAPIKey = "4151621f5318e81115ce7581adb25359"
   let router = Router<WeatherApi>()
   
   func getWeather(lon: Double, lat: Double, completion: @escaping (Result<WeatherModel, NetworkErrors>) -> Void) {
@@ -37,7 +33,6 @@ struct NetworkManager: NetworkManagerProtocol {
             return
           }
           do {
-            print(responseData)
             //let jsonData = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
             //print(jsonData)
             let apiResponse = try JSONDecoder().decode(WeatherModel.self, from: responseData)
@@ -70,7 +65,6 @@ struct NetworkManager: NetworkManagerProtocol {
             return
           }
           do {
-            print(responseData)
             //let jsonData = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
             //print(jsonData)
             let apiResponse = try JSONDecoder().decode([SearchModel].self, from: responseData)

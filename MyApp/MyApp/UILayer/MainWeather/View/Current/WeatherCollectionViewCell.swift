@@ -9,13 +9,12 @@ import UIKit
 
 class WeatherCollectionViewCell: UICollectionViewCell {
   // MARK: - Private types
-  private(set)  var conditionImage = MainImage(frame: .zero)
-  private(set)  var conditionStatusLabel = DescriptionLabel()
-  private(set)  var conditionNameLabel = DescriptionLabel()
+  private let conditionImage = MainImage(frame: .zero)
+  private let conditionStatusLabel = DescriptionLabel()
+  private let conditionNameLabel = DescriptionLabel()
   // MARK: - Initialization
   override init(frame: CGRect) {
     super.init(frame: frame)
-    backgroundColor = UIColor.clear
     setupLayouts()
     addConstraints()
     setupFonts()
@@ -29,6 +28,7 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     contentView.addSubview(conditionImage)
     contentView.addSubview(conditionNameLabel)
     contentView.addSubview(conditionStatusLabel)
+    backgroundColor = UIColor.clear
   }
   
   private func setupFonts() {
@@ -38,16 +38,12 @@ class WeatherCollectionViewCell: UICollectionViewCell {
   
   
   private func addConstraints() {
-    var imageSize: CGFloat {
-      adapted(dimensionSize: 32, to: .height)
-    }
-    
     NSLayoutConstraint.activate([
       
       conditionImage.topAnchor.constraint(equalTo: contentView.topAnchor),
       conditionImage.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-      conditionImage.widthAnchor.constraint(equalToConstant: imageSize),
-      conditionImage.heightAnchor.constraint(equalToConstant: imageSize),
+      conditionImage.widthAnchor.constraint(equalToConstant: Constants.Design.imageCellSize),
+      conditionImage.heightAnchor.constraint(equalToConstant: Constants.Design.imageCellSize),
       
       conditionStatusLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
       conditionStatusLabel.leftAnchor.constraint(equalTo: conditionImage.rightAnchor, constant: adapted(dimensionSize: 4, to: .width)),

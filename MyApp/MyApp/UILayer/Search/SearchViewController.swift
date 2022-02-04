@@ -42,7 +42,6 @@ final class SearchViewController: UIViewController {
   private func setupViews() {
     view.backgroundColor = .systemBackground
     view.addSubview(searchView)
-    searchView.backgroundColor = UIColor(named: "backgroundColor")
     searchView.delegate = self
     self.navigationItem.setHidesBackButton(true, animated: false)
   }
@@ -61,29 +60,15 @@ extension SearchViewController: SearchViewProtocol {
   
   func setViewFromCityList(fot city: [MainInfo], at index: Int) {
     let vc  = BuilderService.buildPageViewController(at: index)
-//    let navigationController = UINavigationController(rootViewController: vc)
-//    navigationController.modalPresentationStyle = .fullScreen
-//    navigationController.setViewControllers([vc], animated: true)
-//    present(navigationController, animated: false)
-   // navigationController?.viewControllers.removeAll()
     navigationController?.setViewControllers([vc], animated: true)
-   // navigationController?.pushViewController(vc, animated: true)
   }
   
   func setViewFromSearch(fot city: [MainInfo], at index: Int) {
-   // navigationController?.dismiss(animated: false, completion: nil)
     let vc  = BuilderService.buildPageViewController(at: index)
-   // let navigationController = UINavigationController(rootViewController: vc)
-//navigationController.setViewControllers([vc], animated: true)
-   // navigationController.modalPresentationStyle = .fullScreen
-  //  present(navigationController, animated: false)
-    //navigationController?.pushViewController(vc, animated: true)
     navigationController?.setViewControllers([vc], animated: true)
   }
   
   func backButtonTapped() {
-//    let vc = BuilderService.buildPageViewController()
-//    navigationController?.pushViewController(vc, animated: true)
     if didEdit {
       let vc  = BuilderService.buildPageViewController()
       navigationController?.setViewControllers([vc], animated: true)
@@ -98,9 +83,9 @@ extension SearchViewController{
     searchView.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
       searchView.topAnchor.constraint(equalTo: view.topAnchor, constant: adapted(dimensionSize: 62, to: .height)),
-      searchView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
-      searchView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
-      searchView.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 766, to: .height))
+      searchView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: Constants.Design.horizontalViewPadding),
+      searchView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -Constants.Design.horizontalViewPadding),
+      searchView.heightAnchor.constraint(equalToConstant: Constants.Design.viewHeight)
     ])
   }
 }

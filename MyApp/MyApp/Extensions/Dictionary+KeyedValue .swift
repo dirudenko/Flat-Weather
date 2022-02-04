@@ -8,6 +8,7 @@
 import Foundation
 
 extension Dictionary {
+  /// нахождение значения по ключу в словаре
     func keyedValue(key: Key) -> Value? {
         return self[key] ?? nil
     }

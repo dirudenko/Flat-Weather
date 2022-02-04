@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 class CityListPageViewController: UIPageViewController {
   
@@ -16,10 +17,14 @@ class CityListPageViewController: UIPageViewController {
   /// Массив контроллеров с городами из list с прогнозами погоды
   private var cityPage = [MainWeatherViewController]()
   private let observer: SearchObserver
+  private let gps = LocationManager()
+  let coreDataManager = CoreDataManager(modelName: "MyApp")
   // MARK: - Private variables
   /// Индекс города, показанного на экране
   private var currentIndex: Int
+  private var userLocation = SearchModel(name: "Current Location", localNames: nil, lat: 0, lon: 0, country: "Current Country", state: nil)
   
+
   // MARK: - Initialization
   init(for list: [MainInfo], index: Int, observer: SearchObserver) {
     self.list = list
@@ -42,6 +47,15 @@ class CityListPageViewController: UIPageViewController {
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
+
+    if gps.checkServiceIsEnabled(){
+      gps.manager?.delegate = self
+      gps.manager?.startUpdatingLocation()
+    }
+  }
+  
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
     
   }
   
@@ -52,6 +66,10 @@ class CityListPageViewController: UIPageViewController {
                            width: pageControl.frame.width,
                            height: adapted(dimensionSize: 8, to: .height))
     pageControl.frame = pageFrame
+  }
+  
+  deinit {
+    print("CityListPageViewController deinit")
   }
   
   // MARK: - Private functions
@@ -74,7 +92,6 @@ class CityListPageViewController: UIPageViewController {
   private func setupPageController() {
     self.dataSource = self
     self.delegate = self
-  //  cityPage.removeAll()
     list.forEach {
       let vc = BuilderService.buildMainWeatherViewController(city: $0)
       cityPage.append(vc)
@@ -83,6 +100,7 @@ class CityListPageViewController: UIPageViewController {
     self.navigationItem.setHidesBackButton(true, animated: false)
   }
 }
+
 
 // MARK: - UIViewController delegates
 
@@ -129,4 +147,49 @@ extension CityListPageViewController: SubcribeSearch {
    // let vc = BuilderService.buildPageViewController()
   //  navigationController?.setViewControllers([vc], animated: true)
   }
+}
+
+extension CityListPageViewController: CLLocationManagerDelegate {
+ 
+  func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+    guard let checkLocationAuth = gps.checkLocationAuth() else { return }
+    /// проверка на случай если пользователь запретил геолокацию для приложения. Текущий город будет удален
+    if !checkLocationAuth {
+      gps.deleteCurrentCity()
+      let vc = BuilderService.buildRootViewController()
+      vc.modalPresentationStyle = .fullScreen
+      present(vc, animated: false, completion: nil)
+    }
+  }
+  
+  func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    if let location = locations.first {
+      gps.manager?.stopUpdatingLocation()
+      /// изменение геопозиции при использовании приложения
+      userLocation.lat = location.coordinate.latitude
+      userLocation.lon = location.coordinate.longitude
+      
+//      gps.deleteCurrentCity()
+//      gps.saveCurrentCity(userLocation)
+//      guard let city = gps.loadCurrentCity() else { return }
+//              cityPage.first?.viewModel.loadWeather()
+//      let vc = BuilderService.buildRootViewController()
+//      vc.modalPresentationStyle = .fullScreen
+//      present(vc, animated: false, completion: nil)
+      
+//      coreDataManager.saveToList(city: userLocation, isCurrentLocation: true)
+//      coreDataManager.saveContext()
+//      coreDataManager.cityResultsPredicate = nil
+//      coreDataManager.loadSavedData()
+//      list = coreDataManager.fetchedResultsController.fetchedObjects ?? []
+//      dataSource = nil
+//      dataSource = self
+    }
+    }
+   
+  
+  func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    print(error)
+  }
+  
 }

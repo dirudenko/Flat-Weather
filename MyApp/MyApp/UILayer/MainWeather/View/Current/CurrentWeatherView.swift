@@ -14,45 +14,43 @@ protocol HeaderButtonsProtocol: AnyObject {
 
 final class CurrentWeatherView: UIView {
   // MARK: - Private types
-  private(set) lazy var collectionView = CurrentWeatherCollectionView(cellType: .WeatherCollectionViewCell)
-  private(set) var weatherImage = MainImage(frame: .zero)
-  private(set) var dateLabel = TitleLabel(textAlignment: .center)
-  private(set) var cityNameLabel = TitleLabel(textAlignment: .center)
-  private(set) var temperatureLabel = TitleLabel(textAlignment: .center)
-  private(set) var conditionLabel = DescriptionLabel()
-  private(set) var loadingVC = LoadingView()
-  private var currentWeather: MainInfo?
-  private(set) var addButton = Button(systemImage: "plus")
-  private(set) var optionsButton = Button(systemImage: "line.3.horizontal")
+  private let collectionView = CurrentWeatherCollectionView(cellType: .WeatherCollectionViewCell)
+  private let weatherImage = MainImage(frame: .zero)
+  private let dateLabel = TitleLabel(textAlignment: .center)
+  private let cityNameLabel = TitleLabel(textAlignment: .center)
+  private let temperatureLabel = TitleLabel(textAlignment: .center)
+  private let conditionLabel = DescriptionLabel()
+  private let loadingVC = LoadingView()
+  private let addButton = Button(systemImage: "plus")
+  private let optionsButton = Button(systemImage: "line.3.horizontal")
   private let gradient = Constants.Design.gradient
 
   // MARK: - Private variables
-  private(set) var collectionViewTopSmall: NSLayoutConstraint?
-  private(set) var collectionViewTopBig: NSLayoutConstraint?
+  private var collectionViewTopSmall: NSLayoutConstraint?
+  private var collectionViewTopBig: NSLayoutConstraint?
   
-  private(set) var weatherImageTop: NSLayoutConstraint?
-  private(set) var weatherImageLeftBig: NSLayoutConstraint?
-  private(set) var weatherImageLeftSmall: NSLayoutConstraint?
-  private(set) var weatherImageSizeSmall: NSLayoutConstraint?
-  private(set) var weatherImageSizeBig: NSLayoutConstraint?
-  private(set) var weatherImageHeightSmall: NSLayoutConstraint?
-  private(set) var weatherImageHeightBig: NSLayoutConstraint?
+  private var weatherImageTop: NSLayoutConstraint?
+  private var weatherImageLeftBig: NSLayoutConstraint?
+  private var weatherImageLeftSmall: NSLayoutConstraint?
+  private var weatherImageSizeSmall: NSLayoutConstraint?
+  private var weatherImageSizeBig: NSLayoutConstraint?
+  private var weatherImageHeightSmall: NSLayoutConstraint?
+  private var weatherImageHeightBig: NSLayoutConstraint?
   
-  private(set) var dateLabelTopSmall: NSLayoutConstraint?
-  private(set) var dateLabelTopBig: NSLayoutConstraint?
-  private(set) var dateLabelLeftBig: NSLayoutConstraint?
-  private(set) var dateLabelLeftSmall: NSLayoutConstraint?
+  private var dateLabelTopSmall: NSLayoutConstraint?
+  private var dateLabelTopBig: NSLayoutConstraint?
+  private var dateLabelLeftBig: NSLayoutConstraint?
+  private var dateLabelLeftSmall: NSLayoutConstraint?
   
-  private(set) var temperatureLabelTopSmall: NSLayoutConstraint?
-  private(set) var temperatureLabelTopBig: NSLayoutConstraint?
-  private(set) var temperatureLabelLeftBig: NSLayoutConstraint?
-  private(set) var temperatureLabelLeftSmall: NSLayoutConstraint?
+  private var temperatureLabelTopSmall: NSLayoutConstraint?
+  private var temperatureLabelTopBig: NSLayoutConstraint?
+  private var temperatureLabelLeftBig: NSLayoutConstraint?
+  private var temperatureLabelLeftSmall: NSLayoutConstraint?
   
-  private(set) var conditionLabelTopSmall: NSLayoutConstraint?
-  private(set) var conditionLabelTopBig: NSLayoutConstraint?
-  private(set) var conditionLabelLeftBig: NSLayoutConstraint?
-  private(set) var conditionLabelLeftSmall: NSLayoutConstraint?
-  private var topPadding = adapted(dimensionSize: 444, to: .height)
+  private var conditionLabelTopSmall: NSLayoutConstraint?
+  private var conditionLabelTopBig: NSLayoutConstraint?
+  private var conditionLabelLeftBig: NSLayoutConstraint?
+  private var conditionLabelLeftSmall: NSLayoutConstraint?
   
   // MARK: - Public variables
   var viewData: MainViewData = .initial {
@@ -61,36 +59,41 @@ final class CurrentWeatherView: UIView {
       collectionView.reloadData()
     }
   }
+  
+  private var currentWeather: MainInfo?
+
+  
   weak var delegate: HeaderButtonsProtocol?
   // MARK: - Initialization
   override init(frame: CGRect) {
     super.init(frame: frame)
     setupLayouts()
+    setupView()
     setupConstraints()
     setupFonts()
-    
   }
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
     fatalError("init(coder:) has not been implemented")
   }
-  /// Data Driven состояние для вьюшки
+  
+  /// Data Driven состояние для View
   override func layoutSubviews() {
     super.layoutSubviews()
     gradient.frame = self.bounds
     switch viewData {
     case .initial:
       break
-    case .fetching(let mainInfo):
-      currentWeather = mainInfo
-      configure(with: mainInfo)
+    case .fetching(let model):
+      currentWeather = model
+      configure(with: model)
       loadingVC.makeInvisible()
     case .loading:
       loadingVC.makeVisible()
-    case .success(let weatherModel):
+    case .success(let model):
       loadingVC.makeInvisible()
-      currentWeather = weatherModel
-      configure(with: weatherModel)
+      currentWeather = model
+      configure(with: model)
     case .failure:
       // TODO: Show Error
       break
@@ -108,27 +111,30 @@ final class CurrentWeatherView: UIView {
     addSubview(addButton)
     addSubview(loadingVC)
     addSubview(optionsButton)
-    backgroundColor = UIColor(named: "bottomColor")
     bringSubviewToFront(loadingVC)
+    layer.insertSublayer(gradient, at:0)
+    layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
+    layer.masksToBounds = true
+  }
+  
+  private func setupView() {
     addButton.addTarget(self, action: #selector(didTapAdd), for: .touchDown)
     optionsButton.addTarget(self, action: #selector(didTapOptions), for: .touchDown)
     let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
     weatherImage.isUserInteractionEnabled = true
     weatherImage.addGestureRecognizer(tapGestureRecognizer)
-    layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
-    layer.masksToBounds = true
     collectionView.delegate = self
     collectionView.dataSource = self
-    layer.insertSublayer(gradient, at:0)
+    backgroundColor = UIColor(named: "bottomColor")
+
   }
   
   
-  
   private func setupFonts() {
-    dateLabel.font = AppFont.regular(size: 16)
-    cityNameLabel.font = AppFont.bold(size: 16)
-    temperatureLabel.font = AppFont.bold(size: 72)
-    conditionLabel.font =  AppFont.regular(size: 16)
+    dateLabel.font = Constants.Fonts.regular
+    cityNameLabel.font = Constants.Fonts.regularBold
+    temperatureLabel.font = Constants.Fonts.bigBold
+    conditionLabel.font =  Constants.Fonts.regular
     conditionLabel.textAlignment = .center
   }
   
@@ -187,40 +193,37 @@ extension CurrentWeatherView: UICollectionViewDataSource, UICollectionViewDelega
 // MARK: - Constraints
 extension CurrentWeatherView {
   
-  override func draw(_ rect: CGRect) {
-    let contextBig = UIGraphicsGetCurrentContext()
-    contextBig?.setLineWidth(2.0)
-    contextBig?.setStrokeColor(UIColor.white.cgColor)
-    contextBig?.move(to: CGPoint(x:adapted(dimensionSize: 16, to: .width), y: topPadding))
-    contextBig?.addLine(to: CGPoint(x: adapted(dimensionSize: 342, to: .width) , y: topPadding))
-    contextBig?.strokePath()
-  }
+//  override func draw(_ rect: CGRect) {
+//    let contextBig = UIGraphicsGetCurrentContext()
+//    contextBig?.setLineWidth(2.0)
+//    contextBig?.setStrokeColor(UIColor.white.cgColor)
+//    contextBig?.move(to: CGPoint(x:adapted(dimensionSize: 16, to: .width), y: topPadding))
+//    contextBig?.addLine(to: CGPoint(x: adapted(dimensionSize: 342, to: .width) , y: topPadding))
+//    contextBig?.strokePath()
+//  }
   
   private func setupConstraints() {
-    
-    let imageSizeBig: CGFloat = adapted(dimensionSize: 240, to: .height)
-    let imageSizeSmall: CGFloat = adapted(dimensionSize: 160, to: .height)
     NSLayoutConstraint.activate([
       
-      addButton.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 16, to: .height)),
-      addButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
-      addButton.widthAnchor.constraint(equalToConstant: 32),
-      addButton.heightAnchor.constraint(equalToConstant: 32),
+      addButton.topAnchor.constraint(equalTo: self.topAnchor, constant: Constants.Design.verticalViewPadding),
+      addButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: Constants.Design.horizontalViewPadding),
+      addButton.widthAnchor.constraint(equalToConstant: Constants.Design.buttonSize),
+      addButton.heightAnchor.constraint(equalToConstant: Constants.Design.buttonSize),
       
-      optionsButton.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 16, to: .height)),
-      optionsButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 310, to: .width)),
-      optionsButton.widthAnchor.constraint(equalToConstant: 32),
-      optionsButton.heightAnchor.constraint(equalToConstant: 32),
+      optionsButton.topAnchor.constraint(equalTo: self.topAnchor, constant: Constants.Design.verticalViewPadding),
+      optionsButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -Constants.Design.horizontalViewPadding),
+      optionsButton.widthAnchor.constraint(equalToConstant: Constants.Design.buttonSize),
+      optionsButton.heightAnchor.constraint(equalToConstant: Constants.Design.buttonSize),
       
-      cityNameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 16, to: .height)),
+      cityNameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: Constants.Design.verticalViewPadding),
       cityNameLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
       cityNameLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 32, to: .height)),
       
       weatherImage.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 48, to: .height)),
-      conditionLabel.rightAnchor.constraint(lessThanOrEqualTo: self.rightAnchor ,constant: adapted(dimensionSize: -16, to: .width)),
-      dateLabel.rightAnchor.constraint(equalTo: self.rightAnchor ,constant: adapted(dimensionSize: -16, to: .width)),
+      conditionLabel.rightAnchor.constraint(lessThanOrEqualTo: self.rightAnchor ,constant: -Constants.Design.horizontalViewPadding),
+      dateLabel.rightAnchor.constraint(equalTo: self.rightAnchor ,constant: -Constants.Design.horizontalViewPadding),
       
-      collectionView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
+      collectionView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: Constants.Design.horizontalViewPadding),
       collectionView.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 326, to: .width)),
       collectionView.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 105, to: .height)),
       
@@ -236,12 +239,12 @@ extension CurrentWeatherView {
     weatherImageLeftBig = weatherImage.centerXAnchor.constraint(equalTo: self.centerXAnchor)
     weatherImageLeftBig?.isActive = true
     weatherImageLeftSmall = weatherImage.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width))
-    weatherImageSizeBig = weatherImage.widthAnchor.constraint(equalToConstant: imageSizeBig)
+    weatherImageSizeBig = weatherImage.widthAnchor.constraint(equalToConstant: Constants.Design.imageSizeBig)
     weatherImageSizeBig?.isActive = true
-    weatherImageSizeSmall = weatherImage.widthAnchor.constraint(equalToConstant: imageSizeSmall)
-    weatherImageHeightBig = weatherImage.heightAnchor.constraint(equalToConstant: imageSizeBig)
+    weatherImageSizeSmall = weatherImage.widthAnchor.constraint(equalToConstant: Constants.Design.imageSizeSmall)
+    weatherImageHeightBig = weatherImage.heightAnchor.constraint(equalToConstant: Constants.Design.imageSizeBig)
     weatherImageHeightBig?.isActive = true
-    weatherImageHeightSmall = weatherImage.heightAnchor.constraint(equalToConstant: imageSizeSmall)
+    weatherImageHeightSmall = weatherImage.heightAnchor.constraint(equalToConstant: Constants.Design.imageSizeSmall)
     
     dateLabelTopBig = dateLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 288, to: .height))
     dateLabelTopBig?.isActive = true
@@ -268,8 +271,7 @@ extension CurrentWeatherView {
   func changeConstraints(isPressed: Bool) {
     if isPressed {
       
-      topPadding = adapted(dimensionSize: 232, to: .height)
-      setNeedsDisplay()
+    //  setNeedsDisplay()
       
       weatherImageLeftBig?.isActive = false
       weatherImageLeftSmall?.isActive = true
@@ -301,8 +303,7 @@ extension CurrentWeatherView {
       }
     } else {
       
-      topPadding = adapted(dimensionSize: 444, to: .height)
-      setNeedsDisplay()
+     // setNeedsDisplay()
       
       weatherImageLeftSmall?.isActive = false
       weatherImageLeftBig?.isActive = true

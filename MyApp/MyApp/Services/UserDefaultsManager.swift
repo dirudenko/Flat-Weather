@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+/// менеджер для хранения пользовательских типов данных
 struct UserDefaultsManager {
     static var userDefaults: UserDefaults = .standard
     

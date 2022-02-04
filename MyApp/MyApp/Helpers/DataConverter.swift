@@ -20,16 +20,41 @@ final class DataConverter {
     }
   }
   
-  func convertWindSpeed(value: Double, unit: WindSpeed) -> Double {
-    switch unit {
+  func convertWindSpeed(value: Double, from: WindSpeed, to: WindSpeed) -> Double {
+    switch to {
     case .ms:
-      return value
+      switch from {
+      case .kmh:
+        let windSpeed = Measurement(value: value, unit: UnitSpeed.kilometersPerHour)
+        return windSpeed.converted(to: .metersPerSecond).value
+      case .milh:
+        let windSpeed = Measurement(value: value, unit: UnitSpeed.milesPerHour)
+        return windSpeed.converted(to: .metersPerSecond).value
+      case .ms:
+        return value
+      }
     case .kmh:
-      let windSpeed = Measurement(value: value, unit: UnitSpeed.metersPerSecond)
-      return windSpeed.converted(to: .kilometersPerHour).value
+      switch from {
+      case .kmh:
+        return value
+      case .milh:
+        let windSpeed = Measurement(value: value, unit: UnitSpeed.milesPerHour)
+        return windSpeed.converted(to: .kilometersPerHour).value
+      case .ms:
+        let windSpeed = Measurement(value: value, unit: UnitSpeed.metersPerSecond)
+        return windSpeed.converted(to: .kilometersPerHour).value
+      }
     case .milh:
-      let windSpeed = Measurement(value: value, unit: UnitSpeed.metersPerSecond)
-      return windSpeed.converted(to: .milesPerHour).value
+      switch from {
+      case .kmh:
+        let windSpeed = Measurement(value: value, unit: UnitSpeed.kilometersPerHour)
+        return windSpeed.converted(to: .milesPerHour).value
+      case .milh:
+        return value
+      case .ms:
+        let windSpeed = Measurement(value: value, unit: UnitSpeed.metersPerSecond)
+        return windSpeed.converted(to: .milesPerHour).value
+      }
     }
   }
   

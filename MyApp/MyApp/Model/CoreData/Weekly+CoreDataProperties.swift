@@ -21,7 +21,7 @@ extension Weekly {
   @NSManaged public var id: Int16
   @NSManaged public var tempDay: Double
   @NSManaged public var tempNight: Double
-  @NSManaged public var iconId: Int16
+  @NSManaged public var iconId: String
   @NSManaged public var name: String
   @NSManaged public var weather: MainInfo?
   

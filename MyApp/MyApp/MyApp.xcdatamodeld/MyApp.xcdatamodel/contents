@@ -10,7 +10,7 @@
     <entity name="Hourly" representedClassName="Hourly" syncable="YES">
         <attribute name="date" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="feelsLike" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="iconId" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="iconId" attributeType="String"/>
         <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="rain" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
@@ -45,7 +45,7 @@
         <attribute name="date" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="desc" attributeType="String"/>
         <attribute name="feelsLike" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="iconId" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="iconId" attributeType="String"/>
         <attribute name="pressure" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="temperature" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="weather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MainInfo" inverseName="topWeather" inverseEntity="MainInfo"/>
@@ -58,7 +58,7 @@
     </entity>
     <entity name="Weekly" representedClassName="Weekly" syncable="YES">
         <attribute name="date" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="iconId" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="iconId" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="rain" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>

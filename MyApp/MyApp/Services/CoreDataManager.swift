@@ -169,7 +169,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
       weather.tempDay = item.temp.day
       weather.tempNight = item.temp.night
       weather.date = Int64(item.dt)
-      weather.iconId = Int16(item.weather.first?.id ?? 0)
+      weather.iconId = item.weather.first?.icon ?? ""
       weather.rain = Int16((item.pop ?? 0) * 100)
       weather.name = list?.name ?? ""
       weather.id = Int16(index)
@@ -188,7 +188,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
       weather.temp = item.temp
       weather.feelsLike = item.feelsLike
       weather.date = Int64(item.dt)
-      weather.iconId = Int16(item.weather.first?.id ?? 0)
+      weather.iconId = item.weather.first?.icon ?? ""
       weather.rain = Int16((item.pop ?? 0) * 100)
       weather.name = list?.name ?? ""
       weather.id = Int16(index)
@@ -206,7 +206,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     weather.temperature = data.current.temp
     weather.feelsLike = data.current.feelsLike
     weather.date = Int64(data.current.dt)
-    weather.iconId = Int16(data.current.weather.first?.id ?? 0)
+    weather.iconId = data.current.weather.first?.icon ?? ""
     weather.desc = data.current.weather.first?.weatherDescription
     weather.weather = list
     saveContext()

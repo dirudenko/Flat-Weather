@@ -13,7 +13,7 @@ final class MainWeatherViewController: UIViewController {
   private var hourlyWeatherView = HourlyWeatherView()
   private let forcastButton = Button()
   private var weeklyWeatherView = WeeklyWeatherView()
-  private(set) var viewModel: MainWeatherViewModelProtocol
+  private var viewModel: MainWeatherViewModelProtocol
   // MARK: - Private variables
   private var isPressed = false
   private var weeklyWeatherViewTopSmall: NSLayoutConstraint?

@@ -19,7 +19,7 @@ extension TopBar {
     @NSManaged public var date: Int64
     @NSManaged public var feelsLike: Double
     @NSManaged public var desc: String?
-    @NSManaged public var iconId: Int16
+    @NSManaged public var iconId: String
     @NSManaged public var pressure: Int16
     @NSManaged public var temperature: Double
     @NSManaged public var weather: MainInfo?

@@ -12,7 +12,6 @@ final class BuilderService {
   private static let networkManager: NetworkManagerProtocol = NetworkManager()
   private static var coreDataManager: CoreDataManagerResultProtocol = CoreDataManager(modelName: "MyApp")
   private static let settingsObserver = SettingsObserver()
-  private static let searchObserver = SearchObserver()
   private static let locationManager = LocationManager()
  
   static func buildRootViewController() -> UINavigationController {
@@ -40,7 +39,7 @@ final class BuilderService {
     coreDataManager.cityResultsPredicate = nil
     coreDataManager.loadSavedData()
     let list = coreDataManager.fetchedResultsController.fetchedObjects ?? []
-    let vc = CityListPageViewController(for: list, index: index, observer: searchObserver)
+    let vc = CityListPageViewController(for: list, index: index, locationManager: locationManager, coreDataManager: coreDataManager)
     return vc
   }
   
@@ -51,7 +50,7 @@ final class BuilderService {
   }
   
   static func buildSearchViewController() -> UIViewController {
-    let searchViewCellModel = SearchViewCellModel(networkManager: networkManager, observer: searchObserver, coreDataManager: coreDataManager)
+    let searchViewCellModel = SearchViewCellModel(networkManager: networkManager, coreDataManager: coreDataManager)
     let viewController = SearchViewController(searchViewCellModel: searchViewCellModel)
     return viewController
   }

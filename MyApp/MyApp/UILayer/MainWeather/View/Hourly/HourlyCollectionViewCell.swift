@@ -73,7 +73,7 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     let pop = modelElement.rain
     popLabel.text = "\(pop)% pop"
     
-    var imageName =  IconHadler.iconDictionary.keyedValue(key: Int(modelElement.iconId ))
+    var imageName =  IconHadler.id.keyedValue(key: modelElement.iconId )
     if ((imageName?.contains(".fill")) != nil) {
       let newImageName = imageName?.replacingOccurrences(of: ".fill", with: "")
       imageName = newImageName

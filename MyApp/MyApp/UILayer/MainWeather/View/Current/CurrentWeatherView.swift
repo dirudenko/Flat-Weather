@@ -162,7 +162,7 @@ final class CurrentWeatherView: UIView {
     dateLabel.text = "\(date)".capitalizedFirstLetter
     
     conditionLabel.text = topBar.desc?.capitalizedFirstLetter
-    let imageName =  IconHadler.iconDictionary.keyedValue(key: Int(topBar.iconId))
+    let imageName =  IconHadler.id.keyedValue(key: topBar.iconId)
     
     if #available(iOS 15.0, *) {
       let config =  UIImage.SymbolConfiguration.preferringMulticolor()

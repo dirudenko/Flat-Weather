@@ -8,8 +8,17 @@
 import Foundation
 import CoreLocation
 
+protocol LocationManagerProtocol: AnyObject {
+  var manager: CLLocationManager? { get }
+  func checkServiceIsEnabled() -> Bool
+  func checkLocationAuth() -> Bool?
+  func deleteCurrentCity()
+  func loadCurrentCity() -> MainInfo?
+  func saveCurrentCity(_ userLocation: SearchModel)
+}
 
-final class LocationManager: NSObject {
+
+final class LocationManager: NSObject, LocationManagerProtocol {
   
   var manager: CLLocationManager?
   var coreDataManager = CoreDataManager(modelName: "MyApp")
@@ -82,7 +91,6 @@ final class LocationManager: NSObject {
 
   func saveCurrentCity(_ userLocation: SearchModel) {
     coreDataManager.saveToList(city: userLocation, isCurrentLocation: true)
-   // coreDataManager.saveContext()
   }
   
 }

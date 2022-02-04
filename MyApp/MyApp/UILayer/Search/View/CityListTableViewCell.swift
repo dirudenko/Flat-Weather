@@ -88,7 +88,7 @@ class CityListTableViewCell: UITableViewCell {
     temperatureLabel.text = "\(Int(model.topWeather?.temperature ?? 0))°/\(Int(model.topWeather?.feelsLike ?? 0))"
     nameLabel.text = model.name
     
-    var imageName =  IconHadler.iconDictionary.keyedValue(key: Int(model.topWeather?.iconId ?? 0))
+    var imageName =  IconHadler.id.keyedValue(key: model.topWeather?.iconId ?? "")
     if ((imageName?.contains(".fill")) != nil) {
       let newImageName = imageName?.replacingOccurrences(of: ".fill", with: "")
       imageName = newImageName

@@ -24,15 +24,12 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
   // MARK: - Private variables
   var networkManager: NetworkManagerProtocol
   var coreDataManager: CoreDataManagerResultProtocol
-  private var observer: SearchObserver
   var updateViewData: ((SearchViewData) -> ())?
   // MARK: - Initialization
-  init(networkManager: NetworkManagerProtocol, observer: SearchObserver, coreDataManager: CoreDataManagerResultProtocol) {
+  init(networkManager: NetworkManagerProtocol, coreDataManager: CoreDataManagerResultProtocol) {
     updateViewData?(.initial)
     self.coreDataManager = coreDataManager
     self.networkManager = networkManager
-    self.observer = observer
-    self.observer.register(observer: self)
   }
   // MARK: - Public functions
   /// получение количества секций для таблиц
@@ -59,7 +56,6 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
     guard let object = getObjects(at: index) else { print("ERROR")
       return }
     coreDataManager.removeDataFromMainWeather(object: object)
-    observer.notifyObserver(index: index)
   }
   
   /// Передеча текста в качестве предиката для фетчРеквеста списка всех городов
@@ -103,10 +99,5 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
   }
 }
 
-// MARK: - Observer
-extension SearchViewCellModel: SubcribeSearch {
-  func delete(at index: Int) {
-  //  removeObject(at: index)
-  }
-}
+
 

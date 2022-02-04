@@ -21,7 +21,7 @@ extension Hourly {
     @NSManaged public var feelsLike: Double
     @NSManaged public var date: Int64
     @NSManaged public var rain: Int16
-    @NSManaged public var iconId: Int16
+    @NSManaged public var iconId: String
     @NSManaged public var id: Int16
     @NSManaged public var weather: MainInfo?
 

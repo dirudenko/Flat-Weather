@@ -68,7 +68,7 @@ class WeeklyTableViewCell: UITableViewCell {
     }
   // MARK: - Public functions
     func configure(with model: Weekly) {
-      var imageName =  IconHadler.iconDictionary.keyedValue(key: Int(model.iconId ))
+      var imageName =  IconHadler.id.keyedValue(key: model.iconId )
       if ((imageName?.contains(".fill")) != nil) {
         let newImageName = imageName?.replacingOccurrences(of: ".fill", with: "")
         imageName = newImageName

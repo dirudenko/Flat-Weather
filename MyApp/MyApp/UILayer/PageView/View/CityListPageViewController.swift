@@ -16,22 +16,19 @@ class CityListPageViewController: UIPageViewController {
   private var list: [MainInfo]
   /// Массив контроллеров с городами из list с прогнозами погоды
   private var cityPage = [MainWeatherViewController]()
-  private let observer: SearchObserver
-  private let location = LocationManager()
-  let coreDataManager = CoreDataManager(modelName: "MyApp")
+  private let location: LocationManagerProtocol
+  private let coreDataManager: CoreDataManagerResultProtocol
   // MARK: - Private variables
   /// Индекс города, показанного на экране
   private var currentIndex: Int
   private var userLocation = SearchModel(name: "Current Location", localNames: nil, lat: 0, lon: 0, country: "Current Country", state: nil)
-  
-  
   // MARK: - Initialization
-  init(for list: [MainInfo], index: Int, observer: SearchObserver) {
+  init(for list: [MainInfo], index: Int, locationManager: LocationManagerProtocol, coreDataManager: CoreDataManagerResultProtocol) {
     self.list = list
     self.currentIndex = index
-    self.observer = observer
+    self.location = locationManager
+    self.coreDataManager = coreDataManager
     super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-    observer.register(observer: self)
   }
   
   required init?(coder: NSCoder) {
@@ -127,20 +124,6 @@ extension CityListPageViewController: UIPageViewControllerDataSource, UIPageView
   
   func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
     pageControl.isHidden = true
-  }
-}
-// MARK: - Observer delegate
-extension CityListPageViewController: SubcribeSearch {
-  func delete(at index: Int) {
-    //    let vc  = BuilderService.buildPageViewController()
-    //    let navigationController = UINavigationController(rootViewController: vc)
-    //    navigationController.setViewControllers([vc], animated: true)
-    //    navigationController.modalPresentationStyle = .fullScreen
-    //    present(navigationController, animated: false)
-    //  let vc = BuilderService.buildPageViewController()
-    //  navigationController?.pushViewController(vc, animated: true)
-    // let vc = BuilderService.buildPageViewController()
-    //  navigationController?.setViewControllers([vc], animated: true)
   }
 }
 // MARK: - LocationManagerDelegate delegates

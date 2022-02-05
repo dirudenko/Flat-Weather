@@ -109,19 +109,19 @@ class CoreDataManager: CoreDataManagerResultProtocol {
   
   
   /// Проверка наналичие данных в БД
-    func entityIsEmpty() -> Bool {
-      let request = MainInfo.createFetchRequest()
-      do {
-        let results = try managedContext.fetch(request)
-        if results.isEmpty {
-          return true
-        } else {
-          return false
-        }
-      } catch {
+  func entityIsEmpty() -> Bool {
+    let request = MainInfo.createFetchRequest()
+    do {
+      let results = try managedContext.fetch(request)
+      if results.isEmpty {
+        return true
+      } else {
         return false
       }
+    } catch {
+      return false
     }
+  }
   
   /// Сохранение добавленного города в КорДату
   func saveToList(city: SearchModel, isCurrentLocation: Bool) {
@@ -138,7 +138,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
       let date = Date(timeIntervalSince1970: 0)
       list.date = date
     } else {
-    list.date = Date()
+      list.date = Date()
     }
     updateUnitTypes(list: list)
     saveContext()
@@ -150,7 +150,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
                                             in: managedContext)!
     let units = UnitsTypes(entity: entity, insertInto: managedContext)
     guard let temperatureType: Temperature = UserDefaultsManager.get(forKey: "Temperature"),
-    let windSpeedType: WindSpeed = UserDefaultsManager.get(forKey: "Wind"),
+          let windSpeedType: WindSpeed = UserDefaultsManager.get(forKey: "Wind"),
           let pressureType: Pressure = UserDefaultsManager.get(forKey: "Pressure") else { return }
     
     units.tempType = Int16(temperatureType.rawValue)
@@ -176,7 +176,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
       list?.insertIntoWeeklyWeather(weather, at: index)
       weather.weather = list
     }
-   // saveContext()
+    // saveContext()
   }
   
   func configureHourly(from data: WeatherModel, list: MainInfo?) {
@@ -195,7 +195,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
       list?.addToHourlyWeather(weather)
       weather.weather = list
     }
-   // saveContext()
+    // saveContext()
   }
   
   /// Конфигурация верхнего бара с текущими погодными данными

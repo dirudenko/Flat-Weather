@@ -86,6 +86,7 @@
 		69914017276C7D19003A64E6 /* HourlyWeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69914016276C7D19003A64E6 /* HourlyWeatherView.swift */; };
 		699F158D27ABBD3F00F15534 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699F158C27ABBD3F00F15534 /* LocationManager.swift */; };
 		699F159027AC0A8400F15534 /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699F158F27AC0A8400F15534 /* LocationViewController.swift */; };
+		699F159527AEE57400F15534 /* ConveterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699F159427AEE57400F15534 /* ConveterTests.swift */; };
 		69A4C11727A0308800C8AA27 /* Picker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A4C11627A0308800C8AA27 /* Picker.swift */; };
 		69A4C11B27A16BC500C8AA27 /* UnitsTypes+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A4C11827A16BC500C8AA27 /* UnitsTypes+CoreDataClass.swift */; };
 		69A4C11C27A16BC500C8AA27 /* UnitsTypes+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A4C11927A16BC500C8AA27 /* UnitsTypes+CoreDataProperties.swift */; };
@@ -205,6 +206,7 @@
 		69914016276C7D19003A64E6 /* HourlyWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherView.swift; sourceTree = "<group>"; };
 		699F158C27ABBD3F00F15534 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		699F158F27AC0A8400F15534 /* LocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewController.swift; sourceTree = "<group>"; };
+		699F159427AEE57400F15534 /* ConveterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConveterTests.swift; sourceTree = "<group>"; };
 		69A4C11627A0308800C8AA27 /* Picker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Picker.swift; sourceTree = "<group>"; };
 		69A4C11827A16BC500C8AA27 /* UnitsTypes+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UnitsTypes+CoreDataClass.swift"; sourceTree = "<group>"; };
 		69A4C11927A16BC500C8AA27 /* UnitsTypes+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UnitsTypes+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -286,6 +288,7 @@
 		691625BE2769CC0D00C736C7 /* MyAppTests */ = {
 			isa = PBXGroup;
 			children = (
+				699F159427AEE57400F15534 /* ConveterTests.swift */,
 				691625BF2769CC0D00C736C7 /* MyAppTests.swift */,
 				69DB9769276E06DC00D0D0D4 /* CoreDataTests.swift */,
 			);
@@ -933,6 +936,7 @@
 			files = (
 				69DB976A276E06DC00D0D0D4 /* CoreDataTests.swift in Sources */,
 				691625C02769CC0D00C736C7 /* MyAppTests.swift in Sources */,
+				699F159527AEE57400F15534 /* ConveterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1094,7 +1098,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = N3G8R7BNR2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyApp/Info.plist;
@@ -1125,7 +1129,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = N3G8R7BNR2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyApp/Info.plist;

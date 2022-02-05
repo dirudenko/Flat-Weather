@@ -8,13 +8,13 @@
 import Foundation
 
 protocol NetworkManagerProtocol {
-  var router: Router<WeatherApi> { get }
   func getWeather(lon: Double, lat: Double, completion: @escaping (Result<WeatherModel, NetworkErrors>) -> Void)
   func getCityName(name: String, completion: @escaping (Result<[SearchModel], NetworkErrors>) -> Void)
 }
 
-struct NetworkManager: NetworkManagerProtocol {
-  let router = Router<WeatherApi>()
+class NetworkManager: NetworkManagerProtocol {
+  
+  var router = Router<WeatherApi>()
   
   func getWeather(lon: Double, lat: Double, completion: @escaping (Result<WeatherModel, NetworkErrors>) -> Void) {
     router.request(.getCurrentWeather(lon: lon, lat: lat)) { data, response, error in
@@ -89,4 +89,50 @@ struct NetworkManager: NetworkManagerProtocol {
     default: return .failure(NetworkErrors.failed)
     }
   }
+}
+
+
+class MockNetworkManager: NetworkManagerProtocol {
+  
+  var router: Router<WeatherApi>?
+  var getWeatherResult: Result<WeatherModel, NetworkErrors>?
+  var getSearchResult: Result<[SearchModel], NetworkErrors>?
+  var weatherExecudeCalled = false
+  var searchExecuteCalled = false
+  
+  func getWeather(lon: Double, lat: Double, completion: @escaping (Result<WeatherModel, NetworkErrors>) -> Void) {
+    weatherExecudeCalled = true
+    router = Router<WeatherApi>()
+    getWeatherResult.map(completion)
+  }
+  
+  func getCityName(name: String, completion: @escaping (Result<[SearchModel], NetworkErrors>) -> Void) {
+    searchExecuteCalled = true
+    router = Router<WeatherApi>()
+    getSearchResult.map(completion)
+  }
+  
+  
+}
+
+struct FakeNetworkService {
+ 
+  let networkManager: NetworkManagerProtocol
+  func search(_ name: String, completion: @escaping (Result<[SearchModel], Error>) -> Void) {
+    networkManager.getCityName(name: name) { result in
+    //  completion(self.parse(result))
+    }
+  }
+        
+        private func parse(_ result: Result<Data, Error>) -> Result<SearchModel, Error> {
+                switch result {
+                case let .success(data):
+                    return Result { try JSONDecoder().decode(SearchModel.self, from: data) }
+
+                case let .failure(error):
+                    return .failure(error)
+                }
+            }
+  
+  
 }

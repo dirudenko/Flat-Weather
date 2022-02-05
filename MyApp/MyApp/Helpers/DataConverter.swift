@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class DataConverter {
+struct DataConverter {
 
   func convertTemperature(value: Double, unit: Temperature) -> Double {
     switch unit {

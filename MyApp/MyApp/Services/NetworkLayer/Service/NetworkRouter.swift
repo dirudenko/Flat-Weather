@@ -95,3 +95,31 @@ class Router<EndPoint: EndPointType>: NetworkRouter {
 }
 
 
+class  FakeRouter<EndPoint: EndPointType>: NetworkRouter {
+  private var task: DataTaskMock?
+  func request(_ route: EndPoint, completion: @escaping NetworkRouterCompletion) {
+    
+        defer { completion(nil, nil, nil) }
+    task?.resume()
+    
+  }
+  
+  func cancel() {}
+}
+
+//class URLSessionMock: URLSessionProtocol {
+//    var lastURL: URL?
+//
+//    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+//        defer { completionHandler(nil, nil, nil) }
+//        lastURL = url
+//        return DataTaskMock()
+//    }
+//}
+
+class DataTaskMock: URLSessionDataTask {
+    override func resume() { }
+}
+
+
+

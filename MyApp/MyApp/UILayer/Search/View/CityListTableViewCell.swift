@@ -50,24 +50,19 @@ class CityListTableViewCell: UITableViewCell {
   
   private func addConstraints() {
     
-    var imageSize: CGFloat {
-      adapted(dimensionSize: 32, to: .height)
-    }
-    
     NSLayoutConstraint.activate([
       
       nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 19, to: .height)),
       nameLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
       nameLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 80, to: .width)),
       nameLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 19, to: .height)),
-      // nameLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: adapted(dimensionSize: 42, to: .height)),
+
       
       conditionImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 19, to: .height)),
       conditionImage.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 263, to: .width)),
-      //conditionImage.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: adapted(dimensionSize: 32, to: .height)),
-      // conditionImage.rightAnchor.constraint(equalTo: self.rightAnchor, constant: adapted(dimensionSize: 31, to: .width)),
-      conditionImage.widthAnchor.constraint(equalToConstant: imageSize),
-      conditionImage.heightAnchor.constraint(equalToConstant: imageSize),
+    
+      conditionImage.widthAnchor.constraint(equalToConstant: Constants.Design.imageCellSize),
+      conditionImage.heightAnchor.constraint(equalToConstant: Constants.Design.imageCellSize),
       
       temperatureLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: adapted(dimensionSize: 4, to: .height)),
       temperatureLabel.leftAnchor.constraint(equalTo: nameLabel.leftAnchor),
@@ -77,7 +72,7 @@ class CityListTableViewCell: UITableViewCell {
       
       descriptionLabel.topAnchor.constraint(equalTo: conditionImage.bottomAnchor, constant: adapted(dimensionSize: 2, to: .height)),
       descriptionLabel.centerXAnchor.constraint(equalTo: conditionImage.centerXAnchor),
-      // descriptionLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: adapted(dimensionSize: 16, to: .width)),
+    
       descriptionLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 62, to: .width)),
       descriptionLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 14, to: .height))
     ])

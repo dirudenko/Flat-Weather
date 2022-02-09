@@ -54,8 +54,8 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
           self.updateCoreData(model: weather, context: self.fetchedCity)
           let result = self.convertData(data: self.fetchedCity, weather: weather)
           switch result {
-          case .success(let weather):
-            self.updateCoreData(model: weather, context: self.fetchedCity)
+          case .success(let convertedWeather):
+            self.updateCoreData(model: convertedWeather, context: self.fetchedCity)
             self.updateViewData?(.success(self.fetchedCity))
           case .failure(_): self.updateViewData?(.failure)
           }
@@ -68,7 +68,6 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
       }
     }
   }
-  
   /// проверка даты последнего обновления данных
   func checkDate() -> Bool {
     let currentTimestamp = Date().timeIntervalSince1970

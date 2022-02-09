@@ -9,7 +9,6 @@ import Foundation
 
 protocol SettingsViewModelProtocol: AnyObject {
   var updateViewData: ((SettingsViewData) -> ())? { get set }
-  func getSettings() -> SettingsModel?
   func changeSettings(unit: Settings, type: UnitOptions)
   func unitPressed()
 }
@@ -25,11 +24,11 @@ class SettingsViewModel: SettingsViewModelProtocol {
     self.observer.register(observer: self)
   }
   // MARK: - Public functions
-  
+  /// вывод на экран PickerView при нажатии на размерность
   func unitPressed() {
     updateViewData?(.loading)
   }
-  
+  /// изменение типа размерности
   func changeSettings(unit: Settings, type: UnitOptions) {
     switch type {
     case .temperature:
@@ -42,7 +41,6 @@ class SettingsViewModel: SettingsViewModelProtocol {
       }
     case .wind:
       let wind = unit as? WindSpeed
-     // UserDefaultsManager.set(temperature,forKey: "Wind")
       if wind != UserDefaultsManager.get(forKey: "Wind") {
       UserDefaultsManager.set(wind,forKey: "Wind")
         observer.notifyObserver(unit: unit, type: type)
@@ -50,24 +48,12 @@ class SettingsViewModel: SettingsViewModelProtocol {
         updateViewData?(.success)
       }    case .pressure:
       let pressure = unit as? Pressure
-     // UserDefaultsManager.set(temperature,forKey: "Pressure")
       if pressure != UserDefaultsManager.get(forKey: "Pressure") {
       UserDefaultsManager.set(pressure,forKey: "Pressure")
         observer.notifyObserver(unit: unit, type: type)
       } else {
         updateViewData?(.success)
       }    }
-  }
-  // MARK: - Private functions
-  func getSettings() -> SettingsModel? {
-    guard let temperature: Temperature = UserDefaultsManager.get(forKey: "Temperature"),
-    let wind: WindSpeed = UserDefaultsManager.get(forKey: "Wind"),
-            let pressure: Pressure = UserDefaultsManager.get(forKey: "Pressure") else { return nil }
-    let model = SettingsModel (temperature: temperature,
-                               wind: wind,
-                               pressure: pressure)
-    
-    return model
   }
 }
 // MARK: - Observer 

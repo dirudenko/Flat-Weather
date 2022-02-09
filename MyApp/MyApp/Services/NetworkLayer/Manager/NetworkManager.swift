@@ -94,45 +94,55 @@ class NetworkManager: NetworkManagerProtocol {
 
 class MockNetworkManager: NetworkManagerProtocol {
   
-  var router: Router<WeatherApi>?
+  var router = FakeRouter<TestApi>()
+ 
   var getWeatherResult: Result<WeatherModel, NetworkErrors>?
   var getSearchResult: Result<[SearchModel], NetworkErrors>?
-  var weatherExecudeCalled = false
-  var searchExecuteCalled = false
+
   
   func getWeather(lon: Double, lat: Double, completion: @escaping (Result<WeatherModel, NetworkErrors>) -> Void) {
-    weatherExecudeCalled = true
-    router = Router<WeatherApi>()
-    getWeatherResult.map(completion)
+    let mockCity = MockWeatherModel.city
+    router.request(.getCurrentWeather(lon: lon, lat: lat)) {  data, response, error in
+      if mockCity.lat == lat && mockCity.lon == lon  {
+        completion(.success(mockCity))
+      } else {
+          completion(.failure(.badRequest))
+      }
+    }
   }
   
   func getCityName(name: String, completion: @escaping (Result<[SearchModel], NetworkErrors>) -> Void) {
-    searchExecuteCalled = true
-    router = Router<WeatherApi>()
-    getSearchResult.map(completion)
-  }
-  
-  
-}
-
-struct FakeNetworkService {
- 
-  let networkManager: NetworkManagerProtocol
-  func search(_ name: String, completion: @escaping (Result<[SearchModel], Error>) -> Void) {
-    networkManager.getCityName(name: name) { result in
-    //  completion(self.parse(result))
+    let mockCity = SearchModel(name: "MockCity", localNames: nil, lat: 123, lon: 456, country: "MockCountry", state: nil)
+    router.request(.getCityName(name: name)) {  data, response, error in
+      if mockCity.name == name {
+        completion(.success([mockCity]))
+      } else {
+          completion(.failure(.badRequest))
+      }
     }
   }
-        
-        private func parse(_ result: Result<Data, Error>) -> Result<SearchModel, Error> {
-                switch result {
-                case let .success(data):
-                    return Result { try JSONDecoder().decode(SearchModel.self, from: data) }
-
-                case let .failure(error):
-                    return .failure(error)
-                }
-            }
   
   
 }
+
+//struct FakeNetworkService {
+//
+//  let networkManager: NetworkManagerProtocol
+//  func search(_ name: String, completion: @escaping (Result<[SearchModel], Error>) -> Void) {
+//    networkManager.getCityName(name: name) { result in
+//      completion(self.parse(result))
+//    }
+//  }
+//
+//        private func parse(_ result: Result<Data, Error>) -> Result<SearchModel, Error> {
+//                switch result {
+//                case let .success(data):
+//                    return Result { try JSONDecoder().decode(SearchModel.self, from: data) }
+//
+//                case let .failure(error):
+//                    return .failure(error)
+//                }
+//            }
+  
+  
+//}

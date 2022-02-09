@@ -18,20 +18,20 @@ class CoreDataTests: XCTestCase {
     sut.saveToList(city: mockCity, isCurrentLocation: false)
     sut.loadSavedData()
   }
-
-    override func setUpWithError() throws {
-        sut = TestCoreDataManager(modelName: "MyApp")
-    }
-
-    override func tearDownWithError() throws {
-        sut = nil
-    }
-
-    func testAddMockCity() throws {
-      configureCoreData()
-      XCTAssertNotNil(sut.fetchedResultsController.fetchedObjects?.first?.lat)
-      XCTAssertTrue(sut.fetchedResultsController.fetchedObjects?.first?.name == "MockCity")
-    }
+  
+  override func setUpWithError() throws {
+    sut = TestCoreDataManager(modelName: "MyApp")
+  }
+  
+  override func tearDownWithError() throws {
+    sut = nil
+  }
+  
+  func testAddMockCity() throws {
+    configureCoreData()
+    XCTAssertNotNil(sut.fetchedResultsController.fetchedObjects?.first?.lat)
+    XCTAssertTrue(sut.fetchedResultsController.fetchedObjects?.first?.name == "MockCity")
+  }
   
   func testPredicate() throws {
     configureCoreData()
@@ -91,11 +91,11 @@ class CoreDataTests: XCTestCase {
   func testIsEntytyIsEmpty() {
     XCTAssertTrue(sut.entityIsEmpty())
   }
-
+  
   func testRemoveDataFromCOreData() {
     configureCoreData()
     let list = sut.fetchedResultsController.fetchedObjects?.first
-
+    
     sut.configureTopView(from: mockWeatherModel, list: list)
     sut.configureBottomView(from: mockWeatherModel, list: list)
     sut.configureHourly(from: mockWeatherModel, list: list)
@@ -104,5 +104,5 @@ class CoreDataTests: XCTestCase {
     
     XCTAssertTrue(sut.entityIsEmpty())
   }
-   
+  
 }

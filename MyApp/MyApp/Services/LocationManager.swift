@@ -22,58 +22,58 @@ final class LocationManager: NSObject, LocationManagerProtocol {
   
   var manager: CLLocationManager?
   var coreDataManager = CoreDataManager(modelName: "MyApp")
-
+  
   override init() {
     super.init()
-    checkServiceIsEnabled()
-     checkLocationAuth()
+    let _ = checkServiceIsEnabled()
+    let _ = checkLocationAuth()
   }
   
   func checkServiceIsEnabled() -> Bool {
     if CLLocationManager.locationServicesEnabled() {
       print("Enabled")
       manager = CLLocationManager()
-     // manager?.delegate = self
+      // manager?.delegate = self
       if #available(iOS 14.0, *) {
         manager?.desiredAccuracy = kCLLocationAccuracyReduced
       } else {
         manager?.desiredAccuracy = kCLLocationAccuracyHundredMeters
       }
       manager?.requestWhenInUseAuthorization()
-     // manager?.requestLocation()
-    return true
+      // manager?.requestLocation()
+      return true
     }
     else {
       print("Disabled")
       return false
     }
   }
-    
-    
-     func checkLocationAuth() -> Bool? {
-      guard let manager = manager else { return false }
-       var status: Bool?
-      if #available(iOS 14.0, *) {
-        switch manager.authorizationStatus {
-          
-        case .notDetermined:
-          manager.requestWhenInUseAuthorization()
-        case .restricted:
-          print("Your location is restridcted")
-          status = false
-        case .denied:
-          print("Your location is denied")
-          status = false
-        case .authorizedAlways, .authorizedWhenInUse:
-          status = true
-        @unknown default:
-          break
-        }
-      } else {
-        // Fallback on earlier versions
+  
+  
+  func checkLocationAuth() -> Bool? {
+    guard let manager = manager else { return false }
+    var status: Bool?
+    if #available(iOS 14.0, *) {
+      switch manager.authorizationStatus {
+        
+      case .notDetermined:
+        manager.requestWhenInUseAuthorization()
+      case .restricted:
+        print("Your location is restridcted")
+        status = false
+      case .denied:
+        print("Your location is denied")
+        status = false
+      case .authorizedAlways, .authorizedWhenInUse:
+        status = true
+      @unknown default:
+        break
       }
-       return status
+    } else {
+      // Fallback on earlier versions
     }
+    return status
+  }
   
   func deleteCurrentCity() {
     coreDataManager.cityResultsPredicate = NSPredicate(format: "name CONTAINS %@", "Current Location")
@@ -88,7 +88,7 @@ final class LocationManager: NSObject, LocationManagerProtocol {
     guard let object = coreDataManager.fetchedResultsController.fetchedObjects?.first else { return nil }
     return object
   }
-
+  
   func saveCurrentCity(_ userLocation: SearchModel) {
     coreDataManager.saveToList(city: userLocation, isCurrentLocation: true)
   }

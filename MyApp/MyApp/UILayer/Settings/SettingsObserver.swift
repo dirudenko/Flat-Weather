@@ -23,7 +23,7 @@ class SettingsObserver {
     observers.append(observer)
   }
   
-  func notifyObserver(unit: Settings,type: UnitOptions){
+  func notifyObserver(unit: Settings,type: UnitOptions) {
     for observer in observers {
       observer.settingsChanged(unit: unit, type: type)
     }

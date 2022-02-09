@@ -8,13 +8,13 @@
 import Foundation
 
 enum CollectionViewCellCellTypes {
-  case HourlyCollectionViewCell
-  case WeatherCollectionViewCell
+  case hourlyCollectionViewCell
+  case weatherCollectionViewCell
 }
 
 enum TableViewCellTypes {
-  case CityListTableViewCell
-  case StandartTableViewCell
-  case WeeklyTableViewCell
-  case SettingsTableViewCell
+  case cityListTableViewCell
+  case standartTableViewCell
+  case weeklyTableViewCell
+  case settingsTableViewCell
 }

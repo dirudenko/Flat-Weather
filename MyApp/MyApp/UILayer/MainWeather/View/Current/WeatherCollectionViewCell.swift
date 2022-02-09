@@ -19,7 +19,7 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     addConstraints()
     setupFonts()
   }
-  
+
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -30,26 +30,25 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     contentView.addSubview(conditionStatusLabel)
     backgroundColor = UIColor.clear
   }
-  
+
   private func setupFonts() {
     conditionStatusLabel.font = AppFont.regular(size: 12)
     conditionNameLabel.font =  AppFont.regular(size: 12)
   }
-  
-  
+
   private func addConstraints() {
     NSLayoutConstraint.activate([
-      
+
       conditionImage.topAnchor.constraint(equalTo: contentView.topAnchor),
       conditionImage.leftAnchor.constraint(equalTo: contentView.leftAnchor),
       conditionImage.widthAnchor.constraint(equalToConstant: Constants.Design.imageCellSize),
       conditionImage.heightAnchor.constraint(equalToConstant: Constants.Design.imageCellSize),
-      
+
       conditionStatusLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
       conditionStatusLabel.leftAnchor.constraint(equalTo: conditionImage.rightAnchor, constant: adapted(dimensionSize: 4, to: .width)),
       conditionStatusLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 50, to: .width)),
       conditionStatusLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 14, to: .height)),
-      
+
       conditionNameLabel.topAnchor.constraint(equalTo: conditionStatusLabel.bottomAnchor, constant: adapted(dimensionSize: 5, to: .height)),
       conditionNameLabel.leftAnchor.constraint(equalTo: conditionImage.rightAnchor, constant: adapted(dimensionSize: 4, to: .width)),
       conditionNameLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 100, to: .width)),
@@ -83,4 +82,3 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     }
   }
 }
-

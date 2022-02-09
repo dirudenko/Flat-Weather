@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MockWeatherModel{
+struct MockWeatherModel {
   static let city = WeatherModel(lat: 37.39,
                           lon: -122.08,
                           timezone: "",
@@ -55,6 +55,5 @@ struct MockWeatherModel{
                            snow: nil)
   static let temp = Temp(day: 20, min: 20, max: 20, night: 20, eve: 20, morn: 20)
   static let feelsLike = FeelsLike(day: 22, night: 22, eve: 22, morn: 22)
-  
-}
 
+}

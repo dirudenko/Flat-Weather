@@ -8,7 +8,7 @@
 import UIKit
 
 struct Constants {
-  
+
   struct Design {
   static var gradient: CAGradientLayer {
       let gradient = CAGradientLayer()
@@ -21,7 +21,7 @@ struct Constants {
       gradient.locations = [0, 0.25, 1]
       return gradient
   }
-    
+
     static let buttonSize: CGFloat = 44
     static let verticalViewPadding = adapted(dimensionSize: 16, to: .height)
     static let horizontalViewPadding = adapted(dimensionSize: 16, to: .width)
@@ -29,17 +29,16 @@ struct Constants {
     static let imageSizeSmall: CGFloat = adapted(dimensionSize: 160, to: .height)
     static let imageCellSize: CGFloat = adapted(dimensionSize: 32, to: .height)
     static let viewHeight: CGFloat = adapted(dimensionSize: 766, to: .height)
-    
 
   }
-  
+
   struct Fonts {
     static let regular = AppFont.regular(size: 16)
     static let regularBold = AppFont.bold(size: 16)
     static let bigBold = AppFont.bold(size: 72)
     static let small = AppFont.regular(size: 12)
   }
-  
+
   struct Network {
     static let weatherAPIKey = "4151621f5318e81115ce7581adb25359"
   }

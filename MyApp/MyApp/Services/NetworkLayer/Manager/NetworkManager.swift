@@ -13,17 +13,17 @@ protocol NetworkManagerProtocol {
 }
 
 class NetworkManager: NetworkManagerProtocol {
-  
+
   var router = Router<WeatherApi>()
-  
+
   func getWeather(lon: Double, lat: Double, completion: @escaping (Result<WeatherModel, NetworkErrors>) -> Void) {
     router.request(.getCurrentWeather(lon: lon, lat: lat)) { data, response, error in
-      
+
       if let _ = error {
         completion(.failure(.badRequest))
         return
       }
-      
+
       if let response = response as? HTTPURLResponse {
         let result = self.handleNetworkResponse(response)
         switch result {
@@ -33,8 +33,8 @@ class NetworkManager: NetworkManagerProtocol {
             return
           }
           do {
-            //let jsonData = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
-            //print(jsonData)
+            // let jsonData = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
+            // print(jsonData)
             let apiResponse = try JSONDecoder().decode(WeatherModel.self, from: responseData)
             completion(.success(apiResponse))
           } catch {
@@ -47,15 +47,15 @@ class NetworkManager: NetworkManagerProtocol {
       }
     }
   }
-  
+
   func getCityName(name: String, completion: @escaping (Result<[SearchModel], NetworkErrors>) -> Void) {
     router.request(.getCityName(name: name)) { data, response, error in
-      
+
       if let _ = error {
         completion(.failure(.badRequest))
         return
       }
-      
+
       if let response = response as? HTTPURLResponse {
         let result = self.handleNetworkResponse(response)
         switch result {
@@ -65,8 +65,8 @@ class NetworkManager: NetworkManagerProtocol {
             return
           }
           do {
-            //let jsonData = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
-            //print(jsonData)
+            // let jsonData = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
+            // print(jsonData)
             let apiResponse = try JSONDecoder().decode([SearchModel].self, from: responseData)
             completion(.success(apiResponse))
           } catch {
@@ -79,8 +79,8 @@ class NetworkManager: NetworkManagerProtocol {
       }
     }
   }
-  
-  private func handleNetworkResponse(_ response: HTTPURLResponse) -> ResponseErrors<NetworkErrors>{
+
+  private func handleNetworkResponse(_ response: HTTPURLResponse) -> ResponseErrors<NetworkErrors> {
     switch response.statusCode {
     case 200...299: return .success
     case 401...500: return .failure(NetworkErrors.authenticationError)
@@ -91,29 +91,27 @@ class NetworkManager: NetworkManagerProtocol {
   }
 }
 
-
 class MockNetworkManager: NetworkManagerProtocol {
-  
+
   var router = FakeRouter<TestApi>()
- 
+
   var getWeatherResult: Result<WeatherModel, NetworkErrors>?
   var getSearchResult: Result<[SearchModel], NetworkErrors>?
 
-  
   func getWeather(lon: Double, lat: Double, completion: @escaping (Result<WeatherModel, NetworkErrors>) -> Void) {
     let mockCity = MockWeatherModel.city
-    router.request(.getCurrentWeather(lon: lon, lat: lat)) {  data, response, error in
-      if mockCity.lat == lat && mockCity.lon == lon  {
+    router.request(.getCurrentWeather(lon: lon, lat: lat)) {  _, _, _ in
+      if mockCity.lat == lat && mockCity.lon == lon {
         completion(.success(mockCity))
       } else {
           completion(.failure(.badRequest))
       }
     }
   }
-  
+
   func getCityName(name: String, completion: @escaping (Result<[SearchModel], NetworkErrors>) -> Void) {
     let mockCity = SearchModel(name: "MockCity", localNames: nil, lat: 123, lon: 456, country: "MockCountry", state: nil)
-    router.request(.getCityName(name: name)) {  data, response, error in
+    router.request(.getCityName(name: name)) {  _, _, _ in
       if mockCity.name == name {
         completion(.success([mockCity]))
       } else {
@@ -121,11 +119,10 @@ class MockNetworkManager: NetworkManagerProtocol {
       }
     }
   }
-  
-  
+
 }
 
-//struct FakeNetworkService {
+// struct FakeNetworkService {
 //
 //  let networkManager: NetworkManagerProtocol
 //  func search(_ name: String, completion: @escaping (Result<[SearchModel], Error>) -> Void) {
@@ -143,6 +140,5 @@ class MockNetworkManager: NetworkManagerProtocol {
 //                    return .failure(error)
 //                }
 //            }
-  
-  
-//}
+
+// }

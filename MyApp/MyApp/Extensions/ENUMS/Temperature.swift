@@ -12,13 +12,13 @@ protocol Settings: CustomStringConvertible, Codable {
 }
 
 enum Temperature: Int, Settings, CaseIterable {
-  case Celcius
-  case Fahrenheit
-  
+  case celcius
+  case fahrenheit
+
   var description: String {
     switch self {
-    case .Celcius: return "°C"
-    case .Fahrenheit: return "°F"
+    case .celcius: return "°C"
+    case .fahrenheit: return "°F"
     }
   }
 }

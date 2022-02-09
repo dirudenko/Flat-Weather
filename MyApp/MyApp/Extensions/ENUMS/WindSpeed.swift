@@ -11,7 +11,7 @@ enum WindSpeed: Int, Settings, CaseIterable {
   case kmh
   case milh
   case ms
-  
+
   var description: String {
     switch self {
     case .kmh: return "km/h"

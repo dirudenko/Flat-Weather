@@ -11,15 +11,15 @@ struct DataConverter {
 
   func convertTemperature(value: Double, unit: Temperature) -> Double {
     switch unit {
-    case .Celcius:
+    case .celcius:
       let temp = Measurement(value: value, unit: UnitTemperature.fahrenheit)
       return temp.converted(to: .celsius).value
-    case .Fahrenheit:
+    case .fahrenheit:
       let temp = Measurement(value: value, unit: UnitTemperature.celsius)
       return temp.converted(to: .fahrenheit).value
     }
   }
-  
+
   func convertWindSpeed(value: Double, from: WindSpeed, to: WindSpeed) -> Double {
     switch to {
     case .ms:
@@ -57,7 +57,7 @@ struct DataConverter {
       }
     }
   }
-  
+
   func convertPressure(value: Double, unit: Pressure) -> Double {
     switch unit {
     case .mbar:

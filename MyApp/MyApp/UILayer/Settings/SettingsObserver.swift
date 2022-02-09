@@ -12,28 +12,28 @@ protocol SubcribeSettings: AnyObject {
 }
 
 class SettingsObserver {
-  
+
   var observers = [SubcribeSettings]()
-  
-  func receiveType (unit: Settings,type: UnitOptions) {
+
+  func receiveType (unit: Settings, type: UnitOptions) {
     notifyObserver(unit: unit, type: type)
   }
-  
-  func register(observer: SubcribeSettings){
+
+  func register(observer: SubcribeSettings) {
     observers.append(observer)
   }
-  
-  func notifyObserver(unit: Settings,type: UnitOptions) {
+
+  func notifyObserver(unit: Settings, type: UnitOptions) {
     for observer in observers {
       observer.settingsChanged(unit: unit, type: type)
     }
   }
-  
+
   func deregister() {
     observers.removeAll()
   }
 }
 
-//struct WeakSubscriber {
+// struct WeakSubscriber {
 //  weak var value: SubcribeSettings?
-//}
+// }

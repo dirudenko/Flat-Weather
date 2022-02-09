@@ -9,7 +9,7 @@ import Foundation
 import CoreData
 
 protocol SearchViewCellModelProtocol {
-  var updateViewData: ((SearchViewData) ->())? { get set }
+  var updateViewData: ((SearchViewData) ->Void)? { get set }
   var networkManager: NetworkManagerProtocol { get }
   var coreDataManager: CoreDataManagerResultProtocol { get }
   func setSections(at tableView: TableViewCellTypes) -> Int
@@ -17,14 +17,14 @@ protocol SearchViewCellModelProtocol {
   func searchText(text: String)
   func setCity(model: SearchModel?, for tableView: TableViewCellTypes) -> [MainInfo]
   func removeObject(at index: Int)
-  
+
 }
 
 final class SearchViewCellModel: SearchViewCellModelProtocol {
   // MARK: - Private variables
   var networkManager: NetworkManagerProtocol
   var coreDataManager: CoreDataManagerResultProtocol
-  var updateViewData: ((SearchViewData) -> ())?
+  var updateViewData: ((SearchViewData) -> Void)?
   // MARK: - Initialization
   init(networkManager: NetworkManagerProtocol, coreDataManager: CoreDataManagerResultProtocol) {
     updateViewData?(.initial)
@@ -35,29 +35,29 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
   /// получение количества секций для таблиц
   func setSections(at tableView: TableViewCellTypes) -> Int {
     switch tableView {
-    case .CityListTableViewCell:
+    case .cityListTableViewCell:
       coreDataManager.cityResultsPredicate = nil
       coreDataManager.loadSavedData()
       let sections = coreDataManager.fetchedResultsController.fetchedObjects?.count
       return  sections ?? 0
-    case .StandartTableViewCell:
+    case .standartTableViewCell:
       return 1
     default:
       return 0
     }
   }
-  
+
   /// получениие объектов из списка сохраненных городов
   func getObjects(at section: Int) -> MainInfo? {
     return coreDataManager.fetchedResultsController.fetchedObjects?[section]
   }
-  
+
   func removeObject(at index: Int) {
     guard let object = getObjects(at: index) else { print("ERROR")
       return }
     coreDataManager.removeDataFromMainWeather(object: object)
   }
-  
+
   /// Передеча текста в качестве предиката для фетчРеквеста списка всех городов
   func searchText(text: String) {
     if text.count > 3 {
@@ -68,7 +68,7 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
           DispatchQueue.main.async {
             self.updateViewData?(.success(weather))
           }
-          
+
         case .failure(let error):
           print(error.rawValue)
           DispatchQueue.main.async {
@@ -76,19 +76,19 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
           }
         }
       }
-    } else if text.count == 0 {
+    } else if text.isEmpty {
       self.updateViewData?(.initial)
     } else {
       self.updateViewData?(.load)
     }
   }
-  
+
   /// получение выбранного города в зависимости от таблицы для передачи в контроллер
   func setCity(model: SearchModel?, for tableView: TableViewCellTypes) -> [MainInfo] {
     switch tableView {
-    case .CityListTableViewCell:
+    case .cityListTableViewCell:
       return coreDataManager.fetchedResultsController.fetchedObjects ?? []
-    case .StandartTableViewCell:
+    case .standartTableViewCell:
       guard let model = model else { return [] }
       coreDataManager.saveToList(city: model, isCurrentLocation: false)
       coreDataManager.loadSavedData()
@@ -98,6 +98,3 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
     }
   }
 }
-
-
-

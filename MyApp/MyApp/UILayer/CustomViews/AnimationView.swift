@@ -8,26 +8,21 @@
 import UIKit
 
 class AnimationView: UIView {
-  
+
   override init(frame: CGRect) {
     super.init(frame: frame)
     translatesAutoresizingMaskIntoConstraints = false
     animateLogo()
   }
-  
+
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
     fatalError("init(coder:) has not been implemented")
   }
-  
-  
-  
-  
-  
-  
+
   func animateLogo() {
      bringSubviewToFront(self)
-      
+
 //      CATransaction.setCompletionBlock{ [weak self] in
 //        UIView.transition(from: self!.animationView,
 //                          to: self!.loginInterface,
@@ -35,7 +30,7 @@ class AnimationView: UIView {
 //                          options: [.transitionFlipFromBottom],
 //                          completion: nil)
 //      }
-      
+
       let shapeLayer = CAShapeLayer()
       shapeLayer.path = createBezierPath().cgPath
       shapeLayer.strokeColor = UIColor.systemBlue.cgColor

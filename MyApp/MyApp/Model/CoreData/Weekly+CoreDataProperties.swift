@@ -9,13 +9,12 @@
 import Foundation
 import CoreData
 
-
 extension Weekly {
-  
+
   @nonobjc public class func fetchRequest() -> NSFetchRequest<Weekly> {
     return NSFetchRequest<Weekly>(entityName: "Weekly")
   }
-  
+
   @NSManaged public var date: Int64
   @NSManaged public var rain: Int16
   @NSManaged public var id: Int16
@@ -24,10 +23,9 @@ extension Weekly {
   @NSManaged public var iconId: String
   @NSManaged public var name: String
   @NSManaged public var weather: MainInfo?
-  
+
 }
 
-extension Weekly : Identifiable {
-  
-}
+extension Weekly: Identifiable {
 
+}

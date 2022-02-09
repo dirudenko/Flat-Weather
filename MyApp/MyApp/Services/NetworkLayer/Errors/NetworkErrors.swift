@@ -16,7 +16,7 @@ enum NetworkErrors: String, Error {
     case unableToDecode = "We could not decode the response."
 }
 
-enum ResponseErrors<String>{
+enum ResponseErrors<String> {
     case success
     case failure(String)
 }

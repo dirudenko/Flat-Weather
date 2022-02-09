@@ -11,18 +11,18 @@ class Picker: UIPickerView {
 
   override init(frame: CGRect) {
     super.init(frame: frame)
-    
+
   }
-  
+
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
+
   init(for view: UIView) {
     super.init(frame: .zero)
     configure(view: view)
   }
-  
+
   func configure(view: UIView) {
     translatesAutoresizingMaskIntoConstraints = false
     view.addSubview(self)
@@ -32,5 +32,5 @@ class Picker: UIPickerView {
   //  isUserInteractionEnabled = true
     isHidden = true
   }
-  
+
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum HTTPMethod : String {
+enum HTTPMethod: String {
     case get     = "GET"
     case post    = "POST"
     case put     = "PUT"

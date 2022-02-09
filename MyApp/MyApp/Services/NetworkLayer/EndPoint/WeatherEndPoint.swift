@@ -18,36 +18,36 @@ enum Units: String {
 }
 
 extension WeatherApi: EndPointType {
-  
+
   var baseURL: URL {
     guard let url = URL(string: "https://api.openweathermap.org") else { fatalError("baseURL could not be configured.")}
     return url
   }
-  
+
   var path: String {
     switch self {
-    case .getCurrentWeather(_,_):
+    case .getCurrentWeather:
       return "/data/2.5/onecall"
-    case .getCityName(_):
+    case .getCityName:
       return "/geo/1.0/direct"
     }
   }
-  
+
   var units: Units {
     let temperature: Temperature? = UserDefaultsManager.get(forKey: "Temperature")
     switch temperature {
-    case .Celcius:
+    case .celcius:
       return .metric
-    case .Fahrenheit:
+    case .fahrenheit:
       return .imperial
     default: fatalError()
     }
   }
-  
+
   var httpMethod: HTTPMethod {
     return .get
   }
-  
+
   var task: HTTPTask {
     switch self {
     case .getCurrentWeather(let lon, let lat):
@@ -59,7 +59,7 @@ extension WeatherApi: EndPointType {
                                   "exclude": "minutely,alerts",
                                   "appid": Constants.Network.weatherAPIKey,
                                   "units": units.rawValue,
-                                  "lang": "en",
+                                  "lang": "en"
                                 ])
     case .getCityName(let name):
       return .requestParameters(bodyParameters: nil,
@@ -71,7 +71,7 @@ extension WeatherApi: EndPointType {
                                 ])
     }
   }
-  
+
   var headers: HTTPHeaders? {
     return nil
   }

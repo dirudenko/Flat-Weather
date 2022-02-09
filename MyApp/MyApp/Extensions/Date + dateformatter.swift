@@ -16,7 +16,7 @@ extension Date {
     let stringDate = formatter.string(from: self)
     return stringDate
   }
-  
+
   func dateHourFormatter() -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "HH:mm"
@@ -24,7 +24,7 @@ extension Date {
     let stringDate = formatter.string(from: self)
     return stringDate
   }
-  
+
   func dateDayFormatter() -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "EEEE"
@@ -32,5 +32,5 @@ extension Date {
     let stringDate = formatter.string(from: self)
     return stringDate
   }
-  
+
 }

@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension Hourly {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Hourly> {
@@ -27,6 +26,6 @@ extension Hourly {
 
 }
 
-extension Hourly : Identifiable {
+extension Hourly: Identifiable {
 
 }

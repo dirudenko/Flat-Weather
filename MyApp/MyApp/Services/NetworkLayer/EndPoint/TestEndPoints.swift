@@ -12,37 +12,35 @@ enum TestApi {
   case getCityName(name: String)
 }
 
-
-
 extension TestApi: EndPointType {
-  
+
   var baseURL: URL {
     guard let url = URL(string: "Test") else { fatalError("baseURL could not be configured.")}
     return url
   }
-  
+
   var path: String {
     switch self {
-    case .getCurrentWeather(_,_):
+    case .getCurrentWeather:
       return "Test"
     case .getCityName(let name):
       return name
     }
   }
-  
+
   var httpMethod: HTTPMethod {
     return .get
   }
-  
+
   var task: HTTPTask {
     switch self {
-    case .getCurrentWeather(_, _):
+    case .getCurrentWeather:
       return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: nil)
-    case .getCityName(_):
+    case .getCityName:
       return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: nil)
     }
   }
-  
+
   var headers: HTTPHeaders? {
     return nil
   }

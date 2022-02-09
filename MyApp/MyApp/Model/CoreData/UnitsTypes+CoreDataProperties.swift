@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension UnitsTypes {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<UnitsTypes> {
@@ -23,6 +22,6 @@ extension UnitsTypes {
 
 }
 
-extension UnitsTypes : Identifiable {
+extension UnitsTypes: Identifiable {
 
 }

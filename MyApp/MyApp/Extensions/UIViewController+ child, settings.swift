@@ -28,23 +28,22 @@ extension UIViewController {
     let pressure: Pressure? = UserDefaultsManager.get(forKey: "Pressure")
 
     if temperature == nil {
-      let temperature: Temperature = .Celcius
-      UserDefaultsManager.set(temperature,forKey: "Temperature")
+      let temperature: Temperature = .celcius
+      UserDefaultsManager.set(temperature, forKey: "Temperature")
     }
-    
+
     switch temperature {
-    case .Fahrenheit:
+    case .fahrenheit:
       let wind: WindSpeed = .milh
-      UserDefaultsManager.set(wind,forKey: "Wind")
+      UserDefaultsManager.set(wind, forKey: "Wind")
     default:
       let wind: WindSpeed = .ms
-      UserDefaultsManager.set(wind,forKey: "Wind")
+      UserDefaultsManager.set(wind, forKey: "Wind")
     }
-    
+
     if pressure == nil {
       let pressure: Pressure = .hPa
-      UserDefaultsManager.set(pressure,forKey: "Pressure")
+      UserDefaultsManager.set(pressure, forKey: "Pressure")
     }
   }
 }
-

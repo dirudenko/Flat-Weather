@@ -12,25 +12,25 @@ protocol SectionType: CustomStringConvertible {
 }
 
 enum SettingsSections: Int, CaseIterable, CustomStringConvertible {
-  
-  case Units
-  case Extra
-  
+
+  case units
+  case extra
+
   var description: String {
     switch self {
-    case .Units: return "UNIT"
-    case .Extra: return "EXTRA"
+    case .units: return "UNIT"
+    case .extra: return "EXTRA"
     }
   }
-  
+
 }
 
 enum UnitOptions: Int, CaseIterable, SectionType {
-  
+
   case temperature
   case wind
   case pressure
-  
+
   var containsType: String {
     switch self {
     case .temperature:
@@ -44,7 +44,7 @@ enum UnitOptions: Int, CaseIterable, SectionType {
       return pressure?.description ?? "Error"
     }
   }
-  
+
   var description: String {
     switch self {
     case .temperature: return "Temperature unit"
@@ -55,22 +55,22 @@ enum UnitOptions: Int, CaseIterable, SectionType {
 }
 
 enum ExtraOptions: Int, CaseIterable, SectionType {
-    
+
   case about
   case privacy
-  
+
   var containsType: String {
     switch self {
     case .about: return ""
     case .privacy: return ""
     }
   }
-  
+
   var description: String {
     switch self {
     case .about: return "About"
     case .privacy: return "Privacy policy"
     }
   }
-  
+
 }

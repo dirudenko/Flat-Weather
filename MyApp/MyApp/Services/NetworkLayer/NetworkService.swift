@@ -7,7 +7,7 @@
 
 import Foundation
 
-//final class NetworkService {
+// final class NetworkService {
 //  
 //  let constanse = NetworkConstants()
 //  
@@ -60,19 +60,17 @@ import Foundation
 //    }
 //    task.resume()
 //  }
-//}
+// }
 //
 //
 //
 //
 //
-//struct NetworkConstants {
+// struct NetworkConstants {
 //  
 //  let scheme = "https"
 //  
 //  let host = "api.openweathermap.org"
 //  
 //
-//}
-
-
+// }

@@ -13,7 +13,7 @@ enum Pressure: Int, Settings, CaseIterable {
   case mmHg
   case inHg
   case hPa
-  
+
   var description: String {
     switch self {
     case .atm: return "atm"
@@ -24,4 +24,3 @@ enum Pressure: Int, Settings, CaseIterable {
     }
   }
 }
-

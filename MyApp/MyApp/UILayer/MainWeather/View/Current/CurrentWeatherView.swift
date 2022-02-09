@@ -14,7 +14,7 @@ protocol HeaderButtonsProtocol: AnyObject {
 
 final class CurrentWeatherView: UIView {
   // MARK: - Private types
-  private let collectionView = CurrentWeatherCollectionView(cellType: .WeatherCollectionViewCell)
+  private let collectionView = CurrentWeatherCollectionView(cellType: .weatherCollectionViewCell)
   private let weatherImage = MainImage(frame: .zero)
   private let dateLabel = TitleLabel(textAlignment: .center)
   private let cityNameLabel = TitleLabel(textAlignment: .center)
@@ -28,7 +28,7 @@ final class CurrentWeatherView: UIView {
   // MARK: - Private variables
   private var collectionViewTopSmall: NSLayoutConstraint?
   private var collectionViewTopBig: NSLayoutConstraint?
-  
+
   private var weatherImageTop: NSLayoutConstraint?
   private var weatherImageLeftBig: NSLayoutConstraint?
   private var weatherImageLeftSmall: NSLayoutConstraint?
@@ -36,22 +36,22 @@ final class CurrentWeatherView: UIView {
   private var weatherImageSizeBig: NSLayoutConstraint?
   private var weatherImageHeightSmall: NSLayoutConstraint?
   private var weatherImageHeightBig: NSLayoutConstraint?
-  
+
   private var dateLabelTopSmall: NSLayoutConstraint?
   private var dateLabelTopBig: NSLayoutConstraint?
   private var dateLabelLeftBig: NSLayoutConstraint?
   private var dateLabelLeftSmall: NSLayoutConstraint?
-  
+
   private var temperatureLabelTopSmall: NSLayoutConstraint?
   private var temperatureLabelTopBig: NSLayoutConstraint?
   private var temperatureLabelLeftBig: NSLayoutConstraint?
   private var temperatureLabelLeftSmall: NSLayoutConstraint?
-  
+
   private var conditionLabelTopSmall: NSLayoutConstraint?
   private var conditionLabelTopBig: NSLayoutConstraint?
   private var conditionLabelLeftBig: NSLayoutConstraint?
   private var conditionLabelLeftSmall: NSLayoutConstraint?
-  
+
   // MARK: - Public variables
   var viewData: MainViewData = .initial {
     didSet {
@@ -59,10 +59,9 @@ final class CurrentWeatherView: UIView {
       collectionView.reloadData()
     }
   }
-  
+
   private var currentWeather: MainInfo?
 
-  
   weak var delegate: HeaderButtonsProtocol?
   // MARK: - Initialization
   override init(frame: CGRect) {
@@ -76,7 +75,7 @@ final class CurrentWeatherView: UIView {
     super.init(coder: aDecoder)
     fatalError("init(coder:) has not been implemented")
   }
-  
+
   /// Data Driven состояние для View
   override func layoutSubviews() {
     super.layoutSubviews()
@@ -101,7 +100,7 @@ final class CurrentWeatherView: UIView {
   }
   // MARK: - Private functions
   private func setupLayouts() {
-  
+
     addSubview(weatherImage)
     addSubview(dateLabel)
     addSubview(cityNameLabel)
@@ -112,11 +111,11 @@ final class CurrentWeatherView: UIView {
     addSubview(loadingVC)
     addSubview(optionsButton)
     bringSubviewToFront(loadingVC)
-    layer.insertSublayer(gradient, at:0)
+    layer.insertSublayer(gradient, at: 0)
     layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
     layer.masksToBounds = true
   }
-  
+
   private func setupView() {
     addButton.addTarget(self, action: #selector(didTapAdd), for: .touchDown)
     optionsButton.addTarget(self, action: #selector(didTapOptions), for: .touchDown)
@@ -128,8 +127,7 @@ final class CurrentWeatherView: UIView {
     backgroundColor = UIColor(named: "bottomColor")
 
   }
-  
-  
+
   private func setupFonts() {
     dateLabel.font = Constants.Fonts.regular
     cityNameLabel.font = Constants.Fonts.regularBold
@@ -137,52 +135,52 @@ final class CurrentWeatherView: UIView {
     conditionLabel.font =  Constants.Fonts.regular
     conditionLabel.textAlignment = .center
   }
-  
+
   @objc private func didTapOptions() {
     delegate?.optionsButtonTapped()
   }
-  
+
   @objc private func didTapAdd() {
     delegate?.plusButtonTapped()
   }
-  
-  @objc private func imageTapped(tapGestureRecognizer: UITapGestureRecognizer)
-  {
+
+  @objc private func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
     //  let tappedImage = tapGestureRecognizer.view as! UIImageView
     // TODO: Анимация перехода на экран с изображением погоды
       print("IMAGE TAPPED")
   }
-  
+
   private func configure(with model: MainInfo?) {
     guard let model = model ,
           let topBar = model.topWeather else { return }
     cityNameLabel.text = model.name
-    
+
     let date = Date(timeIntervalSince1970: TimeInterval(topBar.date)).dateFormatter()
     dateLabel.text = "\(date)".capitalizedFirstLetter
-    
+
     conditionLabel.text = topBar.desc?.capitalizedFirstLetter
     let imageName =  IconHadler.id.keyedValue(key: topBar.iconId)
-    
+
     if #available(iOS 15.0, *) {
       let config =  UIImage.SymbolConfiguration.preferringMulticolor()
       weatherImage.image = UIImage(systemName: imageName ?? "thermometer.sun.fill", withConfiguration: config)
-      
+
     } else {
       weatherImage.image = UIImage(systemName: imageName ?? "thermometer.sun.fill")
     }
     temperatureLabel.text = "\(Int(topBar.temperature))° "
   }
-  
+
 }
 // MARK: - UIView delegates
 extension CurrentWeatherView: UICollectionViewDataSource, UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return currentWeather != nil ? 4 : 0
   }
-  
+
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCollectionViewCell", for: indexPath) as? WeatherCollectionViewCell,
+    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCollectionViewCell", for: indexPath)
+            as? WeatherCollectionViewCell,
           let model = currentWeather
     else { return UICollectionViewCell() }
     cell.configure(with: model, index: indexPath.row)
@@ -192,7 +190,7 @@ extension CurrentWeatherView: UICollectionViewDataSource, UICollectionViewDelega
 
 // MARK: - Constraints
 extension CurrentWeatherView {
-  
+
 //  override func draw(_ rect: CGRect) {
 //    let contextBig = UIGraphicsGetCurrentContext()
 //    contextBig?.setLineWidth(2.0)
@@ -201,41 +199,41 @@ extension CurrentWeatherView {
 //    contextBig?.addLine(to: CGPoint(x: adapted(dimensionSize: 342, to: .width) , y: topPadding))
 //    contextBig?.strokePath()
 //  }
-  
+
   private func setupConstraints() {
     NSLayoutConstraint.activate([
-      
+
       addButton.topAnchor.constraint(equalTo: self.topAnchor, constant: Constants.Design.verticalViewPadding),
       addButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: Constants.Design.horizontalViewPadding),
       addButton.widthAnchor.constraint(equalToConstant: Constants.Design.buttonSize),
       addButton.heightAnchor.constraint(equalToConstant: Constants.Design.buttonSize),
-      
+
       optionsButton.topAnchor.constraint(equalTo: self.topAnchor, constant: Constants.Design.verticalViewPadding),
       optionsButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -Constants.Design.horizontalViewPadding),
       optionsButton.widthAnchor.constraint(equalToConstant: Constants.Design.buttonSize),
       optionsButton.heightAnchor.constraint(equalToConstant: Constants.Design.buttonSize),
-      
+
       cityNameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: Constants.Design.verticalViewPadding),
       cityNameLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
       cityNameLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 32, to: .height)),
-      
+
       weatherImage.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 48, to: .height)),
-      conditionLabel.rightAnchor.constraint(lessThanOrEqualTo: self.rightAnchor ,constant: -Constants.Design.horizontalViewPadding),
-      dateLabel.rightAnchor.constraint(equalTo: self.rightAnchor ,constant: -Constants.Design.horizontalViewPadding),
-      
+      conditionLabel.rightAnchor.constraint(lessThanOrEqualTo: self.rightAnchor, constant: -Constants.Design.horizontalViewPadding),
+      dateLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -Constants.Design.horizontalViewPadding),
+
       collectionView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: Constants.Design.horizontalViewPadding),
       collectionView.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 326, to: .width)),
       collectionView.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 105, to: .height)),
-      
+
       loadingVC.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-      loadingVC.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-      
+      loadingVC.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+
     ])
-    
+
     collectionViewTopBig = collectionView.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 444, to: .height))
     collectionViewTopBig?.isActive = true
     collectionViewTopSmall = collectionView.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 232, to: .height))
-    
+
     weatherImageLeftBig = weatherImage.centerXAnchor.constraint(equalTo: self.centerXAnchor)
     weatherImageLeftBig?.isActive = true
     weatherImageLeftSmall = weatherImage.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width))
@@ -245,21 +243,21 @@ extension CurrentWeatherView {
     weatherImageHeightBig = weatherImage.heightAnchor.constraint(equalToConstant: Constants.Design.imageSizeBig)
     weatherImageHeightBig?.isActive = true
     weatherImageHeightSmall = weatherImage.heightAnchor.constraint(equalToConstant: Constants.Design.imageSizeSmall)
-    
+
     dateLabelTopBig = dateLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 288, to: .height))
     dateLabelTopBig?.isActive = true
     dateLabelTopSmall = dateLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 68, to: .height))
     dateLabelLeftBig = dateLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor)
     dateLabelLeftBig?.isActive = true
     dateLabelLeftSmall = dateLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 199, to: .width))
-    
+
     temperatureLabelTopBig = temperatureLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 323, to: .height))
     temperatureLabelTopBig?.isActive = true
     temperatureLabelTopSmall = temperatureLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 103, to: .height))
     temperatureLabelLeftBig = temperatureLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor)
     temperatureLabelLeftBig?.isActive = true
     temperatureLabelLeftSmall = temperatureLabel.centerXAnchor.constraint(equalTo: dateLabel.centerXAnchor)
-    
+
     conditionLabelTopBig = conditionLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 409, to: .height))
     conditionLabelTopBig?.isActive = true
     conditionLabelTopSmall = conditionLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 189, to: .height))
@@ -267,69 +265,65 @@ extension CurrentWeatherView {
     conditionLabelLeftBig?.isActive = true
     conditionLabelLeftSmall = conditionLabel.centerXAnchor.constraint(equalTo: temperatureLabel.centerXAnchor)
   }
-  
+
   func changeConstraints(isPressed: Bool) {
     if isPressed {
-      
-    //  setNeedsDisplay()
-      
+
       weatherImageLeftBig?.isActive = false
       weatherImageLeftSmall?.isActive = true
       weatherImageSizeBig?.isActive = false
       weatherImageSizeSmall?.isActive = true
       weatherImageHeightBig?.isActive = false
       weatherImageHeightSmall?.isActive = true
-      
+
       dateLabelTopBig?.isActive = false
       dateLabelTopSmall?.isActive = true
       dateLabelLeftBig?.isActive = false
       dateLabelLeftSmall?.isActive = true
-      
+
       temperatureLabelTopBig?.isActive = false
       temperatureLabelTopSmall?.isActive = true
       temperatureLabelLeftBig?.isActive = false
       temperatureLabelLeftSmall?.isActive = true
-      
+
       conditionLabelTopBig?.isActive = false
       conditionLabelTopSmall?.isActive = true
       conditionLabelLeftBig?.isActive = false
       conditionLabelLeftSmall?.isActive = true
-      
+
       collectionViewTopBig?.isActive = false
       collectionViewTopSmall?.isActive = true
-      
+
       UIView.animate(withDuration: 0.3) {
         self.layoutIfNeeded()
       }
     } else {
-      
-     // setNeedsDisplay()
-      
+
       weatherImageLeftSmall?.isActive = false
       weatherImageLeftBig?.isActive = true
       weatherImageSizeSmall?.isActive = false
       weatherImageSizeBig?.isActive = true
       weatherImageHeightSmall?.isActive = false
       weatherImageHeightBig?.isActive = true
-      
+
       dateLabelTopSmall?.isActive = false
       dateLabelTopBig?.isActive = true
       dateLabelLeftSmall?.isActive = false
       dateLabelLeftBig?.isActive = true
-      
+
       temperatureLabelTopSmall?.isActive = false
       temperatureLabelTopBig?.isActive = true
       temperatureLabelLeftSmall?.isActive = false
       temperatureLabelLeftBig?.isActive = true
-      
+
       conditionLabelTopSmall?.isActive = false
       conditionLabelTopBig?.isActive = true
       conditionLabelLeftSmall?.isActive = false
       conditionLabelLeftBig?.isActive = true
-      
+
       collectionViewTopSmall?.isActive = false
       collectionViewTopBig?.isActive = true
-      
+
       UIView.animate(withDuration: 0.3) {
         self.layoutIfNeeded()
       }

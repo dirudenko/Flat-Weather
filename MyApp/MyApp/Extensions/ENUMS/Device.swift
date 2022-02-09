@@ -18,14 +18,13 @@ enum Device {
     case iPhone13Pro
     case iPhone13Mini
     case iPhone13ProMax
-    
-    
+
     static let baseScreenSize: Device = .iPhone13Pro
 }
 
 extension Device: RawRepresentable {
     typealias RawValue = CGSize
-    
+
     init?(rawValue: CGSize) {
         switch rawValue {
         case CGSize(width: 320, height: 568):
@@ -48,7 +47,7 @@ extension Device: RawRepresentable {
             return nil
         }
     }
-    
+
     var rawValue: CGSize {
         switch self {
         case .iPhoneSE:

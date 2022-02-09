@@ -8,7 +8,7 @@
 import UIKit
 
 final class SearchViewController: UIViewController {
-  
+
   // MARK: - Private types
   private var searchView: SearchView!
   private var searchViewCellModel: SearchViewCellModelProtocol
@@ -19,25 +19,25 @@ final class SearchViewController: UIViewController {
     self.searchView = SearchView(frame: .zero, searchViewCellModel: searchViewCellModel)
     super.init(nibName: nil, bundle: nil)
   }
-  
+
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
   // MARK: - UIViewController lifecycle methods
-  
+
   override func viewDidLoad() {
     super.viewDidLoad()
     updateView()
     setupViews()
     setupConstraints()
   }
-  
+
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
     searchView.layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
     searchView.layer.masksToBounds = true
   }
-  
+
   // MARK: - Private functions
   private func setupViews() {
     view.backgroundColor = .systemBackground
@@ -45,7 +45,7 @@ final class SearchViewController: UIViewController {
     searchView.delegate = self
     self.navigationItem.setHidesBackButton(true, animated: false)
   }
-  
+
   private func updateView() {
     searchViewCellModel.updateViewData = { [weak self] viewData in
       self?.searchView.viewData = viewData
@@ -57,28 +57,28 @@ extension SearchViewController: SearchViewProtocol {
   func didEdit(at section: Int) {
     didEdit = true
   }
-  
+
   func setViewFromCityList(fot city: [MainInfo], at index: Int) {
-    let vc  = BuilderService.buildPageViewController(at: index)
-    navigationController?.setViewControllers([vc], animated: true)
+    let viewController = BuilderService.buildPageViewController(at: index)
+    navigationController?.setViewControllers([viewController], animated: true)
   }
-  
+
   func setViewFromSearch(fot city: [MainInfo], at index: Int) {
-    let vc  = BuilderService.buildPageViewController(at: index)
-    navigationController?.setViewControllers([vc], animated: true)
+    let viewController = BuilderService.buildPageViewController(at: index)
+    navigationController?.setViewControllers([viewController], animated: true)
   }
-  
+
   func backButtonTapped() {
     if didEdit {
-      let vc  = BuilderService.buildPageViewController()
-      navigationController?.setViewControllers([vc], animated: true)
+      let viewController = BuilderService.buildPageViewController()
+      navigationController?.setViewControllers([viewController], animated: true)
     } else {
     navigationController?.popViewController(animated: true)
     }
   }
 }
 // MARK: - UIViewController extensions
-extension SearchViewController{
+extension SearchViewController {
   func setupConstraints() {
     searchView.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([

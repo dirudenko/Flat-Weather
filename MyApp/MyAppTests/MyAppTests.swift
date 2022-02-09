@@ -9,7 +9,7 @@ import XCTest
 @testable import MyApp
 
 class MyAppTests: XCTestCase {
- 
+
 //  /// System under test 
 //  var sut: NetworkManagerProtocol!
 //  
@@ -73,5 +73,5 @@ class MyAppTests: XCTestCase {
 //            }
 //          }
 //      }
-  
+
 }

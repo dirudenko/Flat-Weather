@@ -9,10 +9,10 @@ import UIKit
 
 class HourlyWeatherView: UIView {
   // MARK: - Private types
-  private var collectionView = CurrentWeatherCollectionView(cellType: .HourlyCollectionViewCell)
+  private var collectionView = CurrentWeatherCollectionView(cellType: .hourlyCollectionViewCell)
   private var dateLabel = TitleLabel(textAlignment: .center)
   private let loadingVC = LoadingView()
-  
+
   private var hourlyWeather: MainInfo? {
     didSet {
       collectionView.reloadData()
@@ -31,12 +31,12 @@ class HourlyWeatherView: UIView {
     setupFonts()
     addConstraints()
   }
-  
+
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
     fatalError("init(coder:) has not been implemented")
   }
-  
+
   override func layoutSubviews() {
     super.layoutSubviews()
     switch viewData {
@@ -61,7 +61,7 @@ class HourlyWeatherView: UIView {
   private func setupFonts() {
     dateLabel.font = AppFont.bold(size: 14)
   }
-  
+
   private func setupLayouts() {
     addSubview(loadingVC)
     addSubview(dateLabel)
@@ -70,15 +70,15 @@ class HourlyWeatherView: UIView {
     collectionView.delegate = self
     collectionView.dataSource = self
   }
-  
-  private func addConstraints() {    
+
+  private func addConstraints() {
     NSLayoutConstraint.activate([
-      
+
       dateLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 9, to: .height)),
       dateLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
       dateLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 131, to: .width)),
       dateLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 19, to: .height)),
-      
+
       loadingVC.centerXAnchor.constraint(equalTo: self.centerXAnchor),
       loadingVC.centerYAnchor.constraint(equalTo: self.centerYAnchor)
     ])
@@ -90,15 +90,15 @@ extension HourlyWeatherView: UICollectionViewDataSource, UICollectionViewDelegat
     let items = hourlyWeather?.hourlyWeather?.count
     return items ?? 0
   }
-  
+
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyCollectionViewCell", for: indexPath) as? HourlyCollectionViewCell,
          // let model = hourlyWeather?.hourlyWeather as? [Hourly]
           let model: [Hourly] =  hourlyWeather?.hourlyWeather?.toArray()
     else { return UICollectionViewCell() }
-    
+
     cell.configure(with: model, index: indexPath.row)
-    
+
     return cell
   }
 }

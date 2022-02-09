@@ -8,7 +8,7 @@
 import Foundation
 
 protocol MainWeatherViewModelProtocol: AnyObject {
-  var updateViewData: ((MainViewData) ->())? { get set }
+  var updateViewData: ((MainViewData) -> Void)? { get set }
   var networkManager: NetworkManagerProtocol { get }
   var coreDataManager: CoreDataManagerResultProtocol? { get }
   func startFetch()
@@ -20,7 +20,7 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
   private let dataConverter = DataConverter()
   // MARK: - Public types
   var networkManager: NetworkManagerProtocol
-  var updateViewData: ((MainViewData) -> ())?
+  var updateViewData: ((MainViewData) -> Void)?
   var coreDataManager: CoreDataManagerResultProtocol?
   var fetchedCity: MainInfo
   weak var observer: SettingsObserver?
@@ -57,7 +57,7 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
           case .success(let convertedWeather):
             self.updateCoreData(model: convertedWeather, context: self.fetchedCity)
             self.updateViewData?(.success(self.fetchedCity))
-          case .failure(_): self.updateViewData?(.failure)
+          case .failure: self.updateViewData?(.failure)
           }
           }
       case .failure(let error):
@@ -78,7 +78,7 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
       return false
     }
   }
-  
+
   /// конвертирование заруженных данных, в выбранный тип
 
   func convertData(data: MainInfo, weather: WeatherModel?) -> Result<WeatherModel, NetworkErrors> {
@@ -86,7 +86,7 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
     guard var weather = weather else {
       return .failure(.failed)
     }
-    ///конвертирование скорости ветра
+    /// конвертирование скорости ветра
     switch data.unitTypes?.windType {
       /// km/h
     case 0:
@@ -102,7 +102,7 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
     case 1 :
       /// from Celsius
       if data.unitTypes?.tempType == 0 {
-        
+
         weather.current.windSpeed = dataConverter.convertWindSpeed(value: data.bottomWeather?.wind ?? 0, from: .ms, to: .milh)
       }
       /// from Fahrenheit
@@ -114,7 +114,7 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
     case 2:
       /// from Celsius
       if data.unitTypes?.tempType == 0 {
-        
+
        break
       }
       /// from Fahrenheit
@@ -123,16 +123,16 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
       }
     default: break
     }
-    
+
     /// конвертирование давления
     switch data.unitTypes?.pressureType {
-      ///mBar
+      /// mBar
     case 0:
       weather.current.pressure = Int(dataConverter.convertPressure(value: Double((data.bottomWeather?.pressure ?? 0)), unit: .mbar))
-      ///atm
+      /// atm
     case 1:
       weather.current.pressure = Int(dataConverter.convertPressure(value: Double((data.bottomWeather?.pressure ?? 0)), unit: .atm))
-      ///mmHg
+      /// mmHg
     case 2:
       weather.current.pressure = Int(dataConverter.convertPressure(value: Double((data.bottomWeather?.pressure ?? 0)), unit: .mmHg))
       /// inHg
@@ -166,4 +166,3 @@ extension MainWeatherViewModel: SubcribeSettings {
     }
   }
 }
-

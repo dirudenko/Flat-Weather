@@ -8,14 +8,14 @@
 import Foundation
 
 protocol SettingsViewModelProtocol: AnyObject {
-  var updateViewData: ((SettingsViewData) -> ())? { get set }
+  var updateViewData: ((SettingsViewData) -> Void)? { get set }
   func changeSettings(unit: Settings, type: UnitOptions)
   func unitPressed()
 }
 
 class SettingsViewModel: SettingsViewModelProtocol {
   // MARK: - Public variables
-  var updateViewData: ((SettingsViewData) -> ())?
+  var updateViewData: ((SettingsViewData) -> Void)?
   var observer: SettingsObserver
   // MARK: - Initialization
   init(observer: SettingsObserver) {
@@ -34,7 +34,7 @@ class SettingsViewModel: SettingsViewModelProtocol {
     case .temperature:
       let temperature = unit as? Temperature
       if temperature != UserDefaultsManager.get(forKey: "Temperature") {
-      UserDefaultsManager.set(temperature,forKey: "Temperature")
+      UserDefaultsManager.set(temperature, forKey: "Temperature")
         observer.notifyObserver(unit: unit, type: type)
       } else {
         updateViewData?(.success)
@@ -42,14 +42,15 @@ class SettingsViewModel: SettingsViewModelProtocol {
     case .wind:
       let wind = unit as? WindSpeed
       if wind != UserDefaultsManager.get(forKey: "Wind") {
-      UserDefaultsManager.set(wind,forKey: "Wind")
+      UserDefaultsManager.set(wind, forKey: "Wind")
         observer.notifyObserver(unit: unit, type: type)
       } else {
         updateViewData?(.success)
-      }    case .pressure:
+      }
+    case .pressure:
       let pressure = unit as? Pressure
       if pressure != UserDefaultsManager.get(forKey: "Pressure") {
-      UserDefaultsManager.set(pressure,forKey: "Pressure")
+      UserDefaultsManager.set(pressure, forKey: "Pressure")
         observer.notifyObserver(unit: unit, type: type)
       } else {
         updateViewData?(.success)

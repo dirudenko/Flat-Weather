@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension BottomBar {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<BottomBar> {
@@ -24,6 +23,6 @@ extension BottomBar {
 
 }
 
-extension BottomBar : Identifiable {
+extension BottomBar: Identifiable {
 
 }

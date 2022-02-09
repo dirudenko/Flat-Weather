@@ -8,19 +8,18 @@
 import UIKit
 
 class LoadingView: UIView {
-  
+
   override init(frame: CGRect) {
     super.init(frame: frame)
     translatesAutoresizingMaskIntoConstraints = false
     addSpinner()
   }
-  
+
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
     fatalError("init(coder:) has not been implemented")
   }
-  
-  
+
    private func addSpinner() {
     let spinner = UIActivityIndicatorView(style: .large)
     spinner.color = .systemGray
@@ -32,11 +31,11 @@ class LoadingView: UIView {
       spinner.centerYAnchor.constraint(equalTo: self.centerYAnchor)
     ])
   }
-  
+
   func makeInvisible() {
     self.isHidden = true
   }
-  
+
   func makeVisible() {
     self.isHidden = false
   }

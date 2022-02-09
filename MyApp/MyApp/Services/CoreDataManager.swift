@@ -18,13 +18,13 @@ protocol CoreDataManagerProtocol {
   func removeDataFromMainWeather(object: MainInfo)
 }
 
-//protocol CoreDataManagerListProtocol: CoreDataManagerProtocol {
+// protocol CoreDataManagerListProtocol: CoreDataManagerProtocol {
 //  func loadListData()
 //  func entityIsEmpty() -> Bool
 //  func saveToList(city: CityList)
 //  func configure(json: CitiList)
 //  var fetchedListController: NSFetchedResultsController<CityList> { get }
-//}
+// }
 
 protocol CoreDataManagerResultProtocol: CoreDataManagerProtocol {
   func configureTopView(from data: WeatherModel, list: MainInfo?)
@@ -35,18 +35,17 @@ protocol CoreDataManagerResultProtocol: CoreDataManagerProtocol {
   func updateUnitTypes(list: MainInfo?)
 }
 
-
 class CoreDataManager: CoreDataManagerResultProtocol {
-  
+
   var modelName: String
   /// предикат для пользовательских городов
   var cityResultsPredicate: NSPredicate?
   /// предикат для всех городов
-  
+
   init(modelName: String) {
     self.modelName = modelName
   }
-  
+
   fileprivate lazy var storeContainer: NSPersistentContainer = {
     let container = NSPersistentContainer(name: self.modelName)
     container.loadPersistentStores { _, error in
@@ -55,35 +54,35 @@ class CoreDataManager: CoreDataManagerResultProtocol {
       }
     }
     container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
-    //container.viewContext.shouldDeleteInaccessibleFaults = true
-    //container.viewContext.automaticallyMergesChangesFromParent = true
+    // container.viewContext.shouldDeleteInaccessibleFaults = true
+    // container.viewContext.automaticallyMergesChangesFromParent = true
     return container
   }()
-  
+
   /// список добавленных пользователем городов
   lazy var fetchedResultsController: NSFetchedResultsController<MainInfo> = {
     let request = MainInfo.createFetchRequest()
     request.fetchBatchSize = 20
     request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
     let controller = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedContext, sectionNameKeyPath: nil, cacheName: nil)
-    
+
     controller.fetchRequest.predicate = cityResultsPredicate
     do {
       try controller.performFetch()
     } catch {
       print(error.localizedDescription)
     }
-    
+
     return controller
   }()
-  
+
   lazy var managedContext: NSManagedObjectContext = {
     return storeContainer.viewContext
   }()
-  
+
   func saveContext () {
     guard managedContext.hasChanges else { return }
-    
+
     do {
       try managedContext.save()
     } catch let error as NSError {
@@ -91,7 +90,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
       fatalError("Unresolved error \(error), \(error.userInfo)")
     }
   }
-  
+
   /// загрузка пользовательских городов
   func loadSavedData() {
     fetchedResultsController.fetchRequest.predicate = cityResultsPredicate
@@ -101,13 +100,12 @@ class CoreDataManager: CoreDataManagerResultProtocol {
       print(error.localizedDescription)
     }
   }
-  
+
   func removeDataFromMainWeather(object: MainInfo) {
     fetchedResultsController.managedObjectContext.delete(object)
     saveContext()
   }
-  
-  
+
   /// Проверка наналичие данных в БД
   func entityIsEmpty() -> Bool {
     let request = MainInfo.createFetchRequest()
@@ -122,13 +120,13 @@ class CoreDataManager: CoreDataManagerResultProtocol {
       return false
     }
   }
-  
+
   /// Сохранение добавленного города в КорДату
   func saveToList(city: SearchModel, isCurrentLocation: Bool) {
     let entity = NSEntityDescription.entity(forEntityName: "MainInfo",
                                             in: managedContext)!
     let list = MainInfo(entity: entity, insertInto: managedContext)
-    
+
     list.id = isCurrentLocation ? 0 : Int64(city.lat + city.lon)
     list.name = city.name
     list.lat = city.lat
@@ -143,8 +141,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     updateUnitTypes(list: list)
     saveContext()
   }
-  
-  
+
   func updateUnitTypes(list: MainInfo?) {
     let entity = NSEntityDescription.entity(forEntityName: "UnitsTypes",
                                             in: managedContext)!
@@ -152,18 +149,18 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     guard let temperatureType: Temperature = UserDefaultsManager.get(forKey: "Temperature"),
           let windSpeedType: WindSpeed = UserDefaultsManager.get(forKey: "Wind"),
           let pressureType: Pressure = UserDefaultsManager.get(forKey: "Pressure") else { return }
-    
+
     units.tempType = Int16(temperatureType.rawValue)
     units.windType = Int16(windSpeedType.rawValue)
     units.pressureType = Int16(pressureType.rawValue)
     list?.unitTypes = units
-    //saveContext()
+    // saveContext()
   }
-  
+
   func configureWeekly(from data: WeatherModel, list: MainInfo?) {
     let entity = NSEntityDescription.entity(forEntityName: "Weekly",
                                             in: managedContext)!
-    
+
     for (index, item) in data.daily.enumerated() {
       let weather = Weekly(entity: entity, insertInto: managedContext)
       weather.tempDay = item.temp.day
@@ -178,11 +175,11 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     }
     // saveContext()
   }
-  
+
   func configureHourly(from data: WeatherModel, list: MainInfo?) {
     let entity = NSEntityDescription.entity(forEntityName: "Hourly",
                                             in: managedContext)!
-    
+
     for (index, item) in data.hourly.enumerated() {
       let weather = Hourly(entity: entity, insertInto: managedContext)
       weather.temp = item.temp
@@ -197,7 +194,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     }
     // saveContext()
   }
-  
+
   /// Конфигурация верхнего бара с текущими погодными данными
   func configureTopView(from data: WeatherModel, list: MainInfo?) {
     let entity = NSEntityDescription.entity(forEntityName: "TopBar",
@@ -211,7 +208,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     weather.weather = list
     saveContext()
   }
-  
+
   /// Конфигурация collectionView бара с текущими погодными данными
   func configureBottomView(from data: WeatherModel, list: MainInfo?) {
     let entity = NSEntityDescription.entity(forEntityName: "BottomBar",
@@ -234,19 +231,14 @@ class TestCoreDataManager: CoreDataManager {
       name: self.modelName)
     container.persistentStoreDescriptions[0].url =
     URL(fileURLWithPath: "/dev/null")
-    
+
     container.loadPersistentStores { _, error in
       if let error = error as NSError? {
         fatalError(
           "Unresolved error \(error), \(error.userInfo)")
       }
     }
-    
+
     self.storeContainer = container
   }
 }
-
-
-
-
-

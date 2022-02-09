@@ -13,5 +13,5 @@ enum MainViewData {
   case loading
   case success(MainInfo)
   case failure
-  
+
 }

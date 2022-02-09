@@ -15,7 +15,7 @@ struct WeatherModel: Codable {
   var current: Current
   var hourly: [Current]
   var daily: [Daily]
-  
+
   enum CodingKeys: String, CodingKey {
     case lat, lon, timezone
     case timezoneOffset = "timezone_offset"
@@ -37,7 +37,7 @@ struct Current: Codable {
   let weather: [Weather]
   let snow: Snow?
   let pop: Double?
-  
+
   enum CodingKeys: String, CodingKey {
     case dt, sunrise, sunset, temp
     case feelsLike = "feels_like"
@@ -54,7 +54,7 @@ struct Current: Codable {
 // MARK: - Rain
 struct Rain: Codable {
   let the1H: Double
-  
+
   enum CodingKeys: String, CodingKey {
     case the1H = "1h"
   }
@@ -63,7 +63,7 @@ struct Rain: Codable {
 // MARK: - Snow
 struct Snow: Codable {
   let the1H: Double
-  
+
   enum CodingKeys: String, CodingKey {
     case the1H = "1h"
   }
@@ -74,7 +74,7 @@ struct Weather: Codable {
   let main: String
   let weatherDescription: String?
   let icon: String
-  
+
   enum CodingKeys: String, CodingKey {
     case id, main
     case weatherDescription = "description"
@@ -98,7 +98,7 @@ struct Daily: Codable {
   let uvi: Double
   let rain: Double?
   let snow: Double?
-  
+
   enum CodingKeys: String, CodingKey {
     case dt, sunrise, sunset, moonrise, moonset
     case moonPhase = "moon_phase"

@@ -44,6 +44,7 @@ final class SearchViewController: UIViewController {
     view.addSubview(searchView)
     searchView.delegate = self
     self.navigationItem.setHidesBackButton(true, animated: false)
+    view.accessibilityIdentifier = "searchView"
   }
 
   private func updateView() {

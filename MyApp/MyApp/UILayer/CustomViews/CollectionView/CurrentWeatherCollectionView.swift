@@ -40,7 +40,6 @@ class CurrentWeatherCollectionView: UICollectionView {
       layout.itemSize = CGSize(width: adapted(dimensionSize: 122, to: .width),
                                height: adapted(dimensionSize: 32, to: .height))
       super.init(frame: .zero, collectionViewLayout: layout)
-      // register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "WeatherCollectionViewCell")
       configureForWeatherCollectionViewCell()
     }
 

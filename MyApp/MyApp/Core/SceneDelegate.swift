@@ -14,7 +14,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
              options connectionOptions: UIScene.ConnectionOptions) {
     guard let windowScene = (scene as? UIWindowScene) else { return }
     let window = UIWindow(windowScene: windowScene)
+    if CommandLine.arguments.contains("--UITesting") {
+      window.rootViewController = BuilderService.buildRootViewControllerForUiTest()
+    } else {
     window.rootViewController = BuilderService.buildRootViewController()
+    }
     self.window = window
     window.makeKeyAndVisible()
   }

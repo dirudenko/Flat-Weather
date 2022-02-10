@@ -71,6 +71,7 @@ final class MainWeatherViewController: UIViewController {
 
   private func setupLayouts() {
     view.backgroundColor = .systemBackground
+    view.accessibilityIdentifier = "mainWeather"
     view.addSubview(currentWeatherView)
     view.addSubview(hourlyWeatherView)
     view.addSubview(weeklyWeatherView)

@@ -16,6 +16,7 @@ protocol CoreDataManagerProtocol {
   func loadSavedData()
   var fetchedResultsController: NSFetchedResultsController<MainInfo> { get }
   func removeDataFromMainWeather(object: MainInfo)
+  func removeAllData()
 }
 
 // protocol CoreDataManagerListProtocol: CoreDataManagerProtocol {
@@ -104,6 +105,15 @@ class CoreDataManager: CoreDataManagerResultProtocol {
   func removeDataFromMainWeather(object: MainInfo) {
     fetchedResultsController.managedObjectContext.delete(object)
     saveContext()
+  }
+  
+  func removeAllData() {
+    let cities = fetchedResultsController.fetchedObjects
+    if let cities = cities {
+      for city in cities {
+        city.managedObjectContext?.delete(city)
+      }
+    }
   }
 
   /// Проверка наналичие данных в БД

@@ -16,14 +16,14 @@ class CityListPageViewController: UIPageViewController {
   private var list: [MainInfo]
   /// Массив контроллеров с городами из list с прогнозами погоды
   private var cityPage = [MainWeatherViewController]()
-  private let location: LocationManagerProtocol
+  private var location: LocationManagerProtocol?
   private let coreDataManager: CoreDataManagerResultProtocol
   // MARK: - Private variables
   /// Индекс города, показанного на экране
   private var currentIndex: Int
   private var userLocation = SearchModel(name: "Current Location", localNames: nil, lat: 0, lon: 0, country: "Current Country", state: nil)
   // MARK: - Initialization
-  init(for list: [MainInfo], index: Int, locationManager: LocationManagerProtocol, coreDataManager: CoreDataManagerResultProtocol) {
+  init(for list: [MainInfo], index: Int, locationManager: LocationManagerProtocol?, coreDataManager: CoreDataManagerResultProtocol) {
     self.list = list
     self.currentIndex = index
     self.location = locationManager
@@ -40,16 +40,18 @@ class CityListPageViewController: UIPageViewController {
     super.viewDidLoad()
     setupPageController()
     configurePageControl()
+    
   }
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-
-    if location.checkServiceIsEnabled() {
-      location.manager?.delegate = self
-      location.manager?.startUpdatingLocation()
+   
+    if ((location?.checkServiceIsEnabled()) != nil) {
+      location?.manager?.delegate = self
+      location?.manager?.startUpdatingLocation()
     }
   }
+  
 
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
@@ -132,10 +134,10 @@ extension CityListPageViewController: UIPageViewControllerDataSource, UIPageView
 extension CityListPageViewController: CLLocationManagerDelegate {
 
   func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-    guard let checkLocationAuth = location.checkLocationAuth() else { return }
+    guard let checkLocationAuth = location?.checkLocationAuth() else { return }
     /// проверка на случай если пользователь запретил геолокацию для приложения. Текущий город будет удален
     if !checkLocationAuth {
-      location.deleteCurrentCity()
+      location?.deleteCurrentCity()
       let viewController = BuilderService.buildRootViewController()
       viewController.modalPresentationStyle = .fullScreen
       present(viewController, animated: false, completion: nil)
@@ -147,7 +149,7 @@ extension CityListPageViewController: CLLocationManagerDelegate {
       /// изменение геопозиции при использовании приложения
       userLocation.lat = location.coordinate.latitude
       userLocation.lon = location.coordinate.longitude
-      self.location.saveCurrentCity(userLocation)
+      self.location?.saveCurrentCity(userLocation)
 
     }
   }

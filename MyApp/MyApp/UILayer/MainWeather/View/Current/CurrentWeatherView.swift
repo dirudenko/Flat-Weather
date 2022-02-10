@@ -114,6 +114,8 @@ final class CurrentWeatherView: UIView {
     layer.insertSublayer(gradient, at: 0)
     layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
     layer.masksToBounds = true
+    
+    temperatureLabel.accessibilityIdentifier = "topTemperature"
   }
 
   private func setupView() {
@@ -125,6 +127,7 @@ final class CurrentWeatherView: UIView {
     collectionView.delegate = self
     collectionView.dataSource = self
     backgroundColor = UIColor(named: "bottomColor")
+    addButton.accessibilityIdentifier = "pushSearch"
 
   }
 

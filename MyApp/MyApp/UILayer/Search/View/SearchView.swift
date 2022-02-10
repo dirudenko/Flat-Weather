@@ -28,6 +28,7 @@ class SearchView: UIView {
     searchBar.isTranslucent = true
     searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
     searchBar.searchTextField.backgroundColor = .systemGray6
+    searchBar.accessibilityIdentifier = "Search"
     return searchBar
   }()
 

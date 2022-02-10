@@ -11,7 +11,7 @@ App features:
 - CoreData with fetchResultController
 - Unit Tests
 - UI Test
-- 
+- CLLocationManager
 Extra:
 - Fastline
 - Swiftlint

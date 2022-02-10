@@ -45,7 +45,7 @@ class ConveterTests: XCTestCase {
     let input: Double = 10
     let output: Double = 36
 
-    let result = sut.convertWindSpeed(value: input, from: .ms, to: .kmh)
+    let result = sut.convertWindSpeed(value: input, fromUnit: .ms, toUnit: .kmh)
 
     XCTAssertEqual(output, result, accuracy: 0.01)
   }
@@ -55,7 +55,7 @@ class ConveterTests: XCTestCase {
     let input: Double = 4
     let output: Double = 8.95
 
-    let result = sut.convertWindSpeed(value: input, from: .ms, to: .milh)
+    let result = sut.convertWindSpeed(value: input, fromUnit: .ms, toUnit: .milh)
 
     XCTAssertEqual(output, result, accuracy: 0.01)
   }
@@ -65,7 +65,7 @@ class ConveterTests: XCTestCase {
     let input: Double = 10
     let output: Double = 6.21
 
-    let result = sut.convertWindSpeed(value: input, from: .kmh, to: .milh)
+    let result = sut.convertWindSpeed(value: input, fromUnit: .kmh, toUnit: .milh)
 
     XCTAssertEqual(output, result, accuracy: 0.01)
   }
@@ -75,7 +75,7 @@ class ConveterTests: XCTestCase {
     let input: Double = 36
     let output: Double = 10
 
-    let result = sut.convertWindSpeed(value: input, from: .kmh, to: .ms)
+    let result = sut.convertWindSpeed(value: input, fromUnit: .kmh, toUnit: .ms)
 
     XCTAssertEqual(output, result, accuracy: 0.01)
   }
@@ -85,7 +85,7 @@ class ConveterTests: XCTestCase {
     let input: Double = 10
     let output: Double = 16.1
 
-    let result = sut.convertWindSpeed(value: input, from: .milh, to: .kmh)
+    let result = sut.convertWindSpeed(value: input, fromUnit: .milh, toUnit: .kmh)
 
     XCTAssertEqual(output, result, accuracy: 0.01)
   }
@@ -95,7 +95,7 @@ class ConveterTests: XCTestCase {
     let input: Double = 16
     let output: Double = 7.15
 
-    let result = sut.convertWindSpeed(value: input, from: .milh, to: .ms)
+    let result = sut.convertWindSpeed(value: input, fromUnit: .milh, toUnit: .ms)
 
     XCTAssertEqual(output, result, accuracy: 0.01)
   }

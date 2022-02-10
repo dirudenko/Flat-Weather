@@ -11,12 +11,14 @@ class WeeklyWeatherView: UIView {
   // MARK: - Private types
   private let weeklyListTableView = TableView(celltype: .weeklyTableViewCell)
   private(set) var dateLabel = TitleLabel(textAlignment: .center)
+  private let loadingVC = LoadingView()
   private var model: MainInfo? {
     didSet {
       weeklyListTableView.reloadData()
     }
   }
   // MARK: - Public types
+  weak var alertDelegate: AlertProtocol?
   var viewData: MainViewData = .initial {
     didSet {
       setNeedsLayout()
@@ -41,20 +43,22 @@ class WeeklyWeatherView: UIView {
     case .initial:
       break
     case .loading:
-      break
+      loadingVC.makeVisible()
     case .fetching(let weatherModel):
       model = weatherModel
+      loadingVC.makeInvisible()
     case .success(let weatherModel):
       model = weatherModel
-    case .failure:
-      // TODO: Show Error
-      break
+      loadingVC.makeInvisible()
+    case .failure(let error):
+      alertDelegate?.showAlert(text: error)
     }
   }
   // MARK: - Private functions
   private func setupLayouts() {
     addSubview(weeklyListTableView)
     addSubview(dateLabel)
+    addSubview(loadingVC)
     backgroundColor = UIColor(named: "bottomColor")
     weeklyListTableView.delegate = self
     weeklyListTableView.dataSource = self
@@ -75,7 +79,10 @@ class WeeklyWeatherView: UIView {
       weeklyListTableView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor),
       weeklyListTableView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
       weeklyListTableView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
-      weeklyListTableView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+      weeklyListTableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+      
+      loadingVC.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+      loadingVC.centerYAnchor.constraint(equalTo: self.centerYAnchor)
     ])
   }
 }

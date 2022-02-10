@@ -40,6 +40,7 @@ class SearchView: UIView {
   private let gradient = Constants.Design.gradient
   // MARK: - Public types
   weak var delegate: SearchViewProtocol?
+  weak var alertDelegate: AlertProtocol?
   var city = [SearchModel]() {
     didSet {
       searchTableView.reloadData()
@@ -71,7 +72,7 @@ class SearchView: UIView {
     switch viewData {
     case .initial:
       searchBar.resignFirstResponder()
-      spinnerView.isHidden = true
+      spinnerView.makeInvisible()
       cityListTableView.isHidden = false
       searchTableView.isHidden = true
       if searchViewCellModel.coreDataManager.entityIsEmpty() {
@@ -80,7 +81,7 @@ class SearchView: UIView {
         backButton.isHidden = false
       }
     case .load:
-      spinnerView.isHidden = false
+      spinnerView.makeVisible()
       cityListTableView.isHidden = true
       searchTableView.isHidden = false
     case .success(let model):
@@ -88,8 +89,8 @@ class SearchView: UIView {
       spinnerView.makeInvisible()
       searchTableView.isHidden = false
       cityListTableView.isHidden = true
-    case .failure:
-      break
+    case .failure(let error):
+      alertDelegate?.showAlert(text: error)
     }
   }
   // MARK: - Private functions

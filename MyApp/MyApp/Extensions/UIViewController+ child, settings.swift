@@ -8,6 +8,7 @@
 import UIKit
 
 extension UIViewController {
+  /// добавление и удаление subview
   func add(_ child: UIViewController) {
     addChild(child)
     view.addSubview(child.view)
@@ -21,10 +22,16 @@ extension UIViewController {
     view.removeFromSuperview()
     removeFromParent()
   }
+  /// вывод сообщения об ошибке
+  func showSystemAlert(text: String) {
+    let alert = UIAlertController(title: "My Title", message: text, preferredStyle: UIAlertController.Style.alert)
+    alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+    present(alert, animated: true, completion: nil)
+  }
+  
   /// Проверка наличия размерности данных и их установка в случае необходимости
   func checkSettings() {
     let temperature: Temperature? = UserDefaultsManager.get(forKey: "Temperature")
-   // let wind: WindSpeed? = UserDefaultsManager.get(forKey: "Wind")
     let pressure: Pressure? = UserDefaultsManager.get(forKey: "Pressure")
 
     if temperature == nil {

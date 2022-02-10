@@ -19,6 +19,7 @@ class HourlyWeatherView: UIView {
     }
   }
   // MARK: - Public types
+  weak var alertDelegate: AlertProtocol?
   var viewData: MainViewData = .initial {
     didSet {
       setNeedsLayout()
@@ -43,18 +44,15 @@ class HourlyWeatherView: UIView {
     case .initial:
       break
     case .loading:
-      loadingVC.isHidden = false
+      loadingVC.makeVisible()
     case .fetching(let weatherModel):
       hourlyWeather = weatherModel
-     // dateLabel.text = "TEST"
       loadingVC.makeInvisible()
     case .success(let weatherModel):
       loadingVC.makeInvisible()
-    //  dateLabel.text = "TEST"
       hourlyWeather = weatherModel
-    case .failure:
-      // TODO: Show Error
-      break
+    case .failure(let error):
+      alertDelegate?.showAlert(text: error)
     }
   }
   // MARK: - Private functions

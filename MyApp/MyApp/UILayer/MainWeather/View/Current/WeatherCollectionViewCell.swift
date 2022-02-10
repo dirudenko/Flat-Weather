@@ -66,7 +66,7 @@ class WeatherCollectionViewCell: UICollectionViewCell {
       conditionNameLabel.text = "Wind Speed"
     case 1:
       conditionImage.image = UIImage(systemName: "cloud.drizzle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-      conditionStatusLabel.text = "\(bottomBar.rain) %"
+      conditionStatusLabel.text = "\(bottomBar.pop) %"
       conditionNameLabel.text = "Precipitation"
     case 2:
       conditionImage.image = UIImage(systemName: "thermometer")?.withTintColor(.white, renderingMode: .alwaysOriginal)

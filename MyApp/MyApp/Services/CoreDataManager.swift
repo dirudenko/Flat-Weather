@@ -177,7 +177,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
       weather.tempNight = item.temp.night
       weather.date = Int64(item.dt)
       weather.iconId = item.weather.first?.icon ?? ""
-      weather.rain = Int16((item.pop ?? 0) * 100)
+      weather.pop = Int16((item.pop ?? 0) * 100)
       weather.name = list?.name ?? ""
       weather.id = Int16(index)
       list?.insertIntoWeeklyWeather(weather, at: index)
@@ -196,7 +196,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
       weather.feelsLike = item.feelsLike
       weather.date = Int64(item.dt)
       weather.iconId = item.weather.first?.icon ?? ""
-      weather.rain = Int16((item.pop ?? 0) * 100)
+      weather.pop = Int16((item.pop ?? 0) * 100)
       weather.name = list?.name ?? ""
       weather.id = Int16(index)
       list?.addToHourlyWeather(weather)
@@ -227,7 +227,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     weather.wind = data.current.windSpeed
     weather.humidity = Int16(data.current.humidity)
     weather.pressure = Int16(data.current.pressure)
-    weather.rain = Int16((data.current.pop ?? 0) * 100)
+    weather.pop = Int16((data.hourly.first?.pop ?? 0) * 100)
     weather.weather = list
     saveContext()
   }

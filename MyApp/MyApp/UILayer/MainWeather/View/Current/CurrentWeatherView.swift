@@ -12,6 +12,10 @@ protocol HeaderButtonsProtocol: AnyObject {
   func optionsButtonTapped()
 }
 
+protocol AlertProtocol: AnyObject {
+  func showAlert(text: String)
+}
+
 final class CurrentWeatherView: UIView {
   // MARK: - Private types
   private let collectionView = CurrentWeatherCollectionView(cellType: .weatherCollectionViewCell)
@@ -24,7 +28,6 @@ final class CurrentWeatherView: UIView {
   private let addButton = Button(systemImage: "plus")
   private let optionsButton = Button(systemImage: "line.3.horizontal")
   private let gradient = Constants.Design.gradient
-
   // MARK: - Private variables
   private var collectionViewTopSmall: NSLayoutConstraint?
   private var collectionViewTopBig: NSLayoutConstraint?
@@ -61,7 +64,7 @@ final class CurrentWeatherView: UIView {
   }
 
   private var currentWeather: MainInfo?
-
+  weak var alertDelegate: AlertProtocol?
   weak var delegate: HeaderButtonsProtocol?
   // MARK: - Initialization
   override init(frame: CGRect) {
@@ -93,9 +96,9 @@ final class CurrentWeatherView: UIView {
       loadingVC.makeInvisible()
       currentWeather = model
       configure(with: model)
-    case .failure:
-      // TODO: Show Error
-      break
+    case .failure(let error):
+      alertDelegate?.showAlert(text: error)
+    
     }
   }
   // MARK: - Private functions

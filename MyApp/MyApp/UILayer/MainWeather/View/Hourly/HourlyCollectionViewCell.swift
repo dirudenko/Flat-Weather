@@ -68,7 +68,7 @@ class HourlyCollectionViewCell: UICollectionViewCell {
   // MARK: - Public functions
   func configure(with model: [Hourly], index: Int) {
     let modelElement = model[index]
-    let pop = modelElement.rain
+    let pop = modelElement.pop
     popLabel.text = "\(pop)% pop"
 
     var imageName =  IconHadler.id.keyedValue(key: modelElement.iconId )

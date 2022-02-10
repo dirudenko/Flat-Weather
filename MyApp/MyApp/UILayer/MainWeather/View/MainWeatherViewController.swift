@@ -88,6 +88,9 @@ final class MainWeatherViewController: UIViewController {
     view.addGestureRecognizer(swipeGestureRecognizerDown)
     view.addGestureRecognizer(swipeGestureRecognizerUp)
     currentWeatherView.delegate = self
+    currentWeatherView.alertDelegate = self
+    hourlyWeatherView.alertDelegate = self
+    weeklyWeatherView.alertDelegate = self
   }
 
   @objc private func runTimedCode() {
@@ -122,6 +125,12 @@ extension MainWeatherViewController: HeaderButtonsProtocol {
     let searchViewController = BuilderService.buildSearchViewController()
     navigationController?.pushViewController(searchViewController, animated: true)
  }
+}
+
+extension MainWeatherViewController: AlertProtocol {
+  func showAlert(text: String) {
+    self.showSystemAlert(text: text)
+  }
 }
 // MARK: - Constraints
 extension MainWeatherViewController {

@@ -20,10 +20,10 @@ struct DataConverter {
     }
   }
 
-  func convertWindSpeed(value: Double, from: WindSpeed, to: WindSpeed) -> Double {
-    switch to {
+  func convertWindSpeed(value: Double, fromUnit: WindSpeed, toUnit: WindSpeed) -> Double {
+    switch toUnit {
     case .ms:
-      switch from {
+      switch fromUnit {
       case .kmh:
         let windSpeed = Measurement(value: value, unit: UnitSpeed.kilometersPerHour)
         return windSpeed.converted(to: .metersPerSecond).value
@@ -34,7 +34,7 @@ struct DataConverter {
         return value
       }
     case .kmh:
-      switch from {
+      switch fromUnit {
       case .kmh:
         return value
       case .milh:
@@ -45,7 +45,7 @@ struct DataConverter {
         return windSpeed.converted(to: .kilometersPerHour).value
       }
     case .milh:
-      switch from {
+      switch fromUnit {
       case .kmh:
         let windSpeed = Measurement(value: value, unit: UnitSpeed.kilometersPerHour)
         return windSpeed.converted(to: .milesPerHour).value

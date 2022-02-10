@@ -11,5 +11,5 @@ enum SearchViewData {
   case initial
   case load
   case success([SearchModel])
-  case failure
+  case failure(String)
 }

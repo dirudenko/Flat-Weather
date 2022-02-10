@@ -17,7 +17,7 @@ extension BottomBar {
 
     @NSManaged public var humidity: Int16
     @NSManaged public var pressure: Int16
-    @NSManaged public var rain: Int16
+    @NSManaged public var pop: Int16
     @NSManaged public var wind: Double
     @NSManaged public var weather: MainInfo?
 

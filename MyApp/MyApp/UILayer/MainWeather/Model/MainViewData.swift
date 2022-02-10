@@ -12,6 +12,6 @@ enum MainViewData {
   case fetching(MainInfo)
   case loading
   case success(MainInfo)
-  case failure
+  case failure(String)
 
 }

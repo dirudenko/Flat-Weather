@@ -2,8 +2,8 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21D49" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="BottomBar" representedClassName="BottomBar" syncable="YES">
         <attribute name="humidity" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="pop" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="pressure" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="rain" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="wind" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="weather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MainInfo" inverseName="bottomWeather" inverseEntity="MainInfo"/>
     </entity>
@@ -13,7 +13,7 @@
         <attribute name="iconId" attributeType="String"/>
         <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
-        <attribute name="rain" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="pop" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="temp" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="weather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MainInfo" inverseName="hourlyWeather" inverseEntity="MainInfo"/>
         <uniquenessConstraints>
@@ -61,7 +61,7 @@
         <attribute name="iconId" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="rain" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="pop" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="tempDay" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="tempNight" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="weather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MainInfo" inverseName="weeklyWeather" inverseEntity="MainInfo"/>

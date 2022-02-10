@@ -38,7 +38,7 @@ class AsynchronousTests: XCTestCase {
 
       waitForExpectations(timeout: 3) { error in
             if error != nil {
-              XCTFail()
+              XCTFail("Error")
             }
         XCTAssertEqual(output, input)
           }
@@ -61,7 +61,7 @@ class AsynchronousTests: XCTestCase {
 
     waitForExpectations(timeout: 3) { error in
           if error != nil {
-            XCTFail()
+            XCTFail("Error")
           }
       XCTAssertNotEqual(output, input)
         }
@@ -78,7 +78,7 @@ class AsynchronousTests: XCTestCase {
       case .success(let model):
 
         output = model
-      case .failure(_):
+      case .failure:
         output = nil
       }
       expectation.fulfill()
@@ -86,7 +86,7 @@ class AsynchronousTests: XCTestCase {
 
     waitForExpectations(timeout: 3) { error in
           if error != nil {
-            XCTFail()
+            XCTFail("Error")
           }
      XCTAssertNotNil(output)
         }
@@ -103,7 +103,7 @@ class AsynchronousTests: XCTestCase {
       case .success(let model):
 
         output = model
-      case .failure(_):
+      case .failure:
         output = nil
       }
       expectation.fulfill()
@@ -111,7 +111,7 @@ class AsynchronousTests: XCTestCase {
 
     waitForExpectations(timeout: 3) { error in
           if error != nil {
-            XCTFail()
+            XCTFail("Error")
           }
      XCTAssertNil(output)
         }

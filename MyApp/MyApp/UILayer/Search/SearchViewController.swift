@@ -43,6 +43,7 @@ final class SearchViewController: UIViewController {
     view.backgroundColor = .systemBackground
     view.addSubview(searchView)
     searchView.delegate = self
+    searchView.alertDelegate = self
     self.navigationItem.setHidesBackButton(true, animated: false)
     view.accessibilityIdentifier = "searchView"
   }
@@ -76,6 +77,12 @@ extension SearchViewController: SearchViewProtocol {
     } else {
     navigationController?.popViewController(animated: true)
     }
+  }
+}
+
+extension SearchViewController: AlertProtocol {
+  func showAlert(text: String) {
+    self.showSystemAlert(text: text)
   }
 }
 // MARK: - UIViewController extensions

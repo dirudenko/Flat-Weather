@@ -9,7 +9,7 @@ import Foundation
 import CoreData
 
 protocol SearchViewCellModelProtocol {
-  var updateViewData: ((SearchViewData) ->Void)? { get set }
+  var updateViewData: ((SearchViewData) -> Void)? { get set }
   var networkManager: NetworkManagerProtocol { get }
   var coreDataManager: CoreDataManagerResultProtocol { get }
   func setSections(at tableView: TableViewCellTypes) -> Int
@@ -53,8 +53,7 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
   }
 
   func removeObject(at index: Int) {
-    guard let object = getObjects(at: index) else { print("ERROR")
-      return }
+    guard let object = getObjects(at: index) else { return }
     coreDataManager.removeDataFromMainWeather(object: object)
   }
 
@@ -70,9 +69,8 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
           }
 
         case .failure(let error):
-          print(error.rawValue)
           DispatchQueue.main.async {
-            self.updateViewData?(.failure)
+            self.updateViewData?(.failure(error.rawValue))
           }
         }
       }

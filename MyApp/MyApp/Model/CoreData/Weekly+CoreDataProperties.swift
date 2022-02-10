@@ -16,7 +16,7 @@ extension Weekly {
   }
 
   @NSManaged public var date: Int64
-  @NSManaged public var rain: Int16
+  @NSManaged public var pop: Int16
   @NSManaged public var id: Int16
   @NSManaged public var tempDay: Double
   @NSManaged public var tempNight: Double

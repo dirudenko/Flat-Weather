@@ -57,13 +57,13 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
           case .success(let convertedWeather):
             self.updateCoreData(model: convertedWeather, context: self.fetchedCity)
             self.updateViewData?(.success(self.fetchedCity))
-          case .failure: self.updateViewData?(.failure)
+          case .failure(let error):
+            self.updateViewData?(.failure(error.rawValue))
           }
           }
       case .failure(let error):
-        print(error.rawValue)
         DispatchQueue.main.async {
-          self.updateViewData?(.failure)
+          self.updateViewData?(.failure(error.rawValue))
         }
       }
     }
@@ -92,18 +92,18 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
     case 0:
       /// from Celsius
       if data.unitTypes?.tempType == 0 {
-        weather.current.windSpeed = dataConverter.convertWindSpeed(value: data.bottomWeather?.wind ?? 0, from: .ms, to: .kmh)
+        weather.current.windSpeed = dataConverter.convertWindSpeed(value: data.bottomWeather?.wind ?? 0, fromUnit: .ms, toUnit: .kmh)
       }
       /// from Fahrenheit
       if data.unitTypes?.tempType == 1 {
-        weather.current.windSpeed = dataConverter.convertWindSpeed(value: data.bottomWeather?.wind ?? 0, from: .milh, to: .kmh)
+        weather.current.windSpeed = dataConverter.convertWindSpeed(value: data.bottomWeather?.wind ?? 0, fromUnit: .milh, toUnit: .kmh)
       }
       /// mil/h
     case 1 :
       /// from Celsius
       if data.unitTypes?.tempType == 0 {
 
-        weather.current.windSpeed = dataConverter.convertWindSpeed(value: data.bottomWeather?.wind ?? 0, from: .ms, to: .milh)
+        weather.current.windSpeed = dataConverter.convertWindSpeed(value: data.bottomWeather?.wind ?? 0, fromUnit: .ms, toUnit: .milh)
       }
       /// from Fahrenheit
       if data.unitTypes?.tempType == 1 {
@@ -119,7 +119,7 @@ final class MainWeatherViewModel: MainWeatherViewModelProtocol {
       }
       /// from Fahrenheit
       if data.unitTypes?.tempType == 1 {
-        weather.current.windSpeed = dataConverter.convertWindSpeed(value: data.bottomWeather?.wind ?? 0, from: .milh, to: .ms)
+        weather.current.windSpeed = dataConverter.convertWindSpeed(value: data.bottomWeather?.wind ?? 0, fromUnit: .milh, toUnit: .ms)
       }
     default: break
     }

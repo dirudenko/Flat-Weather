@@ -32,7 +32,6 @@ final class LocationManager: NSObject, LocationManagerProtocol {
     if CLLocationManager.locationServicesEnabled() {
       print("Enabled")
       manager = CLLocationManager()
-      // manager?.delegate = self
       if #available(iOS 14.0, *) {
         manager?.desiredAccuracy = kCLLocationAccuracyReduced
       } else {
@@ -52,7 +51,6 @@ final class LocationManager: NSObject, LocationManagerProtocol {
     var status: Bool?
     if #available(iOS 14.0, *) {
       switch manager.authorizationStatus {
-
       case .notDetermined:
         manager.requestWhenInUseAuthorization()
       case .restricted:
@@ -66,8 +64,6 @@ final class LocationManager: NSObject, LocationManagerProtocol {
       @unknown default:
         break
       }
-    } else {
-      // Fallback on earlier versions
     }
     return status
   }

@@ -11,6 +11,8 @@ protocol SettingsViewProtocol: AnyObject {
   func backButtonTapped()
   func unitChanged(unit: Settings, type: UnitOptions?)
   func unitPressed()
+  func privacyPressed()
+  func aboutPressed()
 }
 
 class SettingsView: UIView {
@@ -230,7 +232,14 @@ extension SettingsView: UITableViewDataSource, UITableViewDelegate {
       default: break
       }
     case .extra:
-      break
+      switch indexPath.row {
+      case 0:
+        delegate?.aboutPressed()
+      case 1:
+        delegate?.privacyPressed()
+      default:
+        break
+      }
     default: break
     }
   }

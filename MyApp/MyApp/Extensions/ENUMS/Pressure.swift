@@ -15,12 +15,17 @@ enum Pressure: Int, Settings, CaseIterable {
   case hPa
 
   var description: String {
+    let atmLabel = NSLocalizedString("atmLabel", comment: "atm Label")
+    let hpaLabel = NSLocalizedString("hpaLabel", comment: "hpa Label")
+    let inHqLabel = NSLocalizedString("inHqLabel", comment: "inHq Label")
+    let mbarLabel = NSLocalizedString("mbarLabel", comment: "mbar Label")
+    let mmHgLabel = NSLocalizedString("mmHgLabel", comment: "mmHq Label")
     switch self {
-    case .atm: return "atm"
-    case .hPa: return "hPa"
-    case .inHg: return "inHg"
-    case .mbar: return "mbar"
-    case .mmHg: return "mmHg"
+    case .atm: return atmLabel
+    case .hPa: return hpaLabel
+    case .inHg: return inHqLabel
+    case .mbar: return mbarLabel
+    case .mmHg: return mmHgLabel
     }
   }
 }

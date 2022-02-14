@@ -20,13 +20,13 @@ final class CurrentWeatherView: UIView {
   // MARK: - Private types
   private let collectionView = CurrentWeatherCollectionView(cellType: .weatherCollectionViewCell)
   private let weatherImage = MainImage(frame: .zero)
-  private let dateLabel = TitleLabel(textAlignment: .center)
+  private let dateLabel = DescriptionLabel()
   private let cityNameLabel = TitleLabel(textAlignment: .center)
   private let temperatureLabel = TitleLabel(textAlignment: .center)
   private let conditionLabel = DescriptionLabel()
   private let loadingVC = LoadingView()
   private let addButton = Button(systemImage: "plus")
-  private let optionsButton = Button(systemImage: "line.3.horizontal")
+  private let settingsButton = Button(systemImage: "line.3.horizontal")
   private let gradient = Constants.Design.gradient
   // MARK: - Private variables
   private var collectionViewTopSmall: NSLayoutConstraint?
@@ -103,7 +103,6 @@ final class CurrentWeatherView: UIView {
   }
   // MARK: - Private functions
   private func setupLayouts() {
-
     addSubview(weatherImage)
     addSubview(dateLabel)
     addSubview(cityNameLabel)
@@ -112,18 +111,18 @@ final class CurrentWeatherView: UIView {
     addSubview(collectionView)
     addSubview(addButton)
     addSubview(loadingVC)
-    addSubview(optionsButton)
+    addSubview(settingsButton)
     bringSubviewToFront(loadingVC)
     layer.insertSublayer(gradient, at: 0)
-    layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
+    layer.cornerRadius = Constants.Design.cornerRadius
     layer.masksToBounds = true
-    
+    dateLabel.textAlignment = .center
     temperatureLabel.accessibilityIdentifier = "topTemperature"
   }
 
   private func setupView() {
     addButton.addTarget(self, action: #selector(didTapAdd), for: .touchDown)
-    optionsButton.addTarget(self, action: #selector(didTapOptions), for: .touchDown)
+    settingsButton.addTarget(self, action: #selector(didTapOptions), for: .touchDown)
     let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
     weatherImage.isUserInteractionEnabled = true
     weatherImage.addGestureRecognizer(tapGestureRecognizer)
@@ -131,7 +130,7 @@ final class CurrentWeatherView: UIView {
     collectionView.dataSource = self
     backgroundColor = UIColor(named: "bottomColor")
     addButton.accessibilityIdentifier = "pushSearch"
-
+    settingsButton.accessibilityIdentifier = "pustSettings"
   }
 
   private func setupFonts() {
@@ -214,10 +213,10 @@ extension CurrentWeatherView {
       addButton.widthAnchor.constraint(equalToConstant: Constants.Design.buttonSize),
       addButton.heightAnchor.constraint(equalToConstant: Constants.Design.buttonSize),
 
-      optionsButton.topAnchor.constraint(equalTo: self.topAnchor, constant: Constants.Design.verticalViewPadding),
-      optionsButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -Constants.Design.horizontalViewPadding),
-      optionsButton.widthAnchor.constraint(equalToConstant: Constants.Design.buttonSize),
-      optionsButton.heightAnchor.constraint(equalToConstant: Constants.Design.buttonSize),
+      settingsButton.topAnchor.constraint(equalTo: self.topAnchor, constant: Constants.Design.verticalViewPadding),
+      settingsButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -Constants.Design.horizontalViewPadding),
+      settingsButton.widthAnchor.constraint(equalToConstant: Constants.Design.buttonSize),
+      settingsButton.heightAnchor.constraint(equalToConstant: Constants.Design.buttonSize),
 
       cityNameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: Constants.Design.verticalViewPadding),
       cityNameLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),

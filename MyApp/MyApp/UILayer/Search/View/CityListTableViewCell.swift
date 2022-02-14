@@ -52,7 +52,7 @@ class CityListTableViewCell: UITableViewCell {
 
       nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 19, to: .height)),
       nameLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
-      nameLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 80, to: .width)),
+      nameLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 200, to: .width)),
       nameLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 19, to: .height)),
 
       conditionImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 19, to: .height)),
@@ -77,7 +77,7 @@ class CityListTableViewCell: UITableViewCell {
 
   func configure(with model: MainInfo) {
     descriptionLabel.text = model.topWeather?.desc
-    temperatureLabel.text = "\(Int(model.topWeather?.temperature ?? 0))°/\(Int(model.topWeather?.feelsLike ?? 0))"
+    temperatureLabel.text = "\(Int(model.topWeather?.temperature ?? 0))°/\(Int(model.topWeather?.feelsLike ?? 0))°"
     nameLabel.text = model.name
 
     var imageName =  IconHadler.id.keyedValue(key: model.topWeather?.iconId ?? "")

@@ -12,7 +12,6 @@
 		691625B02769CC0C00C736C7 /* MyApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 691625AE2769CC0C00C736C7 /* MyApp.xcdatamodeld */; };
 		691625B22769CC0D00C736C7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 691625B12769CC0D00C736C7 /* Assets.xcassets */; };
 		691625B52769CC0D00C736C7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 691625B32769CC0D00C736C7 /* LaunchScreen.storyboard */; };
-		691625C02769CC0D00C736C7 /* MyAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691625BF2769CC0D00C736C7 /* MyAppTests.swift */; };
 		691625CA2769CC0D00C736C7 /* MyAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691625C92769CC0D00C736C7 /* MyAppUITests.swift */; };
 		691625CC2769CC0D00C736C7 /* MyAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691625CB2769CC0D00C736C7 /* MyAppUITestsLaunchTests.swift */; };
 		691625E22769D2DB00C736C7 /* Data+ SwittyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691625E12769D2DB00C736C7 /* Data+ SwittyJSON.swift */; };
@@ -51,6 +50,7 @@
 		6927F51C27874C78004DDAF4 /* Temperature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6927F51B27874C78004DDAF4 /* Temperature.swift */; };
 		6927F51F27874D34004DDAF4 /* WindSpeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6927F51E27874D34004DDAF4 /* WindSpeed.swift */; };
 		6927F52127874D9B004DDAF4 /* Pressure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6927F52027874D9B004DDAF4 /* Pressure.swift */; };
+		693CBF6627BA9A4700CC5D60 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 693CBF6827BA9A4700CC5D60 /* InfoPlist.strings */; };
 		6976E43F2787510B0069177A /* SettingsSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6976E43E2787510B0069177A /* SettingsSections.swift */; };
 		6976E441278752460069177A /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6976E440278752460069177A /* SettingsTableViewCell.swift */; };
 		6976E443278C4E270069177A /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6976E442278C4E270069177A /* UserDefaultsManager.swift */; };
@@ -93,6 +93,7 @@
 		69A4C11727A0308800C8AA27 /* Picker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A4C11627A0308800C8AA27 /* Picker.swift */; };
 		69A4C11B27A16BC500C8AA27 /* UnitsTypes+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A4C11827A16BC500C8AA27 /* UnitsTypes+CoreDataClass.swift */; };
 		69A4C11C27A16BC500C8AA27 /* UnitsTypes+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A4C11927A16BC500C8AA27 /* UnitsTypes+CoreDataProperties.swift */; };
+		69AA540A27B660F700B8D783 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 69AA540C27B660F700B8D783 /* Localizable.strings */; };
 		69D074A42771F2DA00B901E5 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D074A32771F2DA00B901E5 /* Device.swift */; };
 		69D074A62771F4CE00B901E5 /* Dimension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D074A52771F4CE00B901E5 /* Dimension.swift */; };
 		69D074A82771F4FF00B901E5 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D074A72771F4FF00B901E5 /* Font.swift */; };
@@ -141,7 +142,6 @@
 		691625B42769CC0D00C736C7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		691625B62769CC0D00C736C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		691625BB2769CC0D00C736C7 /* MyAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		691625BF2769CC0D00C736C7 /* MyAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAppTests.swift; sourceTree = "<group>"; };
 		691625C52769CC0D00C736C7 /* MyAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		691625C92769CC0D00C736C7 /* MyAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAppUITests.swift; sourceTree = "<group>"; };
 		691625CB2769CC0D00C736C7 /* MyAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -181,6 +181,8 @@
 		6927F51B27874C78004DDAF4 /* Temperature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Temperature.swift; sourceTree = "<group>"; };
 		6927F51E27874D34004DDAF4 /* WindSpeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindSpeed.swift; sourceTree = "<group>"; };
 		6927F52027874D9B004DDAF4 /* Pressure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pressure.swift; sourceTree = "<group>"; };
+		693CBF6727BA9A4700CC5D60 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		693CBF6927BA9A5000CC5D60 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6976E43E2787510B0069177A /* SettingsSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSections.swift; sourceTree = "<group>"; };
 		6976E440278752460069177A /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		6976E442278C4E270069177A /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
@@ -224,6 +226,8 @@
 		69A4C11627A0308800C8AA27 /* Picker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Picker.swift; sourceTree = "<group>"; };
 		69A4C11827A16BC500C8AA27 /* UnitsTypes+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UnitsTypes+CoreDataClass.swift"; sourceTree = "<group>"; };
 		69A4C11927A16BC500C8AA27 /* UnitsTypes+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UnitsTypes+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		69AA540B27B660F700B8D783 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		69AA540D27B6612E00B8D783 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		69D074A32771F2DA00B901E5 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 		69D074A52771F4CE00B901E5 /* Dimension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimension.swift; sourceTree = "<group>"; };
 		69D074A72771F4FF00B901E5 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
@@ -315,7 +319,6 @@
 				699F15A727B2BC7200F15534 /* SettingsViewModelTests.swift */,
 				699F15A327AFC7A700F15534 /* SearchViewModelTests.swift */,
 				699F159427AEE57400F15534 /* ConveterTests.swift */,
-				691625BF2769CC0D00C736C7 /* MyAppTests.swift */,
 				69DB9769276E06DC00D0D0D4 /* CoreDataTests.swift */,
 			);
 			path = MyAppTests;
@@ -398,6 +401,8 @@
 				691625A72769CC0C00C736C7 /* SceneDelegate.swift */,
 				691625B32769CC0D00C736C7 /* LaunchScreen.storyboard */,
 				691625B12769CC0D00C736C7 /* Assets.xcassets */,
+				69AA540C27B660F700B8D783 /* Localizable.strings */,
+				693CBF6827BA9A4700CC5D60 /* InfoPlist.strings */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -858,6 +863,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 691625992769CC0C00C736C7;
 			productRefGroup = 691625A32769CC0C00C736C7 /* Products */;
@@ -877,9 +883,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69AA540A27B660F700B8D783 /* Localizable.strings in Resources */,
 				691625B52769CC0D00C736C7 /* LaunchScreen.storyboard in Resources */,
 				699F15AE27B3CCDD00F15534 /* Assets.xcassets in Resources */,
 				691625B22769CC0D00C736C7 /* Assets.xcassets in Resources */,
+				693CBF6627BA9A4700CC5D60 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1025,7 +1033,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				69DB976A276E06DC00D0D0D4 /* CoreDataTests.swift in Sources */,
-				691625C02769CC0D00C736C7 /* MyAppTests.swift in Sources */,
 				699F15A827B2BC7200F15534 /* SettingsViewModelTests.swift in Sources */,
 				699F15A427AFC7A700F15534 /* SearchViewModelTests.swift in Sources */,
 				699F15AA27B2C35C00F15534 /* MainWeatherViewModelTests.swift in Sources */,
@@ -1080,6 +1087,24 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
+		693CBF6827BA9A4700CC5D60 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				693CBF6727BA9A4700CC5D60 /* en */,
+				693CBF6927BA9A5000CC5D60 /* ru */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		69AA540C27B660F700B8D783 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				69AA540B27B660F700B8D783 /* en */,
+				69AA540D27B6612E00B8D783 /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -1087,6 +1112,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -1148,6 +1174,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -1205,17 +1232,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = N3G8R7BNR2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Flat Weather";
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Add location";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is only used to display the weather";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1236,17 +1262,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = N3G8R7BNR2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Flat Weather";
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Add location";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is only used to display the weather";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1267,7 +1292,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = N3G8R7BNR2;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
@@ -1287,7 +1312,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = N3G8R7BNR2;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
@@ -1306,7 +1331,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = N3G8R7BNR2;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -1324,7 +1349,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = N3G8R7BNR2;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -1342,7 +1367,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = N3G8R7BNR2;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
@@ -1361,7 +1386,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = N3G8R7BNR2;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.2;

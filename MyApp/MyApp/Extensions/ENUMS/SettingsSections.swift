@@ -17,9 +17,11 @@ enum SettingsSections: Int, CaseIterable, CustomStringConvertible {
   case extra
 
   var description: String {
+    let unitsLabel = NSLocalizedString("unitsLabel", comment: "")
+    let extraLabel = NSLocalizedString("extraLabel", comment: "")
     switch self {
-    case .units: return "UNIT"
-    case .extra: return "EXTRA"
+    case .units: return unitsLabel
+    case .extra: return extraLabel
     }
   }
 
@@ -46,10 +48,13 @@ enum UnitOptions: Int, CaseIterable, SectionType {
   }
 
   var description: String {
+    let temperatureLabel = NSLocalizedString("temperatureUnitDescription", comment: "")
+    let windLabel = NSLocalizedString("windUnitDescription", comment: "")
+    let pressureLabel = NSLocalizedString("pressureUnitDescription", comment: "")
     switch self {
-    case .temperature: return "Temperature unit"
-    case .wind: return "Wind speed unit"
-    case .pressure: return "Atmospheric pressure unit"
+    case .temperature: return temperatureLabel
+    case .wind: return windLabel
+    case .pressure: return pressureLabel
     }
   }
 }
@@ -67,9 +72,11 @@ enum ExtraOptions: Int, CaseIterable, SectionType {
   }
 
   var description: String {
+    let aboutLabel = NSLocalizedString("aboutDescription", comment: "")
+    let privacyLabel = NSLocalizedString("privacyDescription", comment: "")
     switch self {
-    case .about: return "About"
-    case .privacy: return "Privacy policy"
+    case .about: return aboutLabel
+    case .privacy: return privacyLabel
     }
   }
 

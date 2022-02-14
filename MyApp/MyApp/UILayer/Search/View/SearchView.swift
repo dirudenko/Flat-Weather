@@ -20,7 +20,8 @@ class SearchView: UIView {
   private let searchBar: UISearchBar = {
     let searchBar = UISearchBar()
     searchBar.translatesAutoresizingMaskIntoConstraints = false
-    searchBar.placeholder = "Find city..."
+    let searchBarPlaceholder = NSLocalizedString("searchBarPlaceholder", comment: "Search Bar Placeholder")
+    searchBar.placeholder = searchBarPlaceholder
     searchBar.searchTextField.layer.cornerRadius = 16
     searchBar.searchTextField.borderStyle = .roundedRect
     searchBar.barTintColor = .clear

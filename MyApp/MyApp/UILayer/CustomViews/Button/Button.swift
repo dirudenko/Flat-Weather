@@ -36,7 +36,8 @@ class Button: UIButton {
   }
 
   func addText() {
-    setTitle("Forcast for 7 days", for: .normal)
+    let weeklyWeatherLabel = NSLocalizedString("weeklyWeatherLabel", comment: "weeklyWeather Button Label")
+    setTitle(weeklyWeatherLabel, for: .normal)
     setTitleColor(UIColor(named: "bottomColor"), for: .normal)
 
     let image = UIImage(systemName: "chevron.down")?.withTintColor(UIColor(named: "bottomColor")!, renderingMode: .alwaysOriginal)

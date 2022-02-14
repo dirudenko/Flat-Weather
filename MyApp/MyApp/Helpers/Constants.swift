@@ -29,7 +29,7 @@ struct Constants {
     static let imageSizeSmall: CGFloat = adapted(dimensionSize: 160, to: .height)
     static let imageCellSize: CGFloat = adapted(dimensionSize: 32, to: .height)
     static let viewHeight: CGFloat = adapted(dimensionSize: 766, to: .height)
-
+    static let cornerRadius: CGFloat = adapted(dimensionSize: 30, to: .height)
   }
 
   struct Fonts {

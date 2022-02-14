@@ -66,7 +66,8 @@ class WeeklyWeatherView: UIView {
 
   private func setupFonts() {
     dateLabel.font = AppFont.regular(size: 16)
-    dateLabel.text = "Forecast 7 days"
+    let weeklyWeatherLabel = NSLocalizedString("weeklyWeatherLabel", comment: "weeklyWeather Button Label")
+    dateLabel.text = weeklyWeatherLabel
   }
 
   private func addConstraints() {

@@ -16,9 +16,12 @@ enum Temperature: Int, Settings, CaseIterable {
   case fahrenheit
 
   var description: String {
+    let celciusLabel = NSLocalizedString("celciusLabel", comment: "celcius Label")
+    let fahrenheitLabel = NSLocalizedString("fahrenheitLabel", comment: "fahrenheit Label")
+
     switch self {
-    case .celcius: return "°C"
-    case .fahrenheit: return "°F"
+    case .celcius: return celciusLabel
+    case .fahrenheit: return fahrenheitLabel
     }
   }
 }

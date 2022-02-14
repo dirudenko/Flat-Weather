@@ -1,0 +1,47 @@
+/* 
+ Localizable.strings
+  MyApp
+
+  Created by Dmitry on 11.02.2022.
+  
+*/
+
+"searchBarPlaceholder" = "Find city...";
+
+"apiCallLanguage" = "en";
+
+"windSpeedNameLabel" = "Wind Speed";
+"precipitationNameLabel" = "Precipitation";
+"pressureNameLabel" = "Pressure";
+"humidityNameLabel" = "Humidity";
+
+"alertTitle" = "Error";
+
+"kmhLabel" = "kmh";
+"msLabel" = "ms";
+"milhLabel" = "milh";
+
+"celciusLabel" = "°C";
+"fahrenheitLabel" = "°F";
+
+"atmLabel" = "atm";
+"hpaLabel" = "hpa";
+"inHqLabel" = "inHq";
+"mbarLabel" = "mbar";
+"mmHgLabel" = "mmHg";
+
+"weeklyWeatherLabel" = "Forcast for 7 days";
+
+"hourlyPopLabel" = "POP";
+"nowLabel" = "Now";
+
+"currentLocationLabel" = "Current Location";
+
+"unitsLabel" = "UNITS";
+"extraLabel" = "EXTRA";
+"temperatureUnitDescription" = "Temperature unit";
+"windUnitDescription" = "Wind speed unit";
+"pressureUnitDescription" = "Atmospheric pressure unit";
+"aboutDescription" = "About";
+"privacyDescription" = "Privacy";
+

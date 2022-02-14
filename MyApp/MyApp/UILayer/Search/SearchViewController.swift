@@ -34,7 +34,7 @@ final class SearchViewController: UIViewController {
 
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
-    searchView.layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
+    searchView.layer.cornerRadius = Constants.Design.cornerRadius
     searchView.layer.masksToBounds = true
   }
 

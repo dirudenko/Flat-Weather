@@ -1,0 +1,51 @@
+/* 
+ Localizable.strings
+  MyApp
+
+  Created by Dmitry on 11.02.2022.
+  
+*/
+
+"searchBarPlaceholder" = "Найти город...";
+
+"apiCallLanguage" = "ru";
+
+"windSpeedNameLabel" = "Скорость ветра";
+"precipitationNameLabel" = "Вер-ть осадков";
+"pressureNameLabel" = "Давление";
+"humidityNameLabel" = "Влажность";
+
+"alertTitle" = "Ошибка";
+
+"kmhLabel" = "км/ч";
+"msLabel" = "м/с";
+"milhLabel" = "миль/ч";
+
+"celciusLabel" = "°C";
+"fahrenheitLabel" = "°Ф";
+
+"atmLabel" = "атм";
+"hpaLabel" = "гПа";
+"inHqLabel" = "д рт. ст.";
+"mbarLabel" = "мбар";
+"mmHgLabel" = "мм рт. ст.";
+
+"weeklyWeatherLabel" = "Прогноз на 7 дней";
+
+"hourlyPopLabel" = "осадков";
+"nowLabel" = "Сейчас";
+
+"currentLocationLabel" = "Текущее местоположение";
+
+"unitsLabel" = "Единицы измерения";
+"extraLabel" = "Дополнительно";
+"temperatureUnitDescription" = "Температура";
+"windUnitDescription" = "Скорость ветра";
+"pressureUnitDescription" = "Атмосферное даление";
+"aboutDescription" = "О программе";
+"privacyDescription" = "Конфиденциальность";
+
+
+
+
+

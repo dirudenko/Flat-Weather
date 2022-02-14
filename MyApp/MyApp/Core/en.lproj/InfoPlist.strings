@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  MyApp
+
+  Created by Dmitry on 14.02.2022.
+  
+*/
+
+"NSLocationWhenInUseUsageDescription" = "Your location is only used to display the weather";

@@ -138,7 +138,10 @@ class CoreDataManager: CoreDataManagerResultProtocol {
     let list = MainInfo(entity: entity, insertInto: managedContext)
 
     list.id = isCurrentLocation ? 0 : Int64(city.lat + city.lon)
-    list.name = city.name
+    let searchLanguage = NSLocalizedString("apiCallLanguage", comment: "search Language")
+    
+    let cityName = city.localNames?[searchLanguage]
+    list.name = cityName ?? city.name
     list.lat = city.lat
     list.lon = city.lon
     list.country = city.country

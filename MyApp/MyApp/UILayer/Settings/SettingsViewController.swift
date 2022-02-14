@@ -32,7 +32,7 @@ class SettingsViewController: UIViewController {
 
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
-    settingsView.layer.cornerRadius = adapted(dimensionSize: 30, to: .height)
+    settingsView.layer.cornerRadius = Constants.Design.cornerRadius
     settingsView.layer.masksToBounds = true
 
   }

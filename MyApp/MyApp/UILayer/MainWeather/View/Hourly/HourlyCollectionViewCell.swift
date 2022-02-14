@@ -45,8 +45,8 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     NSLayoutConstraint.activate([
 
       timeLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 8, to: .height)),
-      timeLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 18, to: .width)),
-      timeLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 40, to: .width)),
+      timeLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 10, to: .width)),
+      timeLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 60, to: .width)),
       timeLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 19, to: .height)),
 
       conditionImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 36, to: .height)),
@@ -60,8 +60,8 @@ class HourlyCollectionViewCell: UICollectionViewCell {
       temperatureLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 14, to: .height)),
 
       popLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 82, to: .height)),
-      popLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 12, to: .width)),
-      popLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 50, to: .width)),
+      popLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 6, to: .width)),
+      popLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 60, to: .width)),
       popLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 15, to: .height))
     ])
   }
@@ -69,7 +69,9 @@ class HourlyCollectionViewCell: UICollectionViewCell {
   func configure(with model: [Hourly], index: Int) {
     let modelElement = model[index]
     let pop = modelElement.pop
-    popLabel.text = "\(pop)% pop"
+    let hourlyPopLabel = NSLocalizedString("hourlyPopLabel", comment: "hourly Weather Pop Label")
+
+    popLabel.text = "\(pop)% \(hourlyPopLabel)"
 
     var imageName =  IconHadler.id.keyedValue(key: modelElement.iconId )
     if (imageName?.contains(".fill")) != nil {
@@ -80,7 +82,9 @@ class HourlyCollectionViewCell: UICollectionViewCell {
 
     temperatureLabel.text = "\(Int(modelElement.feelsLike))°/\(Int(modelElement.temp))°"
     if index == 0 {
-      timeLabel.text = "Now"
+      let nowLabel = NSLocalizedString("nowLabel", comment: "Now Weather Pop Label")
+
+      timeLabel.text = nowLabel
     } else {
       let date = Date(timeIntervalSince1970: TimeInterval(modelElement.date)).dateHourFormatter()
       timeLabel.text = "\(date)"

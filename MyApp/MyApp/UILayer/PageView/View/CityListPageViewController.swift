@@ -21,13 +21,15 @@ class CityListPageViewController: UIPageViewController {
   // MARK: - Private variables
   /// Индекс города, показанного на экране
   private var currentIndex: Int
-  private var userLocation = SearchModel(name: "Current Location", localNames: nil, lat: 0, lon: 0, country: "Current Country", state: nil)
+  private let currentLocationLabel = NSLocalizedString("currentLocationLabel", comment: "Current Location Label")
+  private var userLocation: SearchModel?
   // MARK: - Initialization
   init(for list: [MainInfo], index: Int, locationManager: LocationManagerProtocol?, coreDataManager: CoreDataManagerResultProtocol) {
     self.list = list
     self.currentIndex = index
     self.location = locationManager
     self.coreDataManager = coreDataManager
+    userLocation = SearchModel(name: currentLocationLabel, localNames: nil, lat: 0, lon: 0, country: "Current Country", state: nil)
     super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
   }
 
@@ -52,7 +54,6 @@ class CityListPageViewController: UIPageViewController {
     }
   }
   
-
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
     let pageFrame = CGRect(x: view.frame.width / 2 - pageControl.frame.width / 2,
@@ -147,6 +148,7 @@ extension CityListPageViewController: CLLocationManagerDelegate {
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     if let location = locations.last {
       /// изменение геопозиции при использовании приложения
+      guard var userLocation = userLocation else { return }
       userLocation.lat = location.coordinate.latitude
       userLocation.lon = location.coordinate.longitude
       self.location?.saveCurrentCity(userLocation)
@@ -156,6 +158,7 @@ extension CityListPageViewController: CLLocationManagerDelegate {
 
   func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
     print(error)
+    
   }
 
 }

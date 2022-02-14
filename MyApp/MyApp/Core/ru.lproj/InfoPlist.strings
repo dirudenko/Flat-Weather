@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  MyApp
+
+  Created by Dmitry on 14.02.2022.
+  
+*/
+
+"NSLocationWhenInUseUsageDescription" = "Ваша геопозиция будет использована только для отображения погоды";

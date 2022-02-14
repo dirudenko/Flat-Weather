@@ -46,7 +46,7 @@ class WeatherCollectionViewCell: UICollectionViewCell {
 
       conditionStatusLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
       conditionStatusLabel.leftAnchor.constraint(equalTo: conditionImage.rightAnchor, constant: adapted(dimensionSize: 4, to: .width)),
-      conditionStatusLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 50, to: .width)),
+      conditionStatusLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 100, to: .width)),
       conditionStatusLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 14, to: .height)),
 
       conditionNameLabel.topAnchor.constraint(equalTo: conditionStatusLabel.bottomAnchor, constant: adapted(dimensionSize: 5, to: .height)),
@@ -63,20 +63,24 @@ class WeatherCollectionViewCell: UICollectionViewCell {
       conditionImage.image = UIImage(systemName: "wind")?.withTintColor(.white, renderingMode: .alwaysOriginal)
       let wind: WindSpeed = WindSpeed(rawValue: UserDefaultsManager.get(forKey: "Wind")!) ?? .ms
       conditionStatusLabel.text = "\(Int(bottomBar.wind)) \(wind.description)"
-      conditionNameLabel.text = "Wind Speed"
+      let windSpeedNameLabel = NSLocalizedString("windSpeedNameLabel", comment: "WindSpeed Name Label")
+      conditionNameLabel.text = windSpeedNameLabel
     case 1:
       conditionImage.image = UIImage(systemName: "cloud.drizzle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
       conditionStatusLabel.text = "\(bottomBar.pop) %"
-      conditionNameLabel.text = "Precipitation"
+      let precipitationNameLabel = NSLocalizedString("precipitationNameLabel", comment: "Precipitation Name Label")
+      conditionNameLabel.text = precipitationNameLabel
     case 2:
       conditionImage.image = UIImage(systemName: "thermometer")?.withTintColor(.white, renderingMode: .alwaysOriginal)
       let pressure: Pressure = Pressure(rawValue: UserDefaultsManager.get(forKey: "Pressure")!) ?? .hPa
       conditionStatusLabel.text = "\(bottomBar.pressure) \(pressure.description)"
-      conditionNameLabel.text = "Pressure"
+      let pressureNameLabel = NSLocalizedString("pressureNameLabel", comment: "Pressure Name Label")
+      conditionNameLabel.text = pressureNameLabel
     case 3:
       conditionImage.image = UIImage(systemName: "humidity")?.withTintColor(.white, renderingMode: .alwaysOriginal)
       conditionStatusLabel.text = "\(bottomBar.humidity) %"
-      conditionNameLabel.text = "Humidity"
+      let humidityNameLabel = NSLocalizedString("humidityNameLabel", comment: "Humidity Name Label")
+      conditionNameLabel.text = humidityNameLabel
     default:
       break
     }

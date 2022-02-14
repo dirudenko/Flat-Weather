@@ -24,7 +24,8 @@ extension UIViewController {
   }
   /// вывод сообщения об ошибке
   func showSystemAlert(text: String) {
-    let alert = UIAlertController(title: "My Title", message: text, preferredStyle: UIAlertController.Style.alert)
+    let alertTitle = NSLocalizedString("alertTitle", comment: "Alert Title")
+    let alert = UIAlertController(title: alertTitle, message: text, preferredStyle: UIAlertController.Style.alert)
     alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
     present(alert, animated: true, completion: nil)
   }

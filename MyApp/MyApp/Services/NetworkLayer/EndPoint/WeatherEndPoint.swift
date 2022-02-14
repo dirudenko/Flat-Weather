@@ -51,6 +51,8 @@ extension WeatherApi: EndPointType {
   var task: HTTPTask {
     switch self {
     case .getCurrentWeather(let lon, let lat):
+      let searchLanguage = NSLocalizedString("apiCallLanguage", comment: "search Language")
+
       return .requestParameters(bodyParameters: nil,
                                 bodyEncoding: .urlEncoding,
                                 urlParameters: [
@@ -59,7 +61,7 @@ extension WeatherApi: EndPointType {
                                   "exclude": "minutely,alerts",
                                   "appid": Constants.Network.weatherAPIKey,
                                   "units": units.rawValue,
-                                  "lang": "en"
+                                  "lang": searchLanguage
                                 ])
     case .getCityName(let name):
       return .requestParameters(bodyParameters: nil,

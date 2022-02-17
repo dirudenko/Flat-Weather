@@ -31,7 +31,8 @@ class LocationViewController: UIViewController {
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    if ((location?.checkServiceIsEnabled()) != nil) {
+    guard let isServiceEnabled = location?.checkServiceIsEnabled() else { return }
+    if isServiceEnabled == true {
       location?.manager?.delegate = self
       location?.manager?.startUpdatingLocation()
     } else {

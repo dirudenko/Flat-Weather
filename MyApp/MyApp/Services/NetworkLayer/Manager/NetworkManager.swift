@@ -19,7 +19,7 @@ class NetworkManager: NetworkManagerProtocol {
   func getWeather(lon: Double, lat: Double, completion: @escaping (Result<WeatherModel, NetworkErrors>) -> Void) {
     router.request(.getCurrentWeather(lon: lon, lat: lat)) { data, response, error in
 
-      if let _ = error {
+      if error != nil {
         completion(.failure(.badRequest))
         return
       }
@@ -51,7 +51,7 @@ class NetworkManager: NetworkManagerProtocol {
   func getCityName(name: String, completion: @escaping (Result<[SearchModel], NetworkErrors>) -> Void) {
     router.request(.getCityName(name: name)) { data, response, error in
 
-      if let _ = error {
+      if error != nil {
         completion(.failure(.badRequest))
         return
       }

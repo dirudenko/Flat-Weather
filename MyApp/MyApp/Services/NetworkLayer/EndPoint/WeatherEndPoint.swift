@@ -13,8 +13,8 @@ enum WeatherApi {
 }
 
 enum Units: String {
-  case metric = "metric"
-  case imperial = "imperial"
+  case metric
+  case imperial
 }
 
 extension WeatherApi: EndPointType {

@@ -47,8 +47,8 @@ class CityListPageViewController: UIPageViewController {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-   
-    if ((location?.checkServiceIsEnabled()) != nil) {
+    guard let isServiceEnabled = location?.checkLocationAuth() else { return }
+    if isServiceEnabled == true {
       location?.manager?.delegate = self
       location?.manager?.startUpdatingLocation()
     }

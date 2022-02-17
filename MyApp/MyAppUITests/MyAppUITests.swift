@@ -94,4 +94,3 @@ extension XCUIApplication {
     return otherElements["searchView"].exists
   }
 }
-

@@ -1,17 +1,18 @@
 # Flat Weather
 Weather Forecast App (OpenWeather API & CLLocationManager). MVVM architecture. Without storyboard or xib.
 
-The application shows the current weather and the weather for the next 24 hours/7 days for the current user location or any other location. All data stored in CoreData and you can see last weather even offline. 3td party Frameworks are not used
+The application shows the current weather and the weather for the next 24 hours/7 days for the current user location or any other location. All data stored in CoreData and you can see last weather even offline. Data conversion to many types. 3td party Frameworks are not used
 
-<img src="https://user-images.githubusercontent.com/79332349/153421945-3e03b128-eec5-4d85-bd8c-43cbc804941a.png" width="390" height="844"> <img src="https://user-images.githubusercontent.com/79332349/153420903-bf9c1727-fd90-48d0-a7d7-a09d20da32fa.png" width="390" height="844">    <img src="https://user-images.githubusercontent.com/79332349/153420912-6748f3e2-93e9-4021-9718-ebd7c17f03cc.png" width="390" height="844">
+<img src="https://user-images.githubusercontent.com/79332349/154113229-25cd1452-3ef8-40c9-bcd6-86166e944feb.png" width="195" height="422"> <img src="https://user-images.githubusercontent.com/79332349/154113497-4b222b1f-df7c-47c3-bfd7-9aa08e4ae158.png" width="195" height="422"> <img src="https://user-images.githubusercontent.com/79332349/154113590-1c9b1773-c59e-419d-8c55-3759844187d8.png" width="195" height="422"><img src="https://user-images.githubusercontent.com/79332349/154113706-0a72a44e-023e-4e24-83d5-ef6f5a35d9ad.png" width="195" height="422"><img src="https://user-images.githubusercontent.com/79332349/154113772-6e1c557d-1213-4468-90bd-34d92567bf26.png" width="195" height="422"><img src="https://user-images.githubusercontent.com/79332349/154114015-cea312cc-96d6-4f14-b886-6e677c8a476a.png" width="195" height="422">
 
 App features:
-- no storyboards and xibs
+- No storyboards and xibs
 - MVVM with Data Driven UI
 - CoreData with fetchResultController
 - Unit Tests
 - UI Test
 - CLLocationManager
+
 Extra:
 - Fastline
 - Swiftlint
@@ -19,16 +20,17 @@ Extra:
 
 Installation
 
-Clone or download files:
-git clone https://github.com/dirudenko/MyApp.git
-Open WeatherApp.xcodeproj
+- Clone or download files:
+git clone https://github.com/dirudenko/Flat-Weather/MyApp.git
+
+- Open MyAPP.xcodeproj
+- Set you weatherAPIKey in Helpers/Constants.swift
+
 Requirements
+- iOS > 13
+- Xcode 13.1
 
-iOS > 13
-xCode 13.1
 API
-
-I used Openweathermap to get weather data.
-
-Get your own API key here.
+- I used OpenWeathermap to get weather data.
+- Get your own API key [here](https://home.openweathermap.org/api_keys).
 

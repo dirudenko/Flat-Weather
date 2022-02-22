@@ -91,7 +91,6 @@ extension HourlyWeatherView: UICollectionViewDataSource, UICollectionViewDelegat
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyCollectionViewCell", for: indexPath) as? HourlyCollectionViewCell,
-         // let model = hourlyWeather?.hourlyWeather as? [Hourly]
           let model: [Hourly] =  hourlyWeather?.hourlyWeather?.toArray()
     else { return UICollectionViewCell() }
 

@@ -90,7 +90,7 @@ class WeeklyWeatherView: UIView {
 extension WeeklyWeatherView: UITableViewDataSource, UITableViewDelegate {
 
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return model?.weeklyWeather?.count ?? 0
+    return model?.weeklyWeather?.count != nil ? 7 : 0
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

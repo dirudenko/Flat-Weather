@@ -9,13 +9,15 @@ import UIKit
 import CoreLocation
 
 class LocationViewController: UIViewController {
-
+  
   private var location: LocationManager?
-  private var userLocation = SearchModel(name: "Current Location", localNames: nil, lat: 0, lon: 0, country: "Current Country", state: nil)
+  private let currentLocationLabel = NSLocalizedString("currentLocationLabel", comment: "Current Location Label")
+  private var userLocation: SearchModel
   private let gradient = Constants.Design.gradient
   
   init(location: LocationManager?) {
     self.location = location
+    userLocation = SearchModel(name: currentLocationLabel, localNames: nil, lat: 0, lon: 0, country: "Current Country", state: nil)
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -26,7 +28,7 @@ class LocationViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     view.layer.insertSublayer(gradient, at: 0)
-
+    
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -40,14 +42,14 @@ class LocationViewController: UIViewController {
       navigationController?.pushViewController(viewController, animated: false)
     }
   }
-
+  
   override func viewDidLayoutSubviews() {
     gradient.frame = self.view.bounds
-
+    
   }
 }
 extension LocationViewController: CLLocationManagerDelegate {
-
+  
   func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
     guard let checkLocationAuth = location?.checkLocationAuth() else { return }
     if !checkLocationAuth {
@@ -55,7 +57,7 @@ extension LocationViewController: CLLocationManagerDelegate {
       navigationController?.pushViewController(viewController, animated: false)
     }
   }
-
+  
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     if let location = locations.first {
       self.location?.manager?.stopUpdatingLocation()
@@ -66,9 +68,21 @@ extension LocationViewController: CLLocationManagerDelegate {
       navigationController?.pushViewController(viewController, animated: false)
     }
   }
-
+  
   func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-    print(error)
+    if let error = error as? CLError {
+      switch error {
+      case CLError.locationUnknown:
+        print("location unknown")
+        let viewController = BuilderService.buildSearchViewController()
+        navigationController?.pushViewController(viewController, animated: false)
+      case CLError.denied:
+        print("denied")
+      default:
+        print("other Core Location error")
+      }
+    } else {
+      print("other error:", error.localizedDescription)
+    }
   }
-
 }

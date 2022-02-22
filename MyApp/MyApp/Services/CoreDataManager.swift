@@ -55,8 +55,8 @@ class CoreDataManager: CoreDataManagerResultProtocol {
       }
     }
     container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
-    // container.viewContext.shouldDeleteInaccessibleFaults = true
-    // container.viewContext.automaticallyMergesChangesFromParent = true
+    container.viewContext.shouldDeleteInaccessibleFaults = true
+    container.viewContext.automaticallyMergesChangesFromParent = true
     return container
   }()
 

@@ -69,14 +69,16 @@ final class LocationManager: NSObject, LocationManagerProtocol {
   }
 
   func deleteCurrentCity() {
-    coreDataManager.cityResultsPredicate = NSPredicate(format: "name CONTAINS %@", "Current Location")
+    let currentLocationLabel = NSLocalizedString("currentLocationLabel", comment: "Current Location Label")
+    coreDataManager.cityResultsPredicate = NSPredicate(format: "name CONTAINS %@", currentLocationLabel)
     coreDataManager.loadSavedData()
     guard let object = coreDataManager.fetchedResultsController.fetchedObjects?.first else { return }
     coreDataManager.removeDataFromMainWeather(object: object)
   }
 
   func loadCurrentCity() -> MainInfo? {
-    coreDataManager.cityResultsPredicate = NSPredicate(format: "name CONTAINS %@", "Current Location")
+    let currentLocationLabel = NSLocalizedString("currentLocationLabel", comment: "Current Location Label")
+    coreDataManager.cityResultsPredicate = NSPredicate(format: "name CONTAINS %@", currentLocationLabel)
     coreDataManager.loadSavedData()
     guard let object = coreDataManager.fetchedResultsController.fetchedObjects?.first else { return nil }
     return object

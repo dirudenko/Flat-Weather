@@ -45,7 +45,7 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     NSLayoutConstraint.activate([
 
       timeLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 8, to: .height)),
-      timeLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 10, to: .width)),
+      timeLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 14, to: .width)),
       timeLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 60, to: .width)),
       timeLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 19, to: .height)),
 
@@ -86,7 +86,8 @@ class HourlyCollectionViewCell: UICollectionViewCell {
 
       timeLabel.text = nowLabel
     } else {
-      let date = Date(timeIntervalSince1970: TimeInterval(modelElement.date)).dateHourFormatter()
+      let offset = modelElement.timezoneOffset
+      let date = Date(timeIntervalSince1970: TimeInterval(modelElement.date + offset)).dateHourFormatter()
       timeLabel.text = "\(date)"
     }
   }

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21D62" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="BottomBar" representedClassName="BottomBar" syncable="YES">
+        <attribute name="humidity" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="pop" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="pressure" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="wind" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="weather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MainInfo" inverseName="bottomWeather" inverseEntity="MainInfo"/>
+    </entity>
+    <entity name="Hourly" representedClassName="Hourly" syncable="YES">
+        <attribute name="date" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="feelsLike" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="iconId" attributeType="String"/>
+        <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="pop" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="temp" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="timezoneOffset" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="weather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MainInfo" inverseName="hourlyWeather" inverseEntity="MainInfo"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+                <constraint value="name"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="MainInfo" representedClassName="MainInfo" syncable="YES">
+        <attribute name="country" attributeType="String"/>
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="lat" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="lon" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+        <relationship name="bottomWeather" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="BottomBar" inverseName="weather" inverseEntity="BottomBar"/>
+        <relationship name="hourlyWeather" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Hourly" inverseName="weather" inverseEntity="Hourly"/>
+        <relationship name="topWeather" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="TopBar" inverseName="weather" inverseEntity="TopBar"/>
+        <relationship name="unitTypes" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="UnitsTypes" inverseName="main" inverseEntity="UnitsTypes"/>
+        <relationship name="weeklyWeather" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Weekly" inverseName="weather" inverseEntity="Weekly"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="TopBar" representedClassName="TopBar" syncable="YES">
+        <attribute name="date" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="desc" attributeType="String"/>
+        <attribute name="feelsLike" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="iconId" attributeType="String"/>
+        <attribute name="pressure" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="temperature" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="weather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MainInfo" inverseName="topWeather" inverseEntity="MainInfo"/>
+    </entity>
+    <entity name="UnitsTypes" representedClassName="UnitsTypes" syncable="YES">
+        <attribute name="pressureType" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="tempType" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="windType" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="main" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MainInfo" inverseName="unitTypes" inverseEntity="MainInfo"/>
+    </entity>
+    <entity name="Weekly" representedClassName="Weekly" syncable="YES">
+        <attribute name="date" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="iconId" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="pop" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="tempDay" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="tempNight" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="weather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MainInfo" inverseName="weeklyWeather" inverseEntity="MainInfo"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+                <constraint value="name"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <elements>
+        <element name="BottomBar" positionX="126" positionY="81" width="128" height="104"/>
+        <element name="Hourly" positionX="135" positionY="90" width="128" height="164"/>
+        <element name="MainInfo" positionX="-63" positionY="-18" width="128" height="194"/>
+        <element name="TopBar" positionX="314.96484375" positionY="75.43359375" width="128" height="134"/>
+        <element name="UnitsTypes" positionX="126" positionY="117" width="128" height="89"/>
+        <element name="Weekly" positionX="144" positionY="108" width="128" height="149"/>
+    </elements>
+</model>

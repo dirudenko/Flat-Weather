@@ -22,8 +22,8 @@ extension Hourly {
     @NSManaged public var pop: Int16
     @NSManaged public var iconId: String
     @NSManaged public var id: Int16
+    @NSManaged public var timezoneOffset: Int64
     @NSManaged public var weather: MainInfo?
-
 }
 
 extension Hourly: Identifiable {

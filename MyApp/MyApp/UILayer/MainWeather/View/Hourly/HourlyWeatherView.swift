@@ -13,7 +13,7 @@ class HourlyWeatherView: UIView {
   private var dateLabel = TitleLabel(textAlignment: .center)
   private let loadingVC = LoadingView()
 
-  private var hourlyWeather: MainInfo? {
+  private var model: MainInfo? {
     didSet {
       collectionView.reloadData()
     }
@@ -46,11 +46,11 @@ class HourlyWeatherView: UIView {
     case .loading:
       loadingVC.makeVisible()
     case .fetching(let weatherModel):
-      hourlyWeather = weatherModel
+      model = weatherModel
       loadingVC.makeInvisible()
     case .success(let weatherModel):
       loadingVC.makeInvisible()
-      hourlyWeather = weatherModel
+      model = weatherModel
     case .failure(let error):
       alertDelegate?.showAlert(text: error)
     }
@@ -85,13 +85,12 @@ class HourlyWeatherView: UIView {
 // MARK: - UIView delegates
 extension HourlyWeatherView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    let items = hourlyWeather?.hourlyWeather?.count
-    return items ?? 0
+    return model?.hourlyWeather?.count != nil ? 48 : 0
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyCollectionViewCell", for: indexPath) as? HourlyCollectionViewCell,
-          let model: [Hourly] =  hourlyWeather?.hourlyWeather?.toArray()
+          let model: [Hourly] =  model?.hourlyWeather?.toArray()
     else { return UICollectionViewCell() }
 
     cell.configure(with: model, index: indexPath.row)

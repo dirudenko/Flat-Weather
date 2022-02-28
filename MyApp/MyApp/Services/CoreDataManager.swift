@@ -202,6 +202,7 @@ class CoreDataManager: CoreDataManagerResultProtocol {
       weather.pop = Int16((item.pop ?? 0) * 100)
       weather.name = list?.name ?? ""
       weather.id = Int16(index)
+      weather.timezoneOffset = Int64(data.timezoneOffset)
       list?.addToHourlyWeather(weather)
       weather.weather = list
     }

@@ -45,6 +45,7 @@ final class SearchViewController: UIViewController {
     searchView.delegate = self
     searchView.alertDelegate = self
     self.navigationItem.setHidesBackButton(true, animated: false)
+    navigationController?.interactivePopGestureRecognizer?.delegate = self
     view.accessibilityIdentifier = "searchView"
   }
 
@@ -96,4 +97,10 @@ extension SearchViewController {
       searchView.heightAnchor.constraint(equalToConstant: Constants.Design.viewHeight)
     ])
   }
+}
+
+extension SearchViewController: UIGestureRecognizerDelegate {
+  func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+          return true
+      }
 }

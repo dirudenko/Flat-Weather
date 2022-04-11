@@ -44,4 +44,6 @@
 "pressureUnitDescription" = "Atmospheric pressure unit";
 "aboutDescription" = "About";
 "privacyDescription" = "Privacy";
-"aboutText" = "Flat Weather v1.31 \n © Dmitry Rudenko 2022";
+"aboutText" = "Flat Weather v1.35 \n © Dmitry Rudenko 2022";
+
+"searchLabelPlaceholder" = "Please add city";

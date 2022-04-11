@@ -75,7 +75,7 @@ class HourlyWeatherView: UIView {
       dateLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 9, to: .height)),
       dateLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
       dateLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 131, to: .width)),
-      dateLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 19, to: .height)),
+     // dateLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 19, to: .height)),
 
       loadingVC.centerXAnchor.constraint(equalTo: self.centerXAnchor),
       loadingVC.centerYAnchor.constraint(equalTo: self.centerYAnchor)

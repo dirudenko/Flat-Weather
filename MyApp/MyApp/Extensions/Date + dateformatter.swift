@@ -24,6 +24,7 @@ extension Date {
     let searchLanguage = NSLocalizedString("apiCallLanguage", comment: "search Language")
     formatter.dateFormat = "HH:mm"
     formatter.locale = Locale(identifier: searchLanguage)
+    formatter.timeZone = TimeZone(identifier: "GMT")
     let stringDate = formatter.string(from: self)
     return stringDate
   }

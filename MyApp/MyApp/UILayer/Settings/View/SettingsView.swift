@@ -81,8 +81,8 @@ class SettingsView: UIView {
     picker?.dataSource = self
     picker?.delegate = self
     backButton.addTarget(self, action: #selector(didTapBack), for: .touchDown)
-    let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didPan(_:)))
-    addGestureRecognizer(panGestureRecognizer)
+//    let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didPan(_:)))
+//    addGestureRecognizer(panGestureRecognizer)
   }
   
   @objc private func didTapBack() {

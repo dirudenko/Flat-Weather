@@ -174,7 +174,7 @@ extension MainWeatherViewController {
     NSLayoutConstraint.activate([
       weeklyWeatherView.leftAnchor.constraint(equalTo: view.leftAnchor),
       weeklyWeatherView.rightAnchor.constraint(equalTo: view.rightAnchor),
-      weeklyWeatherView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+      weeklyWeatherView.bottomAnchor.constraint(greaterThanOrEqualTo: view.bottomAnchor),
 
       currentWeatherView.topAnchor.constraint(equalTo: view.topAnchor, constant: adapted(dimensionSize: 62, to: .height)),
       currentWeatherView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),

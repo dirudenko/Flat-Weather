@@ -33,8 +33,9 @@ class BackButton: UIButton {
     //  titleLabel?.font        = UIFont.preferredFont(forTextStyle: .headline)
     imageView?.contentMode = .scaleToFill
 
-   // backgroundColor = .black
+    backgroundColor = .clear
       translatesAutoresizingMaskIntoConstraints = false
   }
 
 }
+

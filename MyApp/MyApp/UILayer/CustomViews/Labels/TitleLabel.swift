@@ -26,7 +26,6 @@ class TitleLabel: UILabel {
 
     private func configure() {
         textColor                   = .white
-
         lineBreakMode               = .byTruncatingTail
         translatesAutoresizingMaskIntoConstraints = false
     }

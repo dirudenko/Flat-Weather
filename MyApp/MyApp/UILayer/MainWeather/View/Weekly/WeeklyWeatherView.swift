@@ -27,10 +27,9 @@ class WeeklyWeatherView: UIView {
   // MARK: - Initialization
   override init(frame: CGRect) {
     super.init(frame: frame)
-
     setupLayouts()
-    addConstraints()
     setupFonts()
+    addConstraints()
   }
 
   required init?(coder: NSCoder) {
@@ -75,7 +74,7 @@ class WeeklyWeatherView: UIView {
     NSLayoutConstraint.activate([
       dateLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 16, to: .height)),
       dateLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),
-      dateLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 19, to: .height)),
+     // dateLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 20, to: .height)),
 
       weeklyListTableView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor),
       weeklyListTableView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 16, to: .width)),

@@ -47,6 +47,7 @@ class SettingsViewController: UIViewController {
   
   private func setupViews() {
     view.backgroundColor = .systemBackground
+    navigationController?.interactivePopGestureRecognizer?.delegate = self
     self.navigationItem.setHidesBackButton(true, animated: false)
     view.addSubview(settingsView)
     
@@ -94,4 +95,10 @@ extension SettingsViewController: SettingsViewProtocol {
     alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
     present(alert, animated: true, completion: nil)
   }
+}
+
+extension SettingsViewController: UIGestureRecognizerDelegate {
+  func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+          return true
+      }
 }

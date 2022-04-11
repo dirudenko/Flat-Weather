@@ -35,7 +35,7 @@ class HourlyCollectionViewCell: UICollectionViewCell {
   }
 
   private func setupFonts() {
-    temperatureLabel.font = AppFont.regular(size: 19)
+    temperatureLabel.font = AppFont.regular(size: 14)
     timeLabel.font = AppFont.regular(size: 14)
     popLabel.font = AppFont.regular(size: 14)
   }
@@ -44,23 +44,23 @@ class HourlyCollectionViewCell: UICollectionViewCell {
 
     NSLayoutConstraint.activate([
 
-      timeLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 8, to: .height)),
-      timeLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 14, to: .width)),
+      timeLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 8, to: .height)),
+      timeLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 14, to: .width)),
       timeLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 60, to: .width)),
       timeLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 19, to: .height)),
 
-      conditionImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 36, to: .height)),
-      conditionImage.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 24, to: .width)),
+      conditionImage.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 36, to: .height)),
+      conditionImage.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 24, to: .width)),
       conditionImage.widthAnchor.constraint(equalToConstant: Constants.Design.imageCellSize - 12),
       conditionImage.heightAnchor.constraint(equalToConstant: Constants.Design.imageCellSize - 12),
 
-      temperatureLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 64, to: .height)),
-      temperatureLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 14, to: .width)),
+      temperatureLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 64, to: .height)),
+      temperatureLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 14, to: .width)),
       temperatureLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 45, to: .width)),
       temperatureLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 14, to: .height)),
 
-      popLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 82, to: .height)),
-      popLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 6, to: .width)),
+      popLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 82, to: .height)),
+      popLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 6, to: .width)),
       popLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 60, to: .width)),
       popLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 15, to: .height))
     ])

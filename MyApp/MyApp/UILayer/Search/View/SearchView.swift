@@ -17,7 +17,7 @@ protocol SearchViewProtocol: AnyObject {
 
 class SearchView: UIView {
   // MARK: - Private types
-  private let searchBar: UISearchBar = {
+   let searchBar: UISearchBar = {
     let searchBar = UISearchBar()
     searchBar.translatesAutoresizingMaskIntoConstraints = false
     let searchBarPlaceholder = NSLocalizedString("searchBarPlaceholder", comment: "Search Bar Placeholder")
@@ -39,6 +39,7 @@ class SearchView: UIView {
   private let spinnerView = LoadingView()
   private let backButton = Button(systemImage: "arrow.backward")
   private let gradient = Constants.Design.gradient
+  private(set) var label = DescriptionLabel()
   // MARK: - Public types
   weak var delegate: SearchViewProtocol?
   weak var alertDelegate: AlertProtocol?
@@ -78,18 +79,22 @@ class SearchView: UIView {
       searchTableView.isHidden = true
       if searchViewCellModel.coreDataManager.entityIsEmpty() {
         backButton.isHidden = true
+        label.isHidden = false
       } else {
         backButton.isHidden = false
+        label.isHidden = true
       }
     case .load:
       spinnerView.makeVisible()
       cityListTableView.isHidden = true
       searchTableView.isHidden = false
+      label.isHidden = true
     case .success(let model):
       city = model
       spinnerView.makeInvisible()
       searchTableView.isHidden = false
       cityListTableView.isHidden = true
+      label.isHidden = true
     case .failure(let error):
       alertDelegate?.showAlert(text: error)
     }
@@ -102,6 +107,7 @@ class SearchView: UIView {
     addSubview(cityListTableView)
     addSubview(spinnerView)
     addSubview(backButton)
+    addSubview(label)
     bringSubviewToFront(spinnerView)
     layer.insertSublayer(gradient, at: 0)
   }
@@ -114,6 +120,10 @@ class SearchView: UIView {
     cityListTableView.delegate = self
     cityListTableView.dataSource = self
     searchViewCellModel.coreDataManager.fetchedResultsController.delegate = self
+    let searchLabelPlaceholder = NSLocalizedString("searchLabelPlaceholder", comment: "Search Label Placeholder")
+    label.font = AppFont.regular(size: 16)
+    label.text = searchLabelPlaceholder
+    label.textColor = .darkGray
   }
 
   private func updateView() {
@@ -218,6 +228,7 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
         searchViewCellModel.removeObject(at: indexPath.section)
         if searchViewCellModel.coreDataManager.entityIsEmpty() {
           backButton.isHidden = true
+          label.isHidden = false
         }
       }
     default: return
@@ -230,6 +241,7 @@ extension SearchView: UISearchBarDelegate {
   func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
     searchTableView.isHidden = true
     cityListTableView.isHidden = false
+    label.isHidden = false
   }
 
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -313,7 +325,10 @@ extension SearchView {
       backButton.heightAnchor.constraint(equalToConstant: Constants.Design.buttonSize),
 
       spinnerView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-      spinnerView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+      spinnerView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+      
+      label.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+      label.centerYAnchor.constraint(equalTo: self.centerYAnchor)
 
     ])
   }

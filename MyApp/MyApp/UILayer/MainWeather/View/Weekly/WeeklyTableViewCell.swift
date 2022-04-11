@@ -46,23 +46,23 @@ class WeeklyTableViewCell: UITableViewCell {
 
       NSLayoutConstraint.activate([
 
-        dayLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 15, to: .height)),
-        dayLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 24, to: .width)),
+        dayLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 15, to: .height)),
+        dayLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 24, to: .width)),
 
-        conditionImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 12, to: .height)),
-        conditionImage.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 155, to: .width)),
+        conditionImage.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 12, to: .height)),
+        conditionImage.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 155, to: .width)),
         conditionImage.widthAnchor.constraint(equalToConstant: imageSize),
         conditionImage.heightAnchor.constraint(equalToConstant: imageSize),
 
-        temperatureLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 17, to: .height)),
-        temperatureLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 302, to: .width)),
-        temperatureLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: adapted(dimensionSize: 24, to: .height)),
-        temperatureLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
+        temperatureLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 17, to: .height)),
+        temperatureLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 302, to: .width)),
+       // temperatureLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: adapted(dimensionSize: 24, to: .height)),
+        temperatureLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
 
-        rainLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: adapted(dimensionSize: 17, to: .height)),
-        rainLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: adapted(dimensionSize: 187, to: .width)),
-        rainLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 62, to: .width)),
-        rainLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 14, to: .height))
+        rainLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 17, to: .height)),
+        rainLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 187, to: .width)),
+       // rainLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 62, to: .width)),
+       // rainLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 14, to: .height))
       ])
     }
   // MARK: - Public functions

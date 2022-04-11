@@ -10,7 +10,7 @@ import UIKit
 class DescriptionLabel: UILabel {
 
   override init(frame: CGRect) {
-    super.init(frame: frame)
+    super.init(frame: .zero)
     configure()
   }
 

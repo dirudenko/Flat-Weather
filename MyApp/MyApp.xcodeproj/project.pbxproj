@@ -94,6 +94,7 @@
 		69A4C11B27A16BC500C8AA27 /* UnitsTypes+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A4C11827A16BC500C8AA27 /* UnitsTypes+CoreDataClass.swift */; };
 		69A4C11C27A16BC500C8AA27 /* UnitsTypes+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A4C11927A16BC500C8AA27 /* UnitsTypes+CoreDataProperties.swift */; };
 		69AA540A27B660F700B8D783 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 69AA540C27B660F700B8D783 /* Localizable.strings */; };
+		69C11CB1285CFDAD0035D61E /* OpenWeather-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 69C11CB0285CFDAD0035D61E /* OpenWeather-Info.plist */; };
 		69D074A42771F2DA00B901E5 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D074A32771F2DA00B901E5 /* Device.swift */; };
 		69D074A62771F4CE00B901E5 /* Dimension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D074A52771F4CE00B901E5 /* Dimension.swift */; };
 		69D074A82771F4FF00B901E5 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D074A72771F4FF00B901E5 /* Font.swift */; };
@@ -175,7 +176,7 @@
 		6927F4FC27845513004DDAF4 /* BottomBar+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BottomBar+CoreDataClass.swift"; sourceTree = "<group>"; };
 		6927F4FE27845513004DDAF4 /* MainInfo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		6927F50027845513004DDAF4 /* TopBar+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TopBar+CoreDataClass.swift"; sourceTree = "<group>"; };
-		6927F5132786E761004DDAF4 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchViewController.swift; path = MyApp/UILayer/Search/SearchViewController.swift; sourceTree = SOURCE_ROOT; };
+		6927F5132786E761004DDAF4 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchViewController.swift; path = MyApp/UILayer/Search/View/SearchViewController.swift; sourceTree = SOURCE_ROOT; };
 		6927F516278749D0004DDAF4 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		6927F51927874AC5004DDAF4 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		6927F51B27874C78004DDAF4 /* Temperature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Temperature.swift; sourceTree = "<group>"; };
@@ -183,7 +184,6 @@
 		6927F52027874D9B004DDAF4 /* Pressure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pressure.swift; sourceTree = "<group>"; };
 		693CBF6727BA9A4700CC5D60 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		693CBF6927BA9A5000CC5D60 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		693CBF6C27BACC7300CC5D60 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		6976E43E2787510B0069177A /* SettingsSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSections.swift; sourceTree = "<group>"; };
 		6976E440278752460069177A /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		6976E442278C4E270069177A /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
@@ -230,6 +230,7 @@
 		69AA540B27B660F700B8D783 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		69AA540D27B6612E00B8D783 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		69BB938F27CCEC21009DE710 /* MyApp v1.31.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MyApp v1.31.xcdatamodel"; sourceTree = "<group>"; };
+		69C11CB0285CFDAD0035D61E /* OpenWeather-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OpenWeather-Info.plist"; sourceTree = "<group>"; };
 		69D074A32771F2DA00B901E5 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 		69D074A52771F4CE00B901E5 /* Dimension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimension.swift; sourceTree = "<group>"; };
 		69D074A72771F4FF00B901E5 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
@@ -405,7 +406,7 @@
 				691625B12769CC0D00C736C7 /* Assets.xcassets */,
 				69AA540C27B660F700B8D783 /* Localizable.strings */,
 				693CBF6827BA9A4700CC5D60 /* InfoPlist.strings */,
-				693CBF6C27BACC7300CC5D60 /* Config.xcconfig */,
+				69C11CB0285CFDAD0035D61E /* OpenWeather-Info.plist */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -603,7 +604,6 @@
 			children = (
 				6976E45B2791FA500069177A /* ViewModel */,
 				6976E4532791F1440069177A /* Model */,
-				6927F5132786E761004DDAF4 /* SearchViewController.swift */,
 				69D074BE27748AE400B901E5 /* View */,
 			);
 			path = Search;
@@ -724,6 +724,7 @@
 		69D074BE27748AE400B901E5 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				6927F5132786E761004DDAF4 /* SearchViewController.swift */,
 				69909973276CE1C60025105D /* SearchView.swift */,
 				69D58F2627748CBD0074BAB7 /* CityListTableViewCell.swift */,
 			);
@@ -887,6 +888,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				69AA540A27B660F700B8D783 /* Localizable.strings in Resources */,
+				69C11CB1285CFDAD0035D61E /* OpenWeather-Info.plist in Resources */,
 				691625B52769CC0D00C736C7 /* LaunchScreen.storyboard in Resources */,
 				699F15AE27B3CCDD00F15534 /* Assets.xcassets in Resources */,
 				691625B22769CC0D00C736C7 /* Assets.xcassets in Resources */,
@@ -1235,7 +1237,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = N3G8R7BNR2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyApp/Info.plist;
@@ -1250,7 +1252,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.35;
+				MARKETING_VERSION = 1.36;
 				PRODUCT_BUNDLE_IDENTIFIER = "Dmitry-Rudenko.FlatWeatherApp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1265,7 +1267,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = N3G8R7BNR2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyApp/Info.plist;
@@ -1280,7 +1282,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.35;
+				MARKETING_VERSION = 1.36;
 				PRODUCT_BUNDLE_IDENTIFIER = "Dmitry-Rudenko.FlatWeatherApp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1295,7 +1297,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = N3G8R7BNR2;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
@@ -1315,7 +1317,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = N3G8R7BNR2;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
@@ -1334,7 +1336,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = N3G8R7BNR2;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -1352,7 +1354,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = N3G8R7BNR2;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -1370,7 +1372,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = N3G8R7BNR2;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
@@ -1389,7 +1391,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = N3G8R7BNR2;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.2;

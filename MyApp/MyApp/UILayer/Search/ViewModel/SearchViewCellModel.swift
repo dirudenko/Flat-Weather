@@ -8,16 +8,18 @@
 import Foundation
 import CoreData
 
-protocol SearchViewCellModelProtocol {
+protocol SearchViewCellModelProtocol: AnyObject {
   var updateViewData: ((SearchViewData) -> Void)? { get set }
   var networkManager: NetworkManagerProtocol { get }
   var coreDataManager: CoreDataManagerResultProtocol { get }
+  func setModel(with model: [SearchModel])
   func setSections(at tableView: TableViewCellTypes) -> Int
+  func setRows() -> Int
   func getObjects(at section: Int) -> MainInfo?
   func searchText(text: String)
-  func setCity(model: SearchModel?, for tableView: TableViewCellTypes) -> [MainInfo]
+  func setCity(index: Int, for tableView: TableViewCellTypes) -> [MainInfo]
   func removeObject(at index: Int)
-
+  func configureCell(index: Int) -> String
 }
 
 final class SearchViewCellModel: SearchViewCellModelProtocol {
@@ -25,6 +27,8 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
   var networkManager: NetworkManagerProtocol
   var coreDataManager: CoreDataManagerResultProtocol
   var updateViewData: ((SearchViewData) -> Void)?
+  
+  private var cityList: [SearchModel]?
   // MARK: - Initialization
   init(networkManager: NetworkManagerProtocol, coreDataManager: CoreDataManagerResultProtocol) {
     updateViewData?(.initial)
@@ -46,7 +50,14 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
       return 0
     }
   }
-
+  
+  func setRows() -> Int {
+    return cityList?.count ?? 0
+    }
+  
+  func setModel(with model: [SearchModel]) {
+    cityList = model
+  }
   /// получениие объектов из списка сохраненных городов
   func getObjects(at section: Int) -> MainInfo? {
     return coreDataManager.fetchedResultsController.fetchedObjects?[section]
@@ -80,14 +91,22 @@ final class SearchViewCellModel: SearchViewCellModelProtocol {
       self.updateViewData?(.load)
     }
   }
+  
+  func configureCell(index: Int) -> String {
+    guard let model = cityList?[index] else { return "Error" }
+    let cityName = model.name
+    let cityCountry = model.country
+    let label = cityName + " " + cityCountry
+    return label
+  }
 
   /// получение выбранного города в зависимости от таблицы для передачи в контроллер
-  func setCity(model: SearchModel?, for tableView: TableViewCellTypes) -> [MainInfo] {
+  func setCity(index: Int, for tableView: TableViewCellTypes) -> [MainInfo] {
     switch tableView {
     case .cityListTableViewCell:
       return coreDataManager.fetchedResultsController.fetchedObjects ?? []
     case .standartTableViewCell:
-      guard let model = model else { return [] }
+      guard let model = cityList?[index] else { return [] }
       coreDataManager.saveToList(city: model, isCurrentLocation: false)
       coreDataManager.loadSavedData()
       return coreDataManager.fetchedResultsController.fetchedObjects ?? []

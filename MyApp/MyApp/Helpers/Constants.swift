@@ -40,8 +40,6 @@ struct Constants {
   }
 
   struct Network {
-    static let weatherAPIKey = "4151621f5318e81115ce7581adb25359"
-   // static let weatherAPIKey = Bundle.main.object(forInfoDictionaryKey: "API_Key") as? String
     static let privacyURL = "https://www.app-privacy-policy.com/live.php?token=wqkLZSOqXNE0E3haGqd6kDn4xPCrqkxC"
   }
 }

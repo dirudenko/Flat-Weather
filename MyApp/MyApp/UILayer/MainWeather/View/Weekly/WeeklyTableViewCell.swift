@@ -60,7 +60,7 @@ class WeeklyTableViewCell: UITableViewCell {
         temperatureLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: adapted(dimensionSize: -16, to: .width)),
 
         rainLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 17, to: .height)),
-        rainLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 187, to: .width)),
+        rainLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 187, to: .width))
        // rainLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 62, to: .width)),
        // rainLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 14, to: .height))
       ])

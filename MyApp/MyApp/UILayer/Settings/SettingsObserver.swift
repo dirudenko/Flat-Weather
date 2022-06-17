@@ -33,7 +33,3 @@ class SettingsObserver {
     observers.removeAll()
   }
 }
-
-// struct WeakSubscriber {
-//  weak var value: SubcribeSettings?
-// }

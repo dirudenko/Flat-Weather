@@ -35,7 +35,7 @@ class SearchView: UIView {
 
   private let cityListTableView = TableView(celltype: .cityListTableViewCell)
   private let searchTableView = TableView(celltype: .standartTableViewCell)
-  private var searchViewCellModel: SearchViewCellModelProtocol
+  private var searchViewViewModel: SearchViewCellModelProtocol
   private let spinnerView = LoadingView()
   private let backButton = Button(systemImage: "arrow.backward")
   private let gradient = Constants.Design.gradient
@@ -43,11 +43,7 @@ class SearchView: UIView {
   // MARK: - Public types
   weak var delegate: SearchViewProtocol?
   weak var alertDelegate: AlertProtocol?
-  var city = [SearchModel]() {
-    didSet {
-      searchTableView.reloadData()
-    }
-  }
+
   var viewData: SearchViewData = .initial {
     didSet {
       setNeedsLayout()
@@ -56,7 +52,7 @@ class SearchView: UIView {
   // MARK: - Initialization
 
   init(frame: CGRect, searchViewCellModel: SearchViewCellModelProtocol) {
-    self.searchViewCellModel = searchViewCellModel
+    self.searchViewViewModel = searchViewCellModel
     super.init(frame: frame)
     updateView()
     setupLayouts()
@@ -77,7 +73,7 @@ class SearchView: UIView {
       spinnerView.makeInvisible()
       cityListTableView.isHidden = false
       searchTableView.isHidden = true
-      if searchViewCellModel.coreDataManager.entityIsEmpty() {
+      if searchViewViewModel.coreDataManager.entityIsEmpty() {
         backButton.isHidden = true
         label.isHidden = false
       } else {
@@ -90,11 +86,12 @@ class SearchView: UIView {
       searchTableView.isHidden = false
       label.isHidden = true
     case .success(let model):
-      city = model
+      searchViewViewModel.setModel(with: model)
       spinnerView.makeInvisible()
       searchTableView.isHidden = false
       cityListTableView.isHidden = true
       label.isHidden = true
+      searchTableView.reloadData()
     case .failure(let error):
       alertDelegate?.showAlert(text: error)
     }
@@ -119,7 +116,7 @@ class SearchView: UIView {
     searchTableView.dataSource = self
     cityListTableView.delegate = self
     cityListTableView.dataSource = self
-    searchViewCellModel.coreDataManager.fetchedResultsController.delegate = self
+    searchViewViewModel.coreDataManager.fetchedResultsController.delegate = self
     let searchLabelPlaceholder = NSLocalizedString("searchLabelPlaceholder", comment: "Search Label Placeholder")
     label.font = AppFont.regular(size: 16)
     label.text = searchLabelPlaceholder
@@ -127,7 +124,7 @@ class SearchView: UIView {
   }
 
   private func updateView() {
-    searchViewCellModel.updateViewData = { [weak self] viewData in
+    searchViewViewModel.updateViewData = { [weak self] viewData in
       self?.viewData = viewData
     }
   }
@@ -144,7 +141,7 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
     case searchTableView:
       return 1
     case cityListTableView:
-      return searchViewCellModel.setSections(at: .cityListTableViewCell)
+      return searchViewViewModel.setSections(at: .cityListTableViewCell)
     default: return 0
     }
   }
@@ -152,7 +149,7 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     switch tableView {
     case searchTableView:
-      return city.count
+      return searchViewViewModel.setRows()
     case cityListTableView:
       return 1
     default: return 0
@@ -179,15 +176,15 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
     switch tableView {
     case searchTableView:
       let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
-      let cityName = "\(city[indexPath.row].name)"
-      let cityCountry = "\(city[indexPath.row].country)"
-      cell.textLabel?.text = cityName + " " + cityCountry
+      let text = searchViewViewModel.configureCell(index: indexPath.row)
+      cell.textLabel?.text = text
+      
       cell.backgroundColor = .clear
       return cell
 
     case cityListTableView:
       guard let cell = tableView.dequeueReusableCell(withIdentifier: "CityListTableViewCell", for: indexPath) as? CityListTableViewCell,
-            let model = searchViewCellModel.getObjects(at: indexPath.section)
+            let model = searchViewViewModel.getObjects(at: indexPath.section)
       else { return UITableViewCell() }
       cell.configure(with: model)
       return cell
@@ -199,10 +196,10 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
     tableView.deselectRow(at: indexPath, animated: true)
     switch tableView {
     case searchTableView:
-      let model = searchViewCellModel.setCity(model: city[indexPath.row], for: .standartTableViewCell)
+      let model = searchViewViewModel.setCity(index: indexPath.row, for: .standartTableViewCell)
       delegate?.setViewFromSearch(fot: model, at: model.count - 1)
     case cityListTableView:
-      let model = searchViewCellModel.setCity(model: nil, for: .cityListTableViewCell)
+      let model = searchViewViewModel.setCity(index: 0, for: .cityListTableViewCell)
       delegate?.setViewFromCityList(fot: model, at: indexPath.section)
     default: return
     }
@@ -225,8 +222,8 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
       return
     case cityListTableView:
       if editingStyle == .delete {
-        searchViewCellModel.removeObject(at: indexPath.section)
-        if searchViewCellModel.coreDataManager.entityIsEmpty() {
+        searchViewViewModel.removeObject(at: indexPath.section)
+        if searchViewViewModel.coreDataManager.entityIsEmpty() {
           backButton.isHidden = true
           label.isHidden = false
         }
@@ -245,7 +242,7 @@ extension SearchView: UISearchBarDelegate {
   }
 
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-    searchViewCellModel.searchText(text: searchText)
+    searchViewViewModel.searchText(text: searchText)
   }
 }
 

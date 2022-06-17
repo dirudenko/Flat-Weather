@@ -18,6 +18,21 @@ enum Units: String {
 }
 
 extension WeatherApi: EndPointType {
+  
+  private var apiKey: String {
+      guard let filePath = Bundle.main.path(forResource: "OpenWeather-Info", ofType: "plist") else {
+        fatalError("Couldn't find file 'OpenWeather-Info.plist'.")
+      }
+      let plist = NSDictionary(contentsOfFile: filePath)
+      guard let value = plist?.object(forKey: "API_KEY") as? String else {
+        fatalError("Couldn't find key 'API_KEY' in 'OpenWeather-Info.plist'.")
+      }
+    
+     if (value.starts(with: "_")) {
+          fatalError("Register for a OpenWeather developer account and get an API key")
+        }
+      return value
+  }
 
   var baseURL: URL {
     guard let url = URL(string: "https://api.openweathermap.org") else { fatalError("baseURL could not be configured.")}
@@ -59,7 +74,7 @@ extension WeatherApi: EndPointType {
                                   "lat": lat,
                                   "lon": lon,
                                   "exclude": "minutely,alerts",
-                                  "appid": Constants.Network.weatherAPIKey,
+                                  "appid": apiKey,
                                   "units": units.rawValue,
                                   "lang": searchLanguage
                                 ])
@@ -69,7 +84,7 @@ extension WeatherApi: EndPointType {
                                 urlParameters: [
                                   "q": name,
                                   "limit": 20,
-                                  "appid": Constants.Network.weatherAPIKey
+                                  "appid": apiKey
                                 ])
     }
   }

@@ -33,9 +33,9 @@ class SearchView: UIView {
     return searchBar
   }()
 
-  private let cityListTableView = TableView(celltype: .cityListTableViewCell)
-  private let searchTableView = TableView(celltype: .standartTableViewCell)
-  private var searchViewViewModel: SearchViewCellModelProtocol
+  private let cityListTableView = CustomTableView(celltype: .cityListTableViewCell)
+  private let searchTableView = CustomTableView(celltype: .searchTableViewCell)
+  
   private let spinnerView = LoadingView()
   private let backButton = Button(systemImage: "arrow.backward")
   private let gradient = Constants.Design.gradient
@@ -43,7 +43,7 @@ class SearchView: UIView {
   // MARK: - Public types
   weak var delegate: SearchViewProtocol?
   weak var alertDelegate: AlertProtocol?
-
+  var searchViewViewModel: SearchViewViewModelProtocol
   var viewData: SearchViewData = .initial {
     didSet {
       setNeedsLayout()
@@ -51,8 +51,8 @@ class SearchView: UIView {
   }
   // MARK: - Initialization
 
-  init(frame: CGRect, searchViewCellModel: SearchViewCellModelProtocol) {
-    self.searchViewViewModel = searchViewCellModel
+  init(frame: CGRect, searchViewViewModel: SearchViewViewModelProtocol) {
+    self.searchViewViewModel = searchViewViewModel
     super.init(frame: frame)
     updateView()
     setupLayouts()
@@ -141,7 +141,7 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
     case searchTableView:
       return 1
     case cityListTableView:
-      return searchViewViewModel.setSections(at: .cityListTableViewCell)
+      return searchViewViewModel.numberOfSections(at: .cityListTableViewCell)
     default: return 0
     }
   }
@@ -149,7 +149,7 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     switch tableView {
     case searchTableView:
-      return searchViewViewModel.setRows()
+      return searchViewViewModel.numberOfRows()
     case cityListTableView:
       return 1
     default: return 0
@@ -175,10 +175,12 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     switch tableView {
     case searchTableView:
-      let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
-      let text = searchViewViewModel.configureCell(index: indexPath.row)
-      cell.textLabel?.text = text
+      guard let cell = tableView.dequeueReusableCell(withIdentifier: "SearchListTableViewCell",
+                                                     for: indexPath) as? SearchListTableViewCell
+      else { return UITableViewCell() }
       
+      let cellViewModel = searchViewViewModel.cellViewModel(for: indexPath)
+      cell.viewModel = cellViewModel      
       cell.backgroundColor = .clear
       return cell
 
@@ -196,7 +198,7 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
     tableView.deselectRow(at: indexPath, animated: true)
     switch tableView {
     case searchTableView:
-      let model = searchViewViewModel.setCity(index: indexPath.row, for: .standartTableViewCell)
+      let model = searchViewViewModel.setCity(index: indexPath.row, for: .searchTableViewCell)
       delegate?.setViewFromSearch(fot: model, at: model.count - 1)
     case cityListTableView:
       let model = searchViewViewModel.setCity(index: 0, for: .cityListTableViewCell)
@@ -232,7 +234,7 @@ extension SearchView: UITableViewDataSource, UITableViewDelegate {
     }
   }
 }
-// MARK: - UITableView delegates
+// MARK: - UISearchBarDelegate delegates
 
 extension SearchView: UISearchBarDelegate {
   func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -244,6 +246,11 @@ extension SearchView: UISearchBarDelegate {
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     searchViewViewModel.searchText(text: searchText)
   }
+  
+  func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    searchViewViewModel.searchText(text: searchBar.text ?? "")
+  }
+  
 }
 
 extension SearchView: NSFetchedResultsControllerDelegate {

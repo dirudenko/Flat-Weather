@@ -72,8 +72,8 @@ final class BuilderService {
   }
   
   static func buildSearchViewController() -> UIViewController {
-    let searchViewCellModel = SearchViewCellModel(networkManager: networkManager, coreDataManager: coreDataManager)
-    let viewController = SearchViewController(searchViewCellModel: searchViewCellModel)
+    let searchViewViewModel = SearchViewViewModel(networkManager: networkManager, coreDataManager: coreDataManager)
+    let viewController = SearchViewController(searchViewViewModel: searchViewViewModel)
     return viewController
   }
   

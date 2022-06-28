@@ -10,13 +10,11 @@ import UIKit
 final class SearchViewController: UIViewController {
 
   // MARK: - Private types
-  private var searchView: SearchView!
-  private var searchViewCellModel: SearchViewCellModelProtocol
+  private var searchView: SearchView
   private var didEdit = false
   // MARK: - Initialization
-  init(searchViewCellModel: SearchViewCellModelProtocol) {
-    self.searchViewCellModel = searchViewCellModel
-    self.searchView = SearchView(frame: .zero, searchViewCellModel: searchViewCellModel)
+  init(searchViewViewModel: SearchViewViewModelProtocol) {
+    self.searchView = SearchView(frame: .zero, searchViewViewModel: searchViewViewModel)
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -27,7 +25,6 @@ final class SearchViewController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    updateView()
     setupViews()
     setupConstraints()
   }
@@ -47,12 +44,6 @@ final class SearchViewController: UIViewController {
     self.navigationItem.setHidesBackButton(true, animated: false)
     navigationController?.interactivePopGestureRecognizer?.delegate = self
     view.accessibilityIdentifier = "searchView"
-  }
-
-  private func updateView() {
-    searchViewCellModel.updateViewData = { [weak self] viewData in
-      self?.searchView.viewData = viewData
-    }
   }
 }
 // MARK: - UIViewController delegates

@@ -9,7 +9,7 @@ import UIKit
 
 class WeeklyWeatherView: UIView {
   // MARK: - Private types
-  private let weeklyListTableView = TableView(celltype: .weeklyTableViewCell)
+  private let weeklyListTableView = CustomTableView(celltype: .weeklyTableViewCell)
   private(set) var dateLabel = TitleLabel(textAlignment: .center)
   private let loadingVC = LoadingView()
   private var model: MainInfo? {

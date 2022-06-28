@@ -17,7 +17,7 @@ protocol SettingsViewProtocol: AnyObject {
 
 class SettingsView: UIView {
   // MARK: - Private types
-  private let settingsTableView = TableView(celltype: .settingsTableViewCell)
+  private let settingsTableView = CustomTableView(celltype: .settingsTableViewCell)
   private var picker: Picker?
   private let gradient = Constants.Design.gradient
   private let backButton = Button(systemImage: "arrow.backward")

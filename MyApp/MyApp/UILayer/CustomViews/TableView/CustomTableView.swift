@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TableView: UITableView {
+class CustomTableView: UITableView {
 
   override init(frame: CGRect, style: UITableView.Style) {
     super.init(frame: frame, style: style)
@@ -23,11 +23,11 @@ class TableView: UITableView {
       backgroundColor = UIColor.clear
       rowHeight = adapted(dimensionSize: 80, to: .height)
 
-    case .standartTableViewCell:
+    case .searchTableViewCell:
       super.init(frame: .zero, style: .plain)
       isHidden = true
       translatesAutoresizingMaskIntoConstraints = false
-      register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+      register(SearchListTableViewCell.self, forCellReuseIdentifier: "SearchListTableViewCell")
       backgroundColor = UIColor.clear
 
     case .weeklyTableViewCell:

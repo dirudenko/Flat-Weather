@@ -9,9 +9,7 @@ import Foundation
 import CoreData
 
 protocol SearchViewViewModelProtocol: AnyObject {
-  
   func cellViewModel(for indexPath: IndexPath) -> SearchViewCellModelProtocol?
-  
   var updateViewData: ((SearchViewData) -> Void)? { get set }
   var networkManager: NetworkManagerProtocol { get }
   var coreDataManager: CoreDataManagerResultProtocol { get }
@@ -101,15 +99,7 @@ final class SearchViewViewModel: SearchViewViewModelProtocol {
       self.updateViewData?(.load)
     }
   }
-  
-  func configureCell(index: Int) -> String {
-    guard let model = cityList?[index] else { return "Error" }
-    let cityName = model.name
-    let cityCountry = model.country
-    let label = cityName + " " + cityCountry
-    return label
-  }
-  
+    
   /// получение выбранного города в зависимости от таблицы для передачи в контроллер
   func setCity(index: Int, for tableView: TableViewCellTypes) -> [MainInfo] {
     switch tableView {

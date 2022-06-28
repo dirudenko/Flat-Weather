@@ -8,11 +8,10 @@
 import UIKit
 import CoreData
 
-protocol SearchViewProtocol: AnyObject {
+protocol SearchViewDelegate: AnyObject {
   func setViewFromSearch(fot city: [MainInfo], at index: Int)
   func setViewFromCityList(fot city: [MainInfo], at index: Int)
-  func backButtonTapped()
-  func didEdit(at section: Int)
+  func backButtonTapped(_ isEdited: Bool)
 }
 
 class SearchView: UIView {
@@ -35,13 +34,13 @@ class SearchView: UIView {
 
   private let cityListTableView = CustomTableView(celltype: .cityListTableViewCell)
   private let searchTableView = CustomTableView(celltype: .searchTableViewCell)
-  
+  private var isEdited = false
   private let spinnerView = LoadingView()
   private let backButton = Button(systemImage: "arrow.backward")
   private let gradient = Constants.Design.gradient
   private(set) var label = DescriptionLabel()
   // MARK: - Public types
-  weak var delegate: SearchViewProtocol?
+  weak var delegate: SearchViewDelegate?
   weak var alertDelegate: AlertProtocol?
   var searchViewViewModel: SearchViewViewModelProtocol
   var viewData: SearchViewData = .initial {
@@ -130,7 +129,7 @@ class SearchView: UIView {
   }
 
   @objc private func didTapBack() {
-    delegate?.backButtonTapped()
+    delegate?.backButtonTapped(isEdited)
   }
 }
 // MARK: - UITableView delegates
@@ -269,7 +268,7 @@ extension SearchView: NSFetchedResultsControllerDelegate {
       if let indexPath = indexPath {
         let section = indexPath.row
         cityListTableView.deleteSections([section], with: .fade)
-        delegate?.didEdit(at: section)
+        isEdited = true
       }
     case .insert:
       if let indexPath = newIndexPath {

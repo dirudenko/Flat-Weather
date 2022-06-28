@@ -8,33 +8,33 @@
 import UIKit
 
 final class SearchViewController: UIViewController {
-
+  
   // MARK: - Private types
   private var searchView: SearchView
-  private var didEdit = false
+  private var isEdit = false
   // MARK: - Initialization
   init(searchViewViewModel: SearchViewViewModelProtocol) {
     self.searchView = SearchView(frame: .zero, searchViewViewModel: searchViewViewModel)
     super.init(nibName: nil, bundle: nil)
   }
-
+  
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
   // MARK: - UIViewController lifecycle methods
-
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     setupViews()
     setupConstraints()
   }
-
+  
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
     searchView.layer.cornerRadius = Constants.Design.cornerRadius
     searchView.layer.masksToBounds = true
   }
-
+  
   // MARK: - Private functions
   private func setupViews() {
     view.backgroundColor = .systemBackground
@@ -47,30 +47,28 @@ final class SearchViewController: UIViewController {
   }
 }
 // MARK: - UIViewController delegates
-extension SearchViewController: SearchViewProtocol {
-  func didEdit(at section: Int) {
-    didEdit = true
-  }
-
+extension SearchViewController: SearchViewDelegate {
+  
   func setViewFromCityList(fot city: [MainInfo], at index: Int) {
     let viewController = BuilderService.buildPageViewController(at: index)
     navigationController?.setViewControllers([viewController], animated: true)
   }
-
+  
   func setViewFromSearch(fot city: [MainInfo], at index: Int) {
     let viewController = BuilderService.buildPageViewController(at: index)
     navigationController?.setViewControllers([viewController], animated: true)
   }
-
-  func backButtonTapped() {
-    if didEdit {
-      let viewController = BuilderService.buildPageViewController()
-      navigationController?.setViewControllers([viewController], animated: true)
-    } else {
-    navigationController?.popViewController(animated: true)
+  
+  func backButtonTapped(_ isEdited: Bool) {
+      switch isEdited {
+      case true:
+        let viewController = BuilderService.buildPageViewController()
+        self.navigationController?.setViewControllers([viewController], animated: true)
+      case false:
+        self.navigationController?.popViewController(animated: true)
+      }
     }
   }
-}
 
 extension SearchViewController: AlertProtocol {
   func showAlert(text: String) {
@@ -92,6 +90,6 @@ extension SearchViewController {
 
 extension SearchViewController: UIGestureRecognizerDelegate {
   func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-          return true
-      }
+    return true
+  }
 }

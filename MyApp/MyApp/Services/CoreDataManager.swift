@@ -173,8 +173,12 @@ class CoreDataManager: CoreDataManagerResultProtocol {
   func configureWeekly(from data: WeatherModel, list: MainInfo?) {
     let entity = NSEntityDescription.entity(forEntityName: "Weekly",
                                             in: managedContext)!
-
-    for (index, item) in data.daily.enumerated() {
+   
+    // удаление сегодняшнего дня
+    var weeklyData = data.daily
+    weeklyData.removeFirst()
+    
+    for (index, item) in weeklyData.enumerated() {
       let weather = Weekly(entity: entity, insertInto: managedContext)
       weather.tempDay = item.temp.day
       weather.tempNight = item.temp.night

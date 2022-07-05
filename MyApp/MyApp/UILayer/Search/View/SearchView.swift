@@ -120,8 +120,17 @@ class SearchView: UIView {
     label.font = AppFont.regular(size: 16)
     label.text = searchLabelPlaceholder
     label.textColor = .darkGray
+    /// обработка нажатия на Х на строке поиска
+    if let searchTextField = searchBar.value(forKey: "searchField") as? UITextField,
+       let clearButton = searchTextField.value(forKey: "_clearButton")as? UIButton {
+         clearButton.addTarget(self, action: #selector(didTapClearButton), for: .touchUpInside)
+    }
   }
 
+  @objc private func didTapClearButton() {
+    searchViewViewModel.searchText(text: "     ")
+  }
+  
   private func updateView() {
     searchViewViewModel.updateViewData = { [weak self] viewData in
       self?.viewData = viewData
@@ -241,15 +250,14 @@ extension SearchView: UISearchBarDelegate {
     cityListTableView.isHidden = false
     label.isHidden = false
   }
-
+  
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     searchViewViewModel.searchText(text: searchText)
   }
   
   func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
     searchViewViewModel.searchText(text: searchBar.text ?? "")
-  }
-  
+  }  
 }
 
 extension SearchView: NSFetchedResultsControllerDelegate {

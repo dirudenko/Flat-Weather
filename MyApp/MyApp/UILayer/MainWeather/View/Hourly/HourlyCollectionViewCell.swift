@@ -60,7 +60,7 @@ class HourlyCollectionViewCell: UICollectionViewCell {
       temperatureLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 14, to: .height)),
 
       popLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: adapted(dimensionSize: 82, to: .height)),
-      popLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 6, to: .width)),
+      popLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: adapted(dimensionSize: 14, to: .width)),
       popLabel.widthAnchor.constraint(equalToConstant: adapted(dimensionSize: 60, to: .width)),
       popLabel.heightAnchor.constraint(equalToConstant: adapted(dimensionSize: 15, to: .height))
     ])

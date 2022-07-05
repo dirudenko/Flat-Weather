@@ -10,7 +10,7 @@ import XCTest
 
 class SearchViewModelTests: XCTestCase {
 
-  var sut: SearchViewCellModelProtocol!
+  var sut: SearchViewViewModelProtocol!
   let coreDataManager = TestCoreDataManager(modelName: "MyApp")
   let networkManager = MockNetworkManager()
   let mockCity = SearchModel(name: "MockCity", localNames: nil, lat: 123, lon: 456, country: "MockCountry", state: nil)
@@ -22,8 +22,7 @@ class SearchViewModelTests: XCTestCase {
   }
 
   override func setUpWithError() throws {
-    sut = SearchViewCellModel(networkManager: networkManager, coreDataManager: coreDataManager)
-
+    sut = SearchViewViewModel(networkManager: networkManager, coreDataManager: coreDataManager)
   }
 
   override func tearDownWithError() throws {
@@ -36,15 +35,15 @@ class SearchViewModelTests: XCTestCase {
     let input: TableViewCellTypes = .cityListTableViewCell
     let output = 1
 
-    let result = sut.setSections(at: input)
+    let result = sut.numberOfSections(at: input)
     XCTAssertEqual(result, output)
   }
 
   func testSectionsForStandartTableViewCell() throws {
-    let input: TableViewCellTypes = .standartTableViewCell
+    let input: TableViewCellTypes = .searchTableViewCell
     let output = 1
 
-    let result = sut.setSections(at: input)
+    let result = sut.numberOfSections(at: input)
     XCTAssertEqual(result, output)
   }
 

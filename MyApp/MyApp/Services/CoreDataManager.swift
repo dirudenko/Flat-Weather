@@ -19,14 +19,6 @@ protocol CoreDataManagerProtocol {
   func removeAllData()
 }
 
-// protocol CoreDataManagerListProtocol: CoreDataManagerProtocol {
-//  func loadListData()
-//  func entityIsEmpty() -> Bool
-//  func saveToList(city: CityList)
-//  func configure(json: CitiList)
-//  var fetchedListController: NSFetchedResultsController<CityList> { get }
-// }
-
 protocol CoreDataManagerResultProtocol: CoreDataManagerProtocol {
   func configureTopView(from data: WeatherModel, list: MainInfo?)
   func configureBottomView(from data: WeatherModel, list: MainInfo?)

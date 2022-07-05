@@ -12,14 +12,15 @@ protocol SearchViewCellModelProtocol: AnyObject {
 }
 
 final class SearchViewCellModel: SearchViewCellModelProtocol {
+  // MARK: - Private variables
+  private var city: SearchModel
+  // MARK: - Public variables
   var searchCityName: String {
     let searchLanguage = NSLocalizedString("apiCallLanguage", comment: "search Language")
     let localName = city.localNames?[searchLanguage] ?? city.name
     return localName + " " + city.country
   }
   
-  // MARK: - Private variables
-  private var city: SearchModel
   // MARK: - Initialization
   init(with city: SearchModel) {
     self.city = city

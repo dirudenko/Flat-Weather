@@ -17,7 +17,7 @@ class CityListTableViewCell: UITableViewCell {
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     layer.cornerRadius = adapted(dimensionSize: 16, to: .height)
-    clipsToBounds = true
+    layer.masksToBounds = true
     setupLayouts()
     setupFonts()
     addConstraints()
